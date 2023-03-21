@@ -1,9 +1,44 @@
 {% extends 'base.html' %}
+<html>
+    <link rel="stylesheet" href="issues.css">
+<head>
 
+</head>
 {% block content %}
-    <p>hola</p>
+
+
     {% for issue in issues %}
-        <p>holaaaa</p>
-        {{ issue.subject }}
+        {% if issue.tipus == "B" %}
+        {%endif%}
+        
+        <div style="width: 100%;">
+            <div class="dot"style="background-color: rgb(228, 64, 87)"></div>
+            <p style="display: inline">
+                <span style="width: 150x;">#{{issue.id}} {{issue.subject}}</span> 
+                {%if issue.estat == 'N' %}
+                    <span>Nova</span> 
+                {%elif issue.estat == 'D'%}
+                    <span>En curs</span>
+                {%elif issue.estat == 'T'%}
+                    <span>Llesta per testejar</span>
+                {%elif issue.estat == 'C'%}
+                    <span style="color:#70b578">Tancada</span>
+                {%elif issue.estat == 'I'%}
+                    <span>Necessita informació</span>
+                {%elif issue.estat == 'R'%}
+                    <span style="color:#FF0000">Rebutjada</span>
+                {%elif issue.estat == 'P'%}
+                    <span>Proposada</span>
+                {%endif%}
+                    
+                <span type="date">{{issue.dataModificacio}}</span>
+                <span >{{issue.creador}}</span>
+            </p> 
+           
+            
+        </div>
+       
     {% endfor %}
 {% endblock %}
+</html>
+

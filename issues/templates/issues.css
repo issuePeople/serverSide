@@ -1,0 +1,22 @@
+dot {
+    background-color:#70728f;
+    border-radius: 9px;
+    height: 18px;
+    margin: 0 auto;
+    width: 18px;
+  }
+  
+  h1 {
+    color: navy;
+    margin-left: 20px;
+  }
+  p
+{
+    display: inline;
+}
+span {
+    
+    width: 50px;
+    left: -40px;
+  }
+  
