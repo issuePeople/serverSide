@@ -1,7 +1,6 @@
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 from django.urls import reverse
-from django_tables2 import SingleTableView
-from . import forms, models, tables
+from . import forms, models
 
 
 class CrearIssueView(FormView):
@@ -13,11 +12,6 @@ class CrearIssueView(FormView):
         return reverse('tots_issues')
 
 
-class ListIssueView(SingleTableView):
+class ListIssueView(TemplateView):
     model = models.Issue
     template_name = 'issue_list.html'
-    table_class = tables.IssuesTable
-
-    def get_queryset(self):
-        queryset = super().get_queryset().select_related('assignacio')
-        return queryset
