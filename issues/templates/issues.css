@@ -1,18 +1,17 @@
-dot {
-    background-color:#70728f;
-    border-radius: 9px;
-    height: 18px;
-    margin: 0 auto;
-    width: 18px;
+circle {
+    background: lightblue;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
   }
   
   h1 {
     color: navy;
     margin-left: 20px;
   }
-  p
+  span
 {
-    display: inline;
+    margin: 8px;
 }
 span {
     
