@@ -2,4 +2,8 @@
 
 {% block content %}
     <p>hola</p>
+    {% for issue in issues %}
+        <p>holaaaa</p>
+        {{ issue.subject }}
+    {% endfor %}
 {% endblock %}
