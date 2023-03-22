@@ -1,19 +1,24 @@
+
 {% extends 'base.html' %}
 {% load static %}
-<html>
-    <link rel="stylesheet" type="text/css" href="{% static 'issues.css'%}">
+<html >
+    <link rel="stylesheet" type="text/css" href="issues.css'">
     
 <head>
+    <style>
+        tr:hover {background-color: coral;}
+    </style>
 
 </head>
+
 {% block content %}
 
 
     {% for issue in issues %}
-    <div style=" background: #e1e1e3;margin-bottom: 0.75rem;padding: 0.6rem;">
-        <table>
+    <div style=" background: #e1e1e3;margin-left: 10px;margin-bottom: 0.75rem;padding: 0.6rem; border-radius: 3px;">
+        <table style="width: 100% ;table-layout:auto;">
             <tr>
-                <td style="margin-left: 100px;margin-right: 100px;">
+                <td style="margin-left: 100px;margin-right: 100px; width: 5%;">
                     {% if issue.tipus == "B" %}
                         <p class="circle" style="background: rgb(228, 64, 87);
                         border-radius: 50%;
@@ -35,14 +40,14 @@
                     {%endif%}
                   
                 </td>
-                <td>
+                <td style="width: 5%">
                     <p class="circle" style="background: rgb(228, 64, 87);
                         border-radius: 50%;
                         width: 18px;
                         height: 18px;
                         margin-left: 10px;margin-right: 10px;"></p>
                 </td>
-                <td>
+                <td style="width: 5%">
                     {% if issue.prioritat == "B" %}
                         <p class="circle" style="background: rgb(189, 252, 170);
                         border-radius: 50%;
@@ -63,44 +68,52 @@
                         margin-left: 10px;margin-right: 10px;"></p>
                     {%endif%}
                 </td>
-                    
-            
-            
         
         
-        <td>
-           
-            <p>
-                <span>#{{issue.id}} {{issue.subject}}</span> 
-                {%if issue.estat == 'N' %}
-                    <span>Nova</span> 
-                {%elif issue.estat == 'D'%}
-                    <span>En curs</span>
-                {%elif issue.estat == 'T'%}
-                    <span>Llesta per testejar</span>
-                {%elif issue.estat == 'C'%}
-                    <span style="color:#70b578">Tancada</span>
-                {%elif issue.estat == 'I'%}
-                    <span>Necessita informació</span>
-                {%elif issue.estat == 'R'%}
-                    <span style="color:#FF0000">Rebutjada</span>
-                {%elif issue.estat == 'P'%}
-                    <span>Proposada</span>
-                {%endif%}
+        <td style="width: 45%">
+                <a href="/issues/list/{{issue.id}}" style="max-inline-size: 500px; ">#{{issue.id}} {{issue.subject}}</a> 
+        </td>
+        <td style="width: 10%">
+            <p style="margin-left: 10px;margin-right: 10px;">
+            {%if issue.estat == 'N' %}
+            <span>Nova</span> 
+        {%elif issue.estat == 'D'%}
+            <span>En curs</span>
+        {%elif issue.estat == 'T'%}
+            <span>Llesta per testejar</span>
+        {%elif issue.estat == 'C'%}
+            <span style="color:#70b578">Tancada</span>
+        {%elif issue.estat == 'I'%}
+            <span>Necessita informació</span>
+        {%elif issue.estat == 'R'%}
+            <span style="color:#FF0000">Rebutjada</span>
+        {%elif issue.estat == 'P'%}
+            <span>Proposada</span>
+        {%endif%} 
+    </p>
+        </td>
+        <td style="width: 10%">
+            <span>{{issue.dataModificacio}}</span>
+        </td>
+        <td style="width: 10%">   
+            <span styles="width: auto">{{issue.assignacio.username}}</span>
+        </td>
+                
                     
-                <span type="date">{{issue.dataModificacio}}</span>
-                <span >{{issue.creador}}</span>
+                
                 
 
     
-            </p> 
+             
            
             
-        </td>
+        
     </tr>
     </table>
     </div>  
     {% endfor %}
 {% endblock %}
+
+</body>
 </html>
 
