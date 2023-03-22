@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
-    </form>
+
+    <div class="lightbox lightbox-generic-form lightbox-create-edit open">
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="CREATE" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+            <button class="btn-big add-item" style="background-color: #ff4747; height: 40.8px; margin-top: 10px; margin-bottom: 10px;">
+                GO BACK
+                <a href="/issues/list"></a> 
+            </button>
+        </form>
+    </div>
+
 {% endblock %}
 
