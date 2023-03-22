@@ -70,10 +70,10 @@
                 </td>
         
         
-        <td style="width: 45%">
-                <a href="/issues/list/{{issue.id}}" style="max-inline-size: 500px; ">#{{issue.id}} {{issue.subject}}</a> 
+        <td style="width: 50%">
+                <a href="/issues/list/{{issue.id}}" style="max-inline-size: 500px;color: #000000;text-decoration: none !important;">#{{issue.id}} {{issue.subject}}</a> 
         </td>
-        <td style="width: 10%">
+        <td style="width: 5%;justify-content:left;">
             <p style="margin-left: 10px;margin-right: 10px;">
             {%if issue.estat == 'N' %}
             <span>Nova</span> 
@@ -95,7 +95,7 @@
         <td style="width: 10%">
             <span>{{issue.dataModificacio}}</span>
         </td>
-        <td style="width: 10%">   
+        <td style="width: 5%">   
             <span styles="width: auto">{{issue.assignacio.username}}</span>
         </td>
                 
