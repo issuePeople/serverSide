@@ -1,9 +1,100 @@
-{% extends 'base.html' %}
 
+{% extends 'base.html' %}
 {% block content %}
-    <p>hola</p>
+
+
     {% for issue in issues %}
-        <p>holaaaa</p>
-        {{ issue.subject }}
+    <div style=" background: #e1e1e3;margin-left: 10px;margin-bottom: 0.75rem;padding: 0.6rem; border-radius: 3px;">
+        <table style="width: 100% ;table-layout:auto;">
+            <tr class="row title">
+                <td style="margin-left: 100px;margin-right: 100px; width: 5%;">
+                    {% if issue.tipus == "B" %}
+                        <div class="level" style="background: rgb(228, 64, 87)"></div>
+                    {%elif issue.tipus == "P"%}
+                        <p class="circle" style="background: rgb(189, 252, 170);
+                        border-radius: 50%;
+                        width: 18px;
+                        height: 18px;
+                        margin-left: 10px;margin-right: 10px;"></p>
+                    {%elif issue.tipus == "M"%}
+                        <p class="circle" style="background: rgb(255, 153, 0);
+                        border-radius: 50%;
+                        width: 18px;
+                        height: 18px;
+                        margin-left: 10px;margin-right: 10px;"></p>
+                    {%endif%}
+                  
+                </td>
+                <td style="width: 5%">
+                    <p class="circle" style="background: rgb(228, 64, 87);
+                        border-radius: 50%;
+                        width: 18px;
+                        height: 18px;
+                        margin-left: 10px;margin-right: 10px;"></p>
+                </td>
+                <td style="width: 5%">
+                    {% if issue.prioritat == "B" %}
+                        <p class="circle" style="background: rgb(189, 252, 170);
+                        border-radius: 50%;
+                        width: 18px;
+                        height: 18px;
+                        margin-left: 10px;margin-right: 10px;"></p>
+                    {%elif issue.prioritat == "M"%}
+                        <p class="circle" style=" background: rgb(255, 153, 0);
+                        border-radius: 50%;
+                        width: 18px;
+                        height: 18px;
+                        margin-left: 10px;margin-right: 10px;"></p>
+                    {%elif issue.prioritat == "A"%}
+                        <p class="circle" style="background: rgb(228, 64, 87);
+                        border-radius: 50%;
+                        width: 18px;
+                        height: 18px;
+                        margin-left: 10px;margin-right: 10px;"></p>
+                    {%endif%}
+                </td>
+        
+        
+        <td style="width: 50%">
+                <a href="/issues/list/{{issue.id}}" style="max-inline-size: 500px;color: #000000;text-decoration: none !important;">#{{issue.id}} {{issue.subject}}</a> 
+        </td>
+        <td style="width: 5%;justify-content:left;">
+            <p style="margin-left: 10px;margin-right: 10px;">
+            {%if issue.estat == 'N' %}
+            <span>Nova</span> 
+        {%elif issue.estat == 'D'%}
+            <span>En curs</span>
+        {%elif issue.estat == 'T'%}
+            <span>Llesta per testejar</span>
+        {%elif issue.estat == 'C'%}
+            <span style="color:#70b578">Tancada</span>
+        {%elif issue.estat == 'I'%}
+            <span>Necessita informació</span>
+        {%elif issue.estat == 'R'%}
+            <span style="color:#FF0000">Rebutjada</span>
+        {%elif issue.estat == 'P'%}
+            <span>Proposada</span>
+        {%endif%} 
+    </p>
+        </td>
+        <td style="width: 10%">
+            <span>{{issue.dataModificacio}}</span>
+        </td>
+        <td style="width: 5%">   
+            <span styles="width: auto">{{issue.assignacio.username}}</span>
+        </td>
+                
+                    
+                
+                
+
+    
+             
+           
+            
+        
+    </tr>
+    </table>
+    </div>  
     {% endfor %}
 {% endblock %}
