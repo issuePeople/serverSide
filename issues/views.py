@@ -28,7 +28,8 @@ class ListIssueView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        issues = models.Issue.objects.all()
+        # Temporalment, ordenem per data de creació
+        issues = models.Issue.objects.all().order_by('-dataCreacio')
         print("hola")
         print(issues)
         context.update({'issues': issues})
