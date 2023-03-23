@@ -2,7 +2,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
+<div class="master" style>
+    <div class = "wrapper issues lightbox-generic-form">
+         
+       <tg-project-menu>
+        <div class="sticky-project-menu"></div>
+       </tg-project-menu>
        
         <div class="main issue-main">
             <div class="issue-top">
@@ -25,13 +30,14 @@
                 </header>
             </div>
             <div class="issue-container">
-                <div class="issue-page">
-                    <table class="issues-table" >
+                <div class="issue-page"style="width: 100%;">
+                   <table class="issues-table" style="width: 100%;">
                         
                         {% for issue in issues %}
-                            <tr class="row table-main" >
+                            <tr class="row table-main" style="height: 80px;border-bottom:10px;">
                             
-                                <td class="level-field">
+                                <td class="level-field" style="width: 10%; text-align: center;
+                                vertical-align: middle;">
                                         {% if issue.tipus == "B" %}
                                             <div class="level" style="background: rgb(228, 64, 87)"></div>
                                         {%elif issue.tipus == "P"%}
@@ -42,11 +48,13 @@
                                       
                                 </td>
                                 
-                                 <td class="level-field">
+                                 <td class="level-field" style="width: 10%;text-align: center;
+                                 vertical-align: middle;">
                                     <p class="level" style="background: rgb(228, 64, 87);"></p>
                                  </td>
                                  
-                                 <td class="level-field">
+                                 <td class="level-field" style="width: 10%t;text-align: center;
+                                 vertical-align: middle;">
                                         {% if issue.prioritat == "B" %}
                                             <p class="level" style="background: rgb(189, 252, 170);"></p>
                                         {%elif issue.prioritat == "M"%}
@@ -56,10 +64,11 @@
                                         {%endif%}
                                 </td>
                             
-                                <td class="subject">
+                                <td class="subject" style="text-align: center;
+                                vertical-align: middle;">
                                     
                                     <a href="/issues/{{issue.id}}" >
-                                        <span classe="issue-text">
+                                        <span classe="issue-text" style="display: inline-flex;">
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
                                         </span>
@@ -67,8 +76,9 @@
                                     </a> 
                                 </td>
                                 
-                                <td class="issue-field">
-                                    <p class="issue-status-bind">
+                                <td style="text-align: center;
+                                vertical-align: middle;">
+                                    <div class="assigned-field" >
                                     {%if issue.estat == 'N' %}
                                         <span>Nova</span> 
                                     {%elif issue.estat == 'D'%}
@@ -84,23 +94,25 @@
                                     {%elif issue.estat == 'P'%}
                                         <span>Proposada</span>
                                     {%endif%} 
-                                    </p>
+                                    </div>
                                 </td>
                                 
-                                <td class="modified-field">
+                                <td class="modified-field" style="text-align: center;
+                                vertical-align: middle;">
                                     <span>{{issue.dataModificacio}}</span>
                                 </td>
                                 
-                                <td class="assigned-field">   
+                                <td class="assigned-field" style="text-align: center;
+                                vertical-align: middle;">   
                                     <span class="issue-assignedto">{{issue.assignacio.username}}</span>
                                 </td>
                                 
                             </tr> 
                         {% endfor %}
-                    
+
                     </table>
                 </div>
             </div>
-
-
+</div>
+</div>
 {% endblock %}
