@@ -25,38 +25,37 @@
                             <div>
                                 <!-- status-->
                                 <select class="status-button">
-                                    {% for issue in issues %}
-                                        <option value="{{issue.testats}}">{{issue.testats}}</option>
+                                    {% for estat in form.estat %}
+                                        <option value="{{estat}}">{{estat}}</option>
                                     {% endfor %}    
                                 </select>
 
                                 <!-- assign ? -->
                                 <select class="status-button">
-                                    {% for issue in issues %}
-                                        <option value="nueva">Assignacio</option>
-                                        <option value="{{issue}}">{{issue}}</option>
+                                    {% for assig in form.assignacio %}
+                                        <option value="{{assig}}">{{assig}}</option>
                                     {% endfor %}
                                 </select>
 
                                 <div class="ticket-data-container">
                                     <!-- Type-->
                                     <select class="status-button">
-                                        {% for issue in issues %}
-                                            <option value="{{issue.tipus}}">{{issue.tipus}}</option>
+                                        {% for tipus in form.tipus %}
+                                            <option value="{{tipus}}">{{tipus}}</option>
                                         {% endfor %}
                                     </select>
 
                                     <!-- Severity-->
                                     <select class="status-button">
-                                        {% for issue in issues %}
-                                            <option value="{{issue.tgravetat}}">{{issue.tgravetat}}</option>
+                                        {% for gravetat in form.gravetat %}
+                                            <option value="{{gravetat}}">{{gravetat}}</option>
                                         {% endfor %}
                                     </select>
                                     
                                     <!-- Priority-->
                                     <select class="status-button">
-                                        {% for issue in issues %}
-                                            <option value="{{issue.tprioritat}}">{{issue.tprioritat}}</option>
+                                        {% for prioritat in form.prioritat %}
+                                            <option value="{{prioritat}}">{{prioritat}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
