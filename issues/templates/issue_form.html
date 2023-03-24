@@ -3,13 +3,84 @@
 
     <div class="lightbox lightbox-generic-form lightbox-create-edit open">
         <a class="close" href="/issues/list">
-            <p>X</p>
+            X
         </a>
+        <div> 
+            <form method="post">
+                {% csrf_token %}
+                <h2 class="title">New issue</h2>
+                
+                <div>
+                    <div class="form-wrapper">
+                        <!-- left side -->
+                        <div class="main">
+                            <input value="" type="text">
+                            <textarea rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
+                            <input value="" type="text">
+                        </div>
+
+                        <!-- right side -->
+                        <sidebar class="sidebar ticket-data">
+
+                            <div>
+                                <!-- status-->
+                                <select class="status-button">
+                                    {% for issue in issues %}
+                                        <option value="{{issue.testats}}">{{issue.testats}}</option>
+                                    {% endfor %}    
+                                </select>
+
+                                <!-- assign ? -->
+                                <select class="status-button">
+                                    {% for issue in issues %}
+                                        <option value="nueva">Assignacio</option>
+                                        <option value="{{issue}}">{{issue}}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <div class="ticket-data-container">
+                                    <!-- Type-->
+                                    <select class="status-button">
+                                        {% for issue in issues %}
+                                            <option value="{{issue.tipus}}">{{issue.tipus}}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <!-- Severity-->
+                                    <select class="status-button">
+                                        {% for issue in issues %}
+                                            <option value="{{issue.tgravetat}}">{{issue.tgravetat}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    
+                                    <!-- Priority-->
+                                    <select class="status-button">
+                                        {% for issue in issues %}
+                                            <option value="{{issue.tprioritat}}">{{issue.tprioritat}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="ticket-detail-settings">
+                                    <div><input value="T" type="button" class="btn-icon is-blocked item-block"></div>
+                                    <div><input value="B" type="button" class="btn-icon is-blocked item-block"></div>
+                                </div>
+                                
+                            </div>
+                        </sidebar>
+                        
+                    </div>
+                    <input type="submit" value="CREATE" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+                </div>
+            </form>
+        </div>
+       
+        <!--
         <form method="post">
             {% csrf_token %}
             {{ form }}
             <input type="submit" value="CREATE" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
         </form>
+        -->
     </div>
 
 {% endblock %}
