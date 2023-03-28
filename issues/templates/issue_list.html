@@ -20,7 +20,6 @@
                         <div class="issue-table-options-start" >
                             <button class="btn-filter" onclick="myFunction()">
                                 <img src="   https://cdn-icons-png.flaticon.com/512/10035/10035140.png " width="15" height="15" alt="" title="" class="img-small" >
-                                
                                 <span class="text" style="margin: 5px;">Filters</span>
                             </button>
                         </div>
@@ -34,7 +33,7 @@
             </div>
             <div class="issue-container">
                 
-                <sidebar class="filters-bar" id="filtres"  >
+                <sidebar class="filters-bar" id="filtres" style="display:none" >
                     <div>
                         <div class="filters-step-cat">
                             <div class="filters-advanced">
@@ -46,19 +45,41 @@
                             <div class="filters-cat">
                                 <ul>
                                     <li>
-                                        <button class="filters-cat-single">
+                                        <button class="filters-cat-single"  id="categoria_filtre_tipus" onclick="filtre_tipus(1)" style="display: flex">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
-                                                <svg class="icon icon-arrow-right" style="fill: cred">
+                                                <svg class="icon icon-arrow-right" style="fill: block">
                                                     <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
-                                            
                                                 </svg>
                                             </div>
-                                           
                                         </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_tipus_selected" onclick="filtre_tipus(1)" style="display: none">
+                                            <span>Tipus</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                            
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_tipus" style="display:flex ; flex-direction: column";>
+                                            <div>
+                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%">
+                                                    <span class="name" >Bug</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)">
+                                                    <span class="name">Pregunta</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)">
+                                                    <span class="name" >Millora</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single">
+                                        <button class="filters-cat-single" id="categoria_filtre_gravetat" onclick="filtre_tipus(2)">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -66,8 +87,176 @@
                                             
                                                 </svg>
                                             </div>
-                                           
                                         </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_gravetat_selected" onclick="filtre_tipus(2)" style="display:none">
+                                            <span>Gravetat</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                            
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_gravetat">
+                                            <div>
+                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143); width:100%">
+                                                    <span class="name" >Desitjada</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228);">
+                                                    <span class="name">Menor</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 124);">
+                                                    <span class="name" >Normal</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 162, 64);">
+                                                    <span class="name">Important</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(211, 84, 80);">
+                                                    <span class="name" >Crítica</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="filters-cat-single" id="categoria_filtre_prioritat" onclick="filtre_tipus(3)">
+                                            <span>Prioritat</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-right" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                        </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_prioritat_selected" onclick="filtre_tipus(3)" style="display:none">
+                                            <span>Prioritat</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                            
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_prioritat">
+                                            <div>
+                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(168, 228, 64); width:100%">
+                                                    <span class="name" >Baixa</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64);">
+                                                    <span class="name">Mitja</span>
+                                                </button>
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64);">
+                                                    <span class="name" >Alta</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="filters-cat-single" id="categoria_filtre_estat" onclick="filtre_tipus(4)">
+                                            <span>Estat</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-right" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                        </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_estat_selected" onclick="filtre_tipus(4)" style="display:none">
+                                            <span>Estat</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                            
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_estat">
+                                            <div>
+                                            <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143);; width:100%">
+                                                <span class="name" >Nova</span>
+                                            </button>
+                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228);;">
+                                                <span class="name">En curs</span>
+                                            </button>
+                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64);">
+                                                <span class="name" >Testejar</span>
+                                            </button>
+                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
+                                                <span class="name">Tancada</span>
+                                            </button>
+                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87);">
+                                                <span class="name" >Necessita informació</span>
+                                            </button>
+                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188);">
+                                                <span class="name">Rebutjada</span>
+                                            </button>
+                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
+                                                <span class="name" >Proposada</span>
+                                            </button>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="filters-cat-single" id="categoria_filtre_assignat" onclick="filtre_tipus(5)">
+                                            <span>Assignat a</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-right" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                        </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_assignat_selected" onclick="filtre_tipus(5)" style="display:none">
+                                            <span>Assignat a</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_assignat">
+                                            
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="filters-cat-single" id="categoria_filtre_rol" onclick="filtre_tipus(6)">
+                                            <span>Rol</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-right" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                        </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_rol_selected" onclick="filtre_tipus(6)" style="display:none">
+                                            <span>Rol</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                            
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_rol">
+                                            
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="filters-cat-single" id="categoria_filtre_creat" onclick="filtre_tipus(7)">
+                                            <span>Creat per</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-right" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                        </button>
+                                        <button class="filters-cat-single selected" id="categoria_filtre_creat_selected" onclick="filtre_tipus(7)" style="display:none">
+                                            <span>Creat per</span>
+                                            <div class="ng-animate-disabled">
+                                                <svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                </svg>
+                                            </div>
+                                            
+                                        </button>
+                                        <div class="filter-list" style="display:none" id="filtre_creat">
+                                            
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -75,36 +264,64 @@
                     </div>
                 </sidebar>
                 <div class="issue-page"style="width: 100%;">
-                   <table class="issues-table" style="width: 100%;">
-                        
+                   <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;">
+                        <tr class="row title">
+                            <td class="level-field">
+                                <span class="wide">Tipus</span>
+                                <div class="mobile">
+                                    <div class="tooltip pop-help">Type</div><span class="first-letter">Type</span>
+                                  </div>
+                            </td>
+                            <td class="level-field">
+                                <span class="wide">Gravetat</span>
+                            </td>
+                            <td class="level-field">
+                                <span class="wide">Prioritat</span>
+                            </td>
+                            <td class="subject"></td>
+                            <td class="issue-field"></td>
+                            <td class="modified-field"></td>
+                            <td class="assigned-field"></td>
+                        </tr>
                         {% for issue in issues %}
-                            <tr class="row table-main" style="height: 80px;border-bottom:10px;">
+                            <tr class="row table-main" style="height: 80px;">
                             
                                 <td class="level-field" style="width: 10%; text-align: center;
-                                vertical-align: middle;">
+                                vertical-align: middle">
                                         {% if issue.tipus == "B" %}
                                             <div class="level" style="background: rgb(228, 64, 87)"></div>
                                         {%elif issue.tipus == "P"%}
-                                            <p class="level" style="background: rgb(189, 252, 170);"></p>
+                                            <p class="level" style="background: rgb(81, 120, 211)"></p>
                                         {%elif issue.tipus == "M"%}
-                                            <p class="level" style="background: rgb(255, 153, 0);"></p>
+                                            <p class="level" style="background:  rgb(64, 228, 206)"></p>
                                         {%endif%}
                                       
                                 </td>
                                 
                                  <td class="level-field" style="width: 10%;text-align: center;
                                  vertical-align: middle;">
-                                    <p class="level" style="background: rgb(228, 64, 87);"></p>
+                                    {% if issue.gravetat == "D" %}
+                                        <div class="level" style="background: rgb(112, 114, 143)"></div>
+                                    {%elif issue.gravetat == "M"%}
+                                        <p class="level" style="background: rgb(64, 168, 228)"></p>
+                                    {%elif issue.gravetat == "N"%}
+                                        <p class="level" style="background:  rgb(64, 228, 124)"></p>
+                                    {%elif issue.gravetat == "I"%}
+                                        <p class="level" style="background:  rgb(228, 162, 64)"></p>
+                                    {%elif issue.gravetat == "C"%}
+                                        <p class="level" style="background:   rgb(211, 84, 80)"></p>
+                                    {%endif%}
+                                    
                                  </td>
                                  
                                  <td class="level-field" style="width: 10%t;text-align: center;
                                  vertical-align: middle;">
                                         {% if issue.prioritat == "B" %}
-                                            <p class="level" style="background: rgb(189, 252, 170);"></p>
+                                            <p class="level" style="background: rgb(168, 228, 64);"></p>
                                         {%elif issue.prioritat == "M"%}
-                                            <p class="level" style=" background: rgb(251, 255, 0);"></p>
+                                            <p class="level" style=" background: rgb(228, 206, 64);;"></p>
                                         {%elif issue.prioritat == "A"%}
-                                            <p class="level" style="background: rgb(228, 64, 87);"></p>
+                                            <p class="level" style="background:  rgb(228, 124, 64);"></p>
                                         {%endif%}
                                 </td>
                             
@@ -168,7 +385,60 @@
     x.style.display = "block";
   } else {
     x.style.display = "none";
+    
   }
 }
+
+function filtre_tipus(param1) {
+    if(param1 == 1){
+        var x = document.getElementById("filtre_tipus");
+        var y = document.getElementById("categoria_filtre_tipus");
+        var z = document.getElementById("categoria_filtre_tipus_selected")
+    }
+    if(param1 == 2){
+        var x = document.getElementById("filtre_gravetat");
+        var y = document.getElementById("categoria_filtre_gravetat");
+        var z = document.getElementById("categoria_filtre_gravetat_selected")
+    }
+    if(param1 == 3){
+        var x = document.getElementById("filtre_prioritat");
+        var y = document.getElementById("categoria_filtre_prioritat");
+        var z = document.getElementById("categoria_filtre_prioritat_selected")
+    }
+    if(param1 == 4){
+        var x = document.getElementById("filtre_estat");
+        var y = document.getElementById("categoria_filtre_estat");
+        var z = document.getElementById("categoria_filtre_estat_selected")
+    }
+    if(param1 == 5){
+        var x = document.getElementById("filtre_assignat");
+        var y = document.getElementById("categoria_filtre_assignat");
+        var z = document.getElementById("categoria_filtre_assignat_selected")
+    }
+    if(param1 == 6){
+        var x = document.getElementById("filtre_rol");
+        var y = document.getElementById("categoria_filtre_rol");
+        var z = document.getElementById("categoria_filtre_rol_selected")
+    }
+    if(param1 == 7){
+        var x = document.getElementById("filtre_creat");
+        var y = document.getElementById("categoria_filtre_creat");
+        var z = document.getElementById("categoria_filtre_creat_selected")
+    }
+  
+  if (y.style.display === "none") {
+    x.style.display = "none";
+    y.style.display = "flex";
+    z.style.display = "none";
+  } else {
+    x.style.display = "flex";
+    y.style.display = "none";
+    z.style.display = "flex";
+    
+  }
+}
+
+
+
         </script>
 {% endblock %}
