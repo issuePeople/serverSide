@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f2li=dd+zuko_d_4ojx-xw57p_3q)e$(d31=23x6(=nabdqhi2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com', '127.0.0.1']
 
@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'issuePeople.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'issuePeople',
+        'PASSWORD': 'issuepeopleasw',
+        'HOST': 'awseb-e-aggqmrfkjj-stack-awsebrdsdatabase-v3wq5qeeocuf.cc9za93r8ozm.us-west-2.rds.amazonaws.com',
+        'PORT': 5432,
     }
 }
 
