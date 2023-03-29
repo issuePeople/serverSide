@@ -6,7 +6,7 @@
             X
         </a>
         <div> 
-            <form method="post">
+            <form method="post" >
                 {% csrf_token %}
                 <h2 class="title">New issue</h2>
                 
@@ -17,7 +17,7 @@
                         <div class="main">
                             <input value="" type="text" name="subject">
                             <textarea rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
-                            <input value="" type="text">
+                            <input value="" type="text" name="subject">
                         </div>
 
                         <!-- right side -->
@@ -61,15 +61,15 @@
                                     </select>
                                 </div>
                                 <div class="ticket-detail-settings">
-                                    <div><input value="T" type="button" class="btn-icon is-blocked item-block"></div>
-                                    <div><input value="B" type="button" class="btn-icon is-blocked item-block"></div>
+                                    <div><input name="subject" value="T" type="button" class="btn-icon is-blocked item-block"></div>
+                                    <div><input name="subject" value="B" type="button" class="btn-icon is-blocked item-block"></div>
                                 </div>
                                 
                             </div>
                         </sidebar>
                         
                     </div>
-                    <input type="submit" value="CREATE" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+                    <input type="submit" value="CREATE" name="subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
                 </div>
             </form>
         </div>
