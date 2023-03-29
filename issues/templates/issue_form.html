@@ -16,8 +16,7 @@
                         <!-- left side -->
                         <div class="main">
                             <input value="" type="text" name="subject">
-                            <textarea rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
-                            <input value="" type="text" name="subject">
+                            <textarea name="descripcio" rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
                         </div>
 
                         <!-- right side -->
@@ -25,7 +24,7 @@
 
                             <div>
                                 <!-- status-->
-                                <select class="status-button">
+                                <select name="estat" class="status-button">
                                     {% for estat in form.estat %}
                                         <option value="{{estat}}">{{estat}}</option>
                                     {% endfor %}    
@@ -40,21 +39,21 @@
 
                                 <div class="ticket-data-container">
                                     <!-- Type-->
-                                    <select class="status-button">
+                                    <select name="tipus" class="status-button">
                                         {% for tipus in form.tipus %}
                                             <option value="{{tipus}}">{{tipus}}</option>
                                         {% endfor %}
                                     </select>
 
                                     <!-- Severity-->
-                                    <select class="status-button">
+                                    <select name="gravetat" class="status-button">
                                         {% for gravetat in form.gravetat %}
                                             <option value="{{gravetat}}">{{gravetat}}</option>
                                         {% endfor %}
                                     </select>
                                     
                                     <!-- Priority-->
-                                    <select class="status-button">
+                                    <select name="prioritat" class="status-button">
                                         {% for prioritat in form.prioritat %}
                                             <option value="{{prioritat}}">{{prioritat}}</option>
                                         {% endfor %}
@@ -69,7 +68,7 @@
                         </sidebar>
                         
                     </div>
-                    <input type="submit" value="CREATE" name="subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+                    <input type="submit" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
                 </div>
             </form>
         </div>
