@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from . import forms, models
 
@@ -25,3 +25,24 @@ class CrearIssueView(CreateView):
         # Especifiquem el creador de l'issue
         form.instance.creador = models.Usuari.objects.get(user=self.request.user)
         return super().form_valid(form)
+
+
+class EditarIssueView(UpdateView):
+    model = models.Issue
+    template_name = 'issue_edit.html'
+    form_class = forms.IssueForm
+    success_url = None
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        is_valid_form = form.is_valid()
+        if 'save_subject' in request.POST:
+            self.object = self.get_object()
+            subject = form.cleaned_data['subject']
+            self.object.subject = subject
+            self.object.save()
+            return self.form_valid(form)
+
+    def get_success_url(self):
+        # Sobreescivim la success url per tornar a on estàvem
+        return self.request.path
