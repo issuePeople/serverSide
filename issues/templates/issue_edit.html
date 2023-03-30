@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <form method="post" >
+    {% csrf_token %}
+        <input type="text" name="subject" value="{{ form.subject.value }}">
+        <input type="text" name="tipus" value="{{ form.tipus.value }}">
+        <input type="text" name="estat" value="{{ form.estat.value }}">
+        <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
+        <input type="text" name="prioritat" value="{{ form.prioritat.value }}">
+        <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
+        <input type="submit" name="save_subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+    </form>
+
+{% endblock %}
+
