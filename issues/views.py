@@ -1,18 +1,33 @@
 from django.views.generic import TemplateView, CreateView, UpdateView
+from django_filters.views import FilterView
 from django.urls import reverse_lazy
 from . import forms, models
+from .filters import IssueFilter
 
 
-class ListIssueView(TemplateView):
+class ListIssueView(FilterView):
     model = models.Issue
     template_name = 'issue_list.html'
+    filterset_class = IssueFilter
+    context_object_name = 'issues'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Temporalment, ordenem per data de creació
-        issues = models.Issue.objects.all().order_by('-dataCreacio')
-        context.update({'issues': issues})
+        context.update({'TTipus': models.Issue.TTIPUS})
+        context.update({'TEstats': models.Issue.TESTATS})
+        context.update({'TGravetat': models.Issue.TGRAVETAT})
+        context.update({'TPrioritat': models.Issue.TPRIORITAT})
         return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # Filtrem fent servir l'IssueFilter (fitlers.py)
+        filter = IssueFilter(self.request.GET, queryset=queryset)
+        queryset = filter.qs.order_by(order_by)
+
+        return queryset
+
 
 
 class CrearIssueView(CreateView):
