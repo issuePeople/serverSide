@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'issuePeople.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'aws': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
         'USER': 'issuePeople',
@@ -85,7 +85,7 @@ DATABASES = {
         'HOST': 'awseb-e-aggqmrfkjj-stack-awsebrdsdatabase-v3wq5qeeocuf.cc9za93r8ozm.us-west-2.rds.amazonaws.com',
         'PORT': 5432,
     },
-    'default': {
+    'local': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
