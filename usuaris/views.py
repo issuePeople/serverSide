@@ -4,5 +4,10 @@ from django.urls import reverse
 
 # Create your views here.
 
-class VeureUsuari(TemplateView):
+
+class VeureUsuariView(TemplateView):
     template_name = 'usuaris_perfil.html'
+
+
+class LoginView(TemplateView):
+    template_name = 'usuaris_login.html'

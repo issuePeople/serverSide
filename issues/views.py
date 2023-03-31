@@ -46,3 +46,7 @@ class EditarIssueView(UpdateView):
     def get_success_url(self):
         # Sobreescivim la success url per tornar a on estàvem
         return self.request.path
+
+
+class CrearBulkView(TemplateView):
+    template_name = 'issue_bulk.html'
