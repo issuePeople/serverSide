@@ -22,6 +22,10 @@
                                 <img src="   https://cdn-icons-png.flaticon.com/512/10035/10035140.png " width="15" height="15" alt="" title="" class="img-small" >
                                 <span class="text" style="margin: 5px;">Filters</span>
                             </button>
+                            <div>
+                                <input class="ng-pristine ng-valid ng-empty ng-touched">
+                            </div>
+                            
                         </div>
                         <div class="new-issue">
                             <button class="btn-small" >
@@ -43,9 +47,15 @@
                                 </div>
                             </div>
                             <div class="filters-cat">
+                                <div class="filters-applied">
+                                    <div class="filters-included">
+                                        <div class="filters-title">Filtrat per:</div>
+                                        <div class="filters-wrapper"></div>
+                                    </div>
+                                </div>
                                 <ul>
                                     <li>
-                                        <button class="filters-cat-single"  id="categoria_filtre_tipus" onclick="filtre_tipus(1)" style="display: flex">
+                                        <button class="filters-cat-single"  id="categoria_filtre_tipus" name = "obre"onclick="filtre_tipus('filtre_tipus')" style="display: flex">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: block">
@@ -53,7 +63,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_tipus_selected" onclick="filtre_tipus(1)" style="display: none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_tipus_selected" onclick="filtre_tipus('filtre_tipus')" style="display: none">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -62,10 +72,12 @@
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_tipus" style="display:flex ; flex-direction: column";>
+                                        <div class="filter-list" style="display:none"  name="tanca"  id="filtre_tipus" style="display:flex ; flex-direction: column";>
                                             <div>
                                                 <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%">
                                                     <span class="name" >Bug</span>
+                                                    
+                                                    <span class="number"></span>
                                                 </button>
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)">
                                                     <span class="name">Pregunta</span>
@@ -79,7 +91,7 @@
                                         
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_gravetat" onclick="filtre_tipus(2)">
+                                        <button class="filters-cat-single" id="categoria_filtre_gravetat" name = "obre"onclick="filtre_tipus('filtre_gravetat')">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -88,7 +100,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_gravetat_selected" onclick="filtre_tipus(2)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_gravetat_selected" onclick="filtre_tipus('filtre_gravetat')" style="display:none">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -97,7 +109,7 @@
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_gravetat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_gravetat">
                                             <div>
                                                 <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143); width:100%">
                                                     <span class="name" >Desitjada</span>
@@ -118,7 +130,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_prioritat" onclick="filtre_tipus(3)">
+                                        <button class="filters-cat-single" id="categoria_filtre_prioritat" name = "obre"onclick="filtre_tipus('filtre_prioritat')">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -126,7 +138,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_prioritat_selected" onclick="filtre_tipus(3)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_prioritat_selected" onclick="filtre_tipus('filtre_prioritat')" style="display:none">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -135,7 +147,7 @@
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_prioritat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_prioritat">
                                             <div>
                                                 <button class="single-filter single-filter-type-general"style="border-color: rgb(168, 228, 64); width:100%">
                                                     <span class="name" >Baixa</span>
@@ -150,7 +162,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_estat" onclick="filtre_tipus(4)">
+                                        <button class="filters-cat-single" id="categoria_filtre_estat" name = "obre"onclick="filtre_tipus('filtre_estat')">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -158,7 +170,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_estat_selected" onclick="filtre_tipus(4)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_estat_selected" onclick="filtre_tipus('filtre_estat')" style="display:none">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -167,7 +179,7 @@
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_estat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_estat">
                                             <div>
                                             <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143);; width:100%">
                                                 <span class="name" >Nova</span>
@@ -194,7 +206,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_assignat" onclick="filtre_tipus(5)">
+                                        <button class="filters-cat-single" id="categoria_filtre_assignat" name = "obre"onclick="filtre_tipus('filtre_assignat')">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -202,7 +214,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_assignat_selected" onclick="filtre_tipus(5)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_assignat_selected" onclick="filtre_tipus('filtre_assignat')" style="display:none">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -210,12 +222,12 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_assignat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_assignat">
                                             
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_rol" onclick="filtre_tipus(6)">
+                                        <button class="filters-cat-single" id="categoria_filtre_rol" name = "obre"onclick="filtre_tipus('filtre_rol')">
                                             <span>Rol</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -223,7 +235,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_rol_selected" onclick="filtre_tipus(6)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_rol_selected" onclick="filtre_tipus('filtre_rol')" style="display:none">
                                             <span>Rol</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -232,12 +244,12 @@
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_rol">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_rol">
                                             
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_creat" onclick="filtre_tipus(7)">
+                                        <button class="filters-cat-single" id="categoria_filtre_creat" name = "obre"onclick="filtre_tipus('filtre_creat')">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
@@ -245,7 +257,7 @@
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_creat_selected" onclick="filtre_tipus(7)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_creat_selected" onclick="filtre_tipus('filtre_creat')" style="display:none">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
@@ -254,7 +266,7 @@
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_creat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
                                             
                                         </div>
                                     </li>
@@ -340,20 +352,13 @@
                                 <td style="text-align: center;
                                 vertical-align: middle;">
                                     <div class="assigned-field" >
-                                    {%if issue.estat == 'N' %}
-                                        <span>Nova</span> 
-                                    {%elif issue.estat == 'D'%}
-                                        <span>En curs</span>
-                                    {%elif issue.estat == 'T'%}
-                                        <span>Llesta per testejar</span>
-                                    {%elif issue.estat == 'C'%}
-                                        <span style="color:#70b578">Tancada</span>
-                                    {%elif issue.estat == 'I'%}
-                                        <span>Necessita informació</span>
+                                    
+                                    {%if issue.estat == 'C'%}
+                                        <span style="color:#70b578">{{issue.get_estat_display}}</span>
                                     {%elif issue.estat == 'R'%}
-                                        <span style="color:#FF0000">Rebutjada</span>
-                                    {%elif issue.estat == 'P'%}
-                                        <span>Proposada</span>
+                                        <span style="color:#FF0000">{{issue.get_estat_display}}</span>
+                                    {%else %}
+                                        <span>{{issue.get_estat_display}}</span>
                                     {%endif%} 
                                     </div>
                                 </td>
@@ -389,48 +394,69 @@
   }
 }
 
+function tanca_tot(param1){
+    var tanca = document.getElementsByName("tanca"); //divsToHide is an array
+    for(var i = 0; i < tanca.length; i++){
+        if(tanca[i].id != param1)
+        tanca[i].style.display= "none"; // or
+        //divsToHide[i].style.display = "none"; // depending on what you're doing
+    }
+    var obre = document.getElementsByName("obre");
+    for(var i = 0; i < obre.length; i++){
+        if(obre[i].id != param1)
+        obre[i].style.display= "flex"; // or
+        //divsToHide[i].style.display = "none"; // depending on what you're doing
+    }
+}
+
 function filtre_tipus(param1) {
-    if(param1 == 1){
+    
+    
+    if(param1 == "filtre_tipus"){
         var x = document.getElementById("filtre_tipus");
         var y = document.getElementById("categoria_filtre_tipus");
         var z = document.getElementById("categoria_filtre_tipus_selected")
     }
-    if(param1 == 2){
+    if(param1 == "filtre_gravetat"){
         var x = document.getElementById("filtre_gravetat");
         var y = document.getElementById("categoria_filtre_gravetat");
         var z = document.getElementById("categoria_filtre_gravetat_selected")
     }
-    if(param1 == 3){
+    if(param1 == "filtre_prioritat"){
         var x = document.getElementById("filtre_prioritat");
         var y = document.getElementById("categoria_filtre_prioritat");
         var z = document.getElementById("categoria_filtre_prioritat_selected")
     }
-    if(param1 == 4){
+    if(param1 == "filtre_estat"){
         var x = document.getElementById("filtre_estat");
         var y = document.getElementById("categoria_filtre_estat");
         var z = document.getElementById("categoria_filtre_estat_selected")
     }
-    if(param1 == 5){
+    if(param1 == "filtre_assignat"){
         var x = document.getElementById("filtre_assignat");
         var y = document.getElementById("categoria_filtre_assignat");
         var z = document.getElementById("categoria_filtre_assignat_selected")
     }
-    if(param1 == 6){
+    if(param1 == "filtre_rol"){
         var x = document.getElementById("filtre_rol");
         var y = document.getElementById("categoria_filtre_rol");
         var z = document.getElementById("categoria_filtre_rol_selected")
     }
-    if(param1 == 7){
+    if(param1 == "filtre_creat"){
         var x = document.getElementById("filtre_creat");
         var y = document.getElementById("categoria_filtre_creat");
         var z = document.getElementById("categoria_filtre_creat_selected")
     }
+
   
   if (y.style.display === "none") {
+    tanca_tot(param1);
     x.style.display = "none";
     y.style.display = "flex";
     z.style.display = "none";
+    
   } else {
+    tanca_tot(param1);
     x.style.display = "flex";
     y.style.display = "none";
     z.style.display = "flex";
