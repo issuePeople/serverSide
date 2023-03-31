@@ -25,12 +25,11 @@ class ListIssueView(FilterView):
         # Filtrem fent servir l'IssueFilter (fitlers.py)
         filter = IssueFilter(self.request.GET, queryset=queryset)
 
-        # Ordenem a partir del paràmetre order_by
+        # Ordenem a partir del paràmetre order_by (per defecte, ordenat x data creació)
         order_by = self.request.GET.get('order_by', '-dataCreacio')
         queryset = filter.qs.order_by(order_by)
 
         return queryset
-
 
 
 class CrearIssueView(CreateView):
