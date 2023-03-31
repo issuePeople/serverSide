@@ -64,9 +64,9 @@ class Issue(models.Model):
     estat = models.CharField(choices=TESTATS, default=NOVA, max_length=5, verbose_name=_('Estat'))
     gravetat = models.CharField(choices=TGRAVETAT, default=NORMAL, max_length=5, verbose_name=_('Gravetat'))
     prioritat = models.CharField(choices=TPRIORITAT, default=MITJA, max_length=5, verbose_name=_('Prioritat'))
-    creador = models.ForeignKey(Usuari, related_name='creats', on_delete=models.DO_NOTHING, verbose_name=_('Creador'))
+    creador = models.ForeignKey(Usuari, related_name='creats', null=True, blank=True, on_delete=models.DO_NOTHING, verbose_name=_('Creador'))
     assignacio = models.ForeignKey(Usuari, related_name='assignats', null=True, blank=True, on_delete=models.DO_NOTHING, verbose_name=_('Assignada a'))
-    dataCreacio = models.DateField(auto_now_add=True, verbose_name=_('Data creació'))
-    dataModificacio = models.DateField(auto_now=True, verbose_name=_('Última modificació'))
-    dataLimit = models.DateField(null=True, blank=True, verbose_name=_('Data límit'))
+    dataCreacio = models.DateTimeField(auto_now_add=True, verbose_name=_('Data creació'))
+    dataModificacio = models.DateTimeField(auto_now=True, verbose_name=_('Última modificació'))
+    dataLimit = models.DateTimeField(null=True, blank=True, verbose_name=_('Data límit'))
 

@@ -1,9 +1,86 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
-    </form>
+
+    <div class="lightbox lightbox-generic-form lightbox-create-edit open">
+        <a class="close" href="/issues/list">
+            X
+        </a>
+        <div> 
+            <form method="post" >
+                {% csrf_token %}
+                <h2 class="title">New issue</h2>
+                
+                <div>
+                    <div class="form-wrapper">
+                        
+                        <!-- left side -->
+                        <div class="main">
+                            <input value="" type="text" name="subject">
+                            <textarea name="descripcio" rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
+                        </div>
+
+                        <!-- right side -->
+                        <sidebar class="sidebar ticket-data">
+
+                            <div>
+                                <!-- status-->
+                                <select name="estat" class="status-button">
+                                    {% for estat in form.estat %}
+                                        <option value="{{estat}}">{{estat}}</option>
+                                    {% endfor %}    
+                                </select>
+
+                                <!-- assign ? -->
+                                <select class="status-button">
+                                    {% for assig in form.assignacio %}
+                                        <option value="{{assig}}">{{assig}}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <div class="ticket-data-container">
+                                    <!-- Type-->
+                                    <select name="tipus" class="status-button">
+                                        {% for tipus in form.tipus %}
+                                            <option value="{{tipus}}">{{tipus}}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <!-- Severity-->
+                                    <select name="gravetat" class="status-button">
+                                        {% for gravetat in form.gravetat %}
+                                            <option value="{{gravetat}}">{{gravetat}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    
+                                    <!-- Priority-->
+                                    <select name="prioritat" class="status-button">
+                                        {% for prioritat in form.prioritat %}
+                                            <option value="{{prioritat}}">{{prioritat}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="ticket-detail-settings">
+                                    <div><input name="subject" value="T" type="button" class="btn-icon is-blocked item-block"></div>
+                                    <div><input name="subject" value="B" type="button" class="btn-icon is-blocked item-block"></div>
+                                </div>
+                                
+                            </div>
+                        </sidebar>
+                        
+                    </div>
+                    <input type="submit" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+                </div>
+            </form>
+        </div>
+       
+        <!--
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="CREATE" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
+        </form>
+        -->
+    </div>
+
 {% endblock %}
 

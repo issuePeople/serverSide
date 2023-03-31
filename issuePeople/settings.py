@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-f2li=dd+zuko_d_4ojx-xw57p_3q)e$(d31=23x6(=nabdqhi2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com', '127.0.0.1']
 
 
 # Application definition
@@ -77,6 +77,14 @@ WSGI_APPLICATION = 'issuePeople.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    'aws': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'issuePeople',
+        'PASSWORD': 'issuepeopleasw',
+        'HOST': 'awseb-e-aggqmrfkjj-stack-awsebrdsdatabase-v3wq5qeeocuf.cc9za93r8ozm.us-west-2.rds.amazonaws.com',
+        'PORT': 5432,
+    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -121,7 +129,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, os.path.join('issuePeople', "static")),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # Default primary key field type
