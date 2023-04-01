@@ -1,6 +1,7 @@
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.views.generic import FormView, CreateView, UpdateView
 from django_filters.views import FilterView
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from issuePeople.mixins import IsAuthenticatedMixin
 from . import forms, models
 from .filters import IssueFilter
@@ -66,5 +67,21 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
         return self.request.path
 
 
-class CrearBulkView(TemplateView):
+class CrearBulkView(IsAuthenticatedMixin, FormView):
+    model = models.Issue
     template_name = 'issue_bulk.html'
+    form_class = forms.IssueBulkForm
+    success_url = reverse_lazy('tots_issues')
+
+    def form_valid(self, form):
+        subject_text = form.cleaned_data['subjects']
+        subjects = subject_text.splitlines()
+        issues = []
+        for subject in subjects:
+            issue = models.Issue(
+                subject=subject,
+                creador=models.Usuari.objects.get(user=self.request.user)
+            )
+            issues.append(issue)
+        models.Issue.objects.bulk_create(issues)
+        return redirect(self.success_url)
