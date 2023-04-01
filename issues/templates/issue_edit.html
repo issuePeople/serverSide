@@ -1,8 +1,176 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="master">
+    <div class="wrapper">
+        <div class="main detail">
+            <!-- issue info container  -->
+            <div class="detail-header-container">
+                <!-- Per passar al segunet o anterior issue -->
+                <div class="detail-nav"></div>
+                <div class="detail-header">
+                    <!-- Titol issue-->
+                    <div class=""></div>
+                    <!-- Action buttons-->
+                    <div class="action-buttons"></div>
+                    <div class="subheader">
+                        <div class="tags-container">
+                            <button>Add tag+</button>
+                        </div>
+                        <div>
+                            <div class="created-by">
+                                <a href="url usser"></a>
+                                <div class="created-date"></div>
+                            </div>
+                            <div class="user-avatar">
+                                <a href="url usser"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attachments Comments Activites-->
+            <div class="detail-content">
+                <!-- Descripcio issue-->
+                <section class="duty-content">
+                    <div>
+                        edit text here 
+                    </div>
+                </section>
+
+                <!-- Attachments -->
+                <section class="attachments attachments-full">
+                    <!-- attachment header-->
+                    <div class="attachments-header">
+                        <h3 class="attachment-title">
+                            <!-- num attachment -->
+                            <span class="attachments-num">1</span>
+                            <span class="attachments-text">Attachments</span>
+                        </h3>
+                        
+                        <!-- add attachment-->
+                        <div class="options ">
+                            <div class="add-attach">
+                                <button>
+                                    +
+                                    <input type="button" name="submit" value="+asdasd" class="btn-icon add-attachment-button">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- attachment content-->
+                    <div class="attachment-list sortable">
+                        list attachment
+                    </div>
+                </section>
+
+                <!-- Comments Activites header -->
+                <section class="history">
+                    <nav class="history-tabs">
+                        <a class="history-tab active">0 Comments</a>
+                        <a class="history-tab">Activites</a>
+                    </nav>
+                </section>
+                <!-- Comments Activites content -->
+                <section class="comment" >
+                    <div class="commmetns-wrapper">
+                        list of coments
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <sidebar class="sidebar ticket-data">
+            <section class="ticket-header">
+                <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
+                    <span>Open</span>
+                </span>
+                <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
+                    <!-- Falta desplegable -->
+                    <span>New</span>
+                </span>
+            </section>
+            <section class="ticket-section ticket-data-container">
+                <div class="ticket-data-container">
+                    <!-- Type-->
+                    <select name="tipus" class="status-button">
+                        {% for tipus in form.tipus %}
+                            <option value="{{tipus}}">{{tipus}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Severity-->
+                    <select name="gravetat" class="status-button">
+                        {% for gravetat in form.gravetat %}
+                            <option value="{{gravetat}}">{{gravetat}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- Priority-->
+                    <select name="prioritat" class="status-button">
+                        {% for prioritat in form.prioritat %}
+                            <option value="{{prioritat}}">{{prioritat}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </section>
+            <!-- Assigned section-->
+            <section class="ticket-section ng-pristine ng-untouched ng-valid ng-not-empty">
+                <div class="ticket-section-label">
+                    <span>Assigned</span>
+                </div>
+                <div class="ticket-user-list-container">
+                    <div class="ticket-user-list-content">
+                        <div class="ticket-user-list"></div>
+                        <div class="ticket-users-actions">
+                            <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
+                            <a href="url/assignToMe" class="ticket-users-actions">Assign to me</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Watchers section-->
+            <section class="ticket-section ticket-watchers">
+                <div class="ticket-section-label">
+                    <span>Watchers</span>
+                </div>
+                <div class="ticket-user-list-container">
+                    <div class="ticket-user-list-content">
+                        <div class="ticket-user-list"></div>
+                        <div class="ticket-users-actions">
+                            <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
+                            <a href="url/assignToMe" class="ticket-users-actions">Watch</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- setting Section-->
+            <section class="ticket-section ticket-detail-settings">
+                <div class="ticket-detail-settings">
+                    <div>
+                        <!-- <button id="datePickerBtn" type="button" class="btn-icon is-blocked item-block">T</button> -->
+                        <input type="date" 
+                               id="datePickerInput" 
+                               name="timeline" 
+                               value="T"
+                        >
+                    </div>
+                    <div>
+                        <input name="subject" value="B" type="checkbox" id="btnBlock" style="margin-left: 15px;">
+                    </div>
+                    <div>
+                        <input name="subject" value="D" type="button" id="btnBlock" style="margin-left: 15px;">
+                    </div>
+                </div>
+            </section>
+        </sidebar>
+    </div>
+</div>
+
+<!--
     <form method="post" >
-    {% csrf_token %}
+        {% csrf_token %}
         <input type="text" name="subject" value="{{ form.subject.value }}">
         <input type="text" name="tipus" value="{{ form.tipus.value }}">
         <input type="text" name="estat" value="{{ form.estat.value }}">
@@ -11,6 +179,6 @@
         <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
         <input type="submit" name="save_subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
     </form>
-
+-->
 {% endblock %}
 
