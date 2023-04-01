@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login as djangologin, logout as djangologout
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, FormView
@@ -49,3 +49,8 @@ class LoginView(FormView):
         else:
             form = LoginForm()
         return render(request, self.template_name, {'form': form})
+
+
+def logout(request):
+    djangologout(request)
+    return redirect(reverse('login'))
