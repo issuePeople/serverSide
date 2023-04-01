@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="master">
+    <div class="wrapper">
+        <div class="auth">
+            <div class="auth-container">
+                <div class="logo-svg"></div>
+                <h1 class="logo">Taiga</h1>
+                <h2 class="tagline">LOVE YOUR PROJECT</h2>
+                <div class="login-form-container">
+                    <!-- Login propi -->
+                    <form class="login-form ng-pristine ng-valid" style="justify-content: space-around;">
+                        <input style="margin-bottom: 5px;" type="text" autocorrect="off" autocapitalize="none" autofocus required name="username" data-required="true" placeholder="Pick a username">
+                        <input style="margin-bottom: 5px;" type="text" autocorrect="off" autocapitalize="none" autofocus required name="fullname" data-required="true" placeholder="Pick your full name">
+                        <input style="margin-bottom: 5px;" type="text" autocorrect="off" autocapitalize="none" autofocus required name="email" data-required="true" placeholder="Your email">
+                        <div class="login-password" >
+                            <input style="margin-bottom: 5px;" type="password" name="password" data-required="true" placeholder="Set a password (case sensitive)" >
+                            <a href="">Forgot it?</a>
+                        </div>
+                        <div>
+                            <input type="submit" name="login" value="sing Up" class="btn-small full" style="margin-top: 10px; margin-bottom: 10px;">
+                        </div>
+                    </form>
+
+                    <!-- Login propi -->
+                    <div class="contrib-plugins-wrapper">
+                        <label>Or login with</label>
+                        <div >
+                            <a href="" title="Enter with your google account" class="button button-auth">
+                                <span>Sign in with Google   </span>
+                            </a>
+                        </div>
+                    </div>
+                    <span>
+                        Not registred yet? 
+                        <a href="">create your free account here</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
