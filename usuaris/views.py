@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login as djangologin, logout as djangologout
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, FormView
-from .forms import LoginForm
+from .forms import LoginForm, RegistreForm
 from .models import Usuari
 
 
@@ -49,6 +50,37 @@ class LoginView(FormView):
         else:
             form = LoginForm()
         return render(request, self.template_name, {'form': form})
+
+
+class RegistreView(LoginView):
+    template_name = 'usuaris_singUp.html'
+    form_class = RegistreForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            # Primer creem l'usuari de Django
+            user = User(
+                username=form.cleaned_data.get('username'),
+                email=form.cleaned_data.get('email'),
+                first_name=form.cleaned_data.get('name'),
+            )
+            # Encripta la contrasenya
+            user.set_password(form.cleaned_data.get('password'))
+            user.save()
+
+            # Per últim, el nostre usuari, enllaçat amb el Django
+            usuari = Usuari(
+                user=user
+            )
+            usuari.save()
+
+            # Fem login
+            djangologin(request, user)
+            return redirect(self.success_url)
+        else:
+            form = RegistreForm()
+            return render(request, self.template_name, {'form': form})
 
 
 def logout(request):
