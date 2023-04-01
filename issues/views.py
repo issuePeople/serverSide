@@ -1,11 +1,12 @@
 from django.views.generic import TemplateView, CreateView, UpdateView
 from django_filters.views import FilterView
 from django.urls import reverse_lazy
+from issuePeople.mixins import IsAuthenticatedMixin
 from . import forms, models
 from .filters import IssueFilter
 
 
-class ListIssueView(FilterView):
+class ListIssueView(IsAuthenticatedMixin, FilterView):
     model = models.Issue
     template_name = 'issue_list.html'
     filterset_class = IssueFilter
@@ -32,7 +33,7 @@ class ListIssueView(FilterView):
         return queryset
 
 
-class CrearIssueView(CreateView):
+class CrearIssueView(IsAuthenticatedMixin, CreateView):
     model = models.Issue
     template_name = 'issue_form.html'
     form_class = forms.IssueForm
@@ -44,7 +45,7 @@ class CrearIssueView(CreateView):
         return super().form_valid(form)
 
 
-class EditarIssueView(UpdateView):
+class EditarIssueView(IsAuthenticatedMixin, UpdateView):
     model = models.Issue
     template_name = 'issue_edit.html'
     form_class = forms.IssueForm

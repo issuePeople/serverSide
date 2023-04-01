@@ -5,10 +5,11 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, FormView
 from .forms import LoginForm, RegistreForm
+from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Usuari
 
 
-class VeureUsuariView(TemplateView):
+class VeureUsuariView(IsAuthenticatedMixin, TemplateView):
     template_name = 'usuaris_perfil.html'
 
 
