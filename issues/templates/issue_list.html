@@ -228,7 +228,7 @@
                                     </li>
                                     <li>
                                         <button class="filters-cat-single" id="categoria_filtre_rol" name = "obre"onclick="filtre_tipus('filtre_rol')">
-                                            <span>Rol</span>
+                                            <span>Tags</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
                                                     <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
@@ -236,7 +236,7 @@
                                             </div>
                                         </button>
                                         <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_rol_selected" onclick="filtre_tipus('filtre_rol')" style="display:none">
-                                            <span>Rol</span>
+                                            <span>Tags</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
                                                     <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
@@ -280,9 +280,7 @@
                         <tr class="row title">
                             <td class="level-field">
                                 <span class="wide">Tipus</span>
-                                <div class="mobile">
-                                    <div class="tooltip pop-help">Type</div><span class="first-letter">Type</span>
-                                  </div>
+                                
                             </td>
                             <td class="level-field">
                                 <span class="wide">Gravetat</span>
@@ -290,7 +288,9 @@
                             <td class="level-field">
                                 <span class="wide">Prioritat</span>
                             </td>
-                            <td class="subject"></td>
+                            <td class="subject">
+                                <span class="wide">Issue</span>
+                            </td>
                             <td class="issue-field"></td>
                             <td class="modified-field"></td>
                             <td class="assigned-field"></td>
@@ -298,7 +298,7 @@
                         {% for issue in issues %}
                             <tr class="row table-main" style="height: 80px;">
                             
-                                <td class="level-field" style="width: 10%; text-align: center;
+                                <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;
                                 vertical-align: middle">
                                         {% if issue.tipus == "B" %}
                                             <div class="level" style="background: rgb(228, 64, 87)"></div>
@@ -310,7 +310,7 @@
                                       
                                 </td>
                                 
-                                 <td class="level-field" style="width: 10%;text-align: center;
+                                 <td class="level-field" style="padding-right: 20px;text-align: center;
                                  vertical-align: middle;">
                                     {% if issue.gravetat == "D" %}
                                         <div class="level" style="background: rgb(112, 114, 143)"></div>
@@ -326,7 +326,7 @@
                                     
                                  </td>
                                  
-                                 <td class="level-field" style="width: 10%t;text-align: center;
+                                 <td class="level-field" style="padding-right: 20px;text-align: center;
                                  vertical-align: middle;">
                                         {% if issue.prioritat == "B" %}
                                             <p class="level" style="background: rgb(168, 228, 64);"></p>
