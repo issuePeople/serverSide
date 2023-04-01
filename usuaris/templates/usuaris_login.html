@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
 {% block content %}
 
 <div class="master">
@@ -29,7 +30,7 @@
                     <!-- Login propi -->
                     <div class="contrib-plugins-wrapper">
                         <div >
-                            <a href="" title="Enter with your google account" class="button button-auth">
+                            <a href="{% provider_login_url 'google' %}" title="Enter with your google account" class="button button-auth">
                                 <span>Sign in with Google   </span>
                             </a>
                         </div>
