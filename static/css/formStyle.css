@@ -1,11 +1,11 @@
-#id_subject {
-    
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
 }
 
-#id_descripcio {
-
+input[type=checkbox]::before {
+  background: #83eede;
 }
-
-#id_assignacio {
-
+input[type=checkbox]::after {
+  background: red;
 }
