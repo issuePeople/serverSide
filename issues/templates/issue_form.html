@@ -60,8 +60,17 @@
                                     </select>
                                 </div>
                                 <div class="ticket-detail-settings">
-                                    <div><input name="subject" value="T" type="button" class="btn-icon is-blocked item-block"></div>
-                                    <div><input name="subject" value="B" type="button" class="btn-icon is-blocked item-block"></div>
+                                    <div>
+                                        <!-- <button id="datePickerBtn" type="button" class="btn-icon is-blocked item-block">T</button> -->
+                                        <input type="date" 
+                                               id="datePickerInput" 
+                                               name="timeline" 
+                                               value="T"
+                                        >
+                                    </div>
+                                    <div>
+                                        <input name="subject" value="B" type="checkbox" id="btnBlock" style="margin-left: 15px;">
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -81,6 +90,8 @@
         </form>
         -->
     </div>
+
+    
 
 {% endblock %}
 
