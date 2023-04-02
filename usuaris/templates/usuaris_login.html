@@ -6,22 +6,26 @@
     <div class="wrapper">
         <div class="auth">
             <div class="auth-container">
-                <div class="logo-svg"></div>
+                <div class="logo-svg">
+                    <img src="https://static9.depositphotos.com/1010305/1139/i/600/depositphotos_11390423-stock-photo-kitten-on-a-white-background.jpg"
+                    width="200"
+                    height="200">
+                </div>
                 <h1 class="logo">Taiga</h1>
                 <h2 class="tagline">LOVE YOUR PROJECT</h2>
                 <div class="login-form-container">
-
-                <!-- ToDo: Posar maco! -->
-                    {% for error in form.errors.values %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-
+                    
                     <!-- Login propi -->
                     <form class="login-form ng-pristine ng-valid" method="post">
                         {% csrf_token %}
                         <input style="margin-bottom: 5px;" type="text" autocorrect="off" autocapitalize="none" autofocus required name="username" data-required="true" placeholder="Username or email (case sensitive)">
                         <div class="login-password">
                             <input style="margin-bottom: 5px;" type="password" name="password" data-required="true" placeholder="Password (case sensitive)" >
+                            <div style="color: red; margin-left: 15px; margin-top: -10px; margin-bottom: -10px;">
+                                {% for error in form.errors.values %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
                             <a href="">Forgot it?</a>
                         </div>
                         <button type="submit" name="login" value="LOGIN" class="btn-small full" style="margin-top: 10px; margin-bottom: 10px;">LOGIN</button>
