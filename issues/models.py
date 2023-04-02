@@ -79,3 +79,9 @@ class Issue(models.Model):
     bloquejat = models.BooleanField(null=False, blank=False, default=False, verbose_name=_('Bloquejat'))
     motiuBloqueig = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Motiu bloqueig'))
     tags = models.ManyToManyField(Tag, verbose_name=_('Tags'))
+
+
+class Attachment(models.Model):
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
+    document = models.FileField(verbose_name=_('Document'))
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, verbose_name=_('Issue'), related_name='attachments')
