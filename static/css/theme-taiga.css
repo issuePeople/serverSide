@@ -16734,9 +16734,11 @@ body {
     padding-left: 1rem
 }
 
+/*
 .attachments-header input {
     display: none
 }
+*/
 
 .attachments-empty {
     border: 3px dashed #eceff4;
