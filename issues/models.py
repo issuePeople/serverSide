@@ -76,4 +76,6 @@ class Issue(models.Model):
     dataCreacio = models.DateTimeField(auto_now_add=True, verbose_name=_('Data creació'))
     dataModificacio = models.DateTimeField(auto_now=True, verbose_name=_('Última modificació'))
     dataLimit = models.DateTimeField(null=True, blank=True, verbose_name=_('Data límit'))
-    tags = models.ManyToManyField(Tag, null=True, blank=True, verbose_name=_('Tags'))
+    bloquejat = models.BooleanField(null=False, blank=False, default=False, verbose_name=_('Bloquejat'))
+    motiuBloqueig = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Motiu bloqueig'))
+    tags = models.ManyToManyField(Tag, verbose_name=_('Tags'))
