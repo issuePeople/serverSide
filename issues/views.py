@@ -1,7 +1,7 @@
 from django.views.generic import FormView, CreateView, UpdateView
 from django_filters.views import FilterView
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
 from . import forms, models
 from .filters import IssueFilter
@@ -51,16 +51,31 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
     template_name = 'issue_edit.html'
     form_class = forms.IssueForm
     success_url = None
+    context_object_name = 'issue'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        queryset = models.Issue.objects.prefetch_related('attachments').order_by('-attachments__data')
+        return get_object_or_404(queryset, pk=pk)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        is_valid_form = form.is_valid()
-        if 'save_subject' in request.POST:
-            self.object = self.get_object()
-            subject = form.cleaned_data['subject']
-            self.object.subject = subject
-            self.object.save()
+        if form.is_valid():
+            if 'save_subject' in request.POST:
+                self.object = self.get_object()
+                subject = form.cleaned_data['subject']
+                self.object.subject = subject
+                self.object.save()
+                return self.form_valid(form)
+            if 'add_attachment' in request.POST:
+                attachment_form = forms.AttachmentForm(request.POST, request.FILES)
+                if attachment_form.is_valid():
+                    attachment = attachment_form.save(commit=False)
+                    attachment.issue = self.get_object()
+                    attachment.save()
             return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def get_success_url(self):
         # Sobreescivim la success url per tornar a on estàvem
