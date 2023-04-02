@@ -1,11 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 
+    <!--<
     <form method="post" >
     {% csrf_token %}
         <textarea type="text" name="subjects"></textarea>
         <button type="submit">Submit</button>
     </form>
-
+    <<-->
+    <div class="lightbox lightbox-generic-bulk open" style="display: flex">
+        <a class="close" href="/issues">
+            X
+        </a>
+        <form class="ng-pristine ng-invalid ng-invalid-required" method="post" style="display: block">
+            {% csrf_token %}
+            <h2 class="title">
+                Afegir nou bulk
+            </h2>
+            <textarea cols="200" wrap="off" data-linewidth="200" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"
+                type="text" name="subjects" style="display: block">
+            </textarea>
+            <div class="lb-action-wrapper">
+                <button variant="primary" type="submit" title="Save" class="btn-big">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 
