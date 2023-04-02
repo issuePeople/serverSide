@@ -36,7 +36,7 @@
                         <div>
                             <div class="created-by">
                                 <a href="url usser">Created by userName</a>
-                                <div class="created-date">17 Mar 2023 21:13</div>
+                                <div class="created-date">{{issue.dataModificacio}}</div>
                             </div>
                             <div class="user-avatar">
                                 <a href="url usser"></a>
@@ -50,9 +50,12 @@
             <!-- Attachments Comments Activites-->
             <div class="detail-content">
                 <!-- Descripcio issue-->
-                <section class="duty-content">
-                    <div>
-                        edit text here 
+                <section class="duty-content" style="justify-content: flex-start;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <textarea placeholder="Empty space is so boring... go on, be descriptive..." 
+                        name="descripcio" rows="7" 
+                        class="description ng-pristine ng-untouched ng-valid ng-empty"></textarea>
+                        <input style="max-height: 32px;" type="button" name="guardarDescripcio" class="btn-small" value="S">
                     </div>
                 </section>
 
@@ -69,10 +72,7 @@
                         <!-- add attachment-->
                         <div class="options ">
                             <div class="add-attach">
-                                <button>
-                                    +
-                                    <input type="button" name="submit" value="+asdasd" class="btn-icon add-attachment-button">
-                                </button>
+                                <input type="file" value="+" name="attachment">
                             </div>
                         </div>
                     </div>
