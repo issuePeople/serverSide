@@ -7,23 +7,40 @@
             <!-- issue info container  -->
             <div class="detail-header-container">
                 <!-- Per passar al segunet o anterior issue -->
-                <div class="detail-nav"></div>
+                <div class="detail-nav">
+                    <a title="Previous" href="url/previous/issue">arwL</a>
+                    <a title="Next" href="url/next/issue">arwR</a>
+                </div>
                 <div class="detail-header">
                     <!-- Titol issue-->
-                    <div class=""></div>
+                    <div class="detail-title-wrapper">
+                        <span classe="issue-text" style="display: inline-flex;">
+                            <div class="detail-ref">
+                                <span class="issue-ref">#{{issue.id}}</span>
+                            </div>
+                            <span style="margin-top: 3px; font-size: 25px;" class="detail-subject">{{issue.subject}}</span>
+                        </span>
+                    </div>
+                    <div class="detail-project">
+                        <div class="section-name">Issue</div>
+                    </div>
                     <!-- Action buttons-->
                     <div class="action-buttons"></div>
                     <div class="subheader">
                         <div class="tags-container">
-                            <button>Add tag+</button>
+                            <button class="btn-filter ng-animate-disabled">
+                                <span>Add tag</span>
+                                <span style="font-size: 20px;">+</span>
+                            </button>
                         </div>
                         <div>
                             <div class="created-by">
-                                <a href="url usser"></a>
-                                <div class="created-date"></div>
+                                <a href="url usser">Created by userName</a>
+                                <div class="created-date">17 Mar 2023 21:13</div>
                             </div>
                             <div class="user-avatar">
                                 <a href="url usser"></a>
+                                <span>Foto perfil</span>
                             </div>
                         </div>
                     </div>
@@ -86,10 +103,12 @@
                 <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
                     <span>Open</span>
                 </span>
-                <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
-                    <!-- Falta desplegable -->
-                    <span>New</span>
-                </span>
+                <!-- status-->
+                <select name="estat" class="status-button">
+                    {% for estat in form.estat %}
+                        <option value="{{estat}}">{{estat}}</option>
+                    {% endfor %}    
+                </select>
             </section>
             <section class="ticket-section ticket-data-container">
                 <div class="ticket-data-container">
