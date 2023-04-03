@@ -1,9 +1,9 @@
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
-from .models import Issue, Tag
+from .models import Issue, Tag, Attachment
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm
 from usuaris.models import Usuari
 from .filters import IssueFilter
@@ -60,9 +60,9 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
     context_object_name = 'issue'
 
     def get_object(self, queryset=None):
-        pk = self.kwargs.get('pk')
+        id = self.kwargs.get('id')
         queryset = Issue.objects.prefetch_related('attachments', 'comentaris').order_by('-attachments__data', '-comentaris__data')
-        return get_object_or_404(queryset, pk=pk)
+        return get_object_or_404(queryset, id=id)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -120,3 +120,16 @@ class EsborrarIssueView(IsAuthenticatedMixin, DeleteView):
     pk_url_kwarg = 'id'
     success_url = reverse_lazy('tots_issues')
     template_name = 'issue_confirm_delete.html'
+    context_object_name = 'issue'
+
+
+class EsborrarAttachmemtView(IsAuthenticatedMixin, DeleteView):
+    model = Attachment
+    pk_url_kwarg = 'id'
+    queryset = Attachment.objects.select_related('issue')
+    template_name = 'attachment_confirm_delete.html'
+    context_object_name = 'attachment'
+
+    def get_success_url(self):
+        id_issue = self.object.issue.id
+        return reverse('editar_issue', kwargs={'id': id_issue})
