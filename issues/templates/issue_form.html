@@ -2,7 +2,7 @@
 {% block content %}
 
     <div class="lightbox lightbox-generic-form lightbox-create-edit open">
-        <a class="close" href="/issues/list">
+        <a class="close" href="/issues/">
             X
         </a>
         <div> 
@@ -26,14 +26,14 @@
                                 <!-- status-->
                                 <select name="estat" class="status-button">
                                     {% for estat in form.estat %}
-                                        <option value="{{estat}}">{{estat}}</option>
+                                        <option value="{{estat}}"></option>
                                     {% endfor %}    
                                 </select>
 
                                 <!-- assign ? -->
                                 <select class="status-button">
                                     {% for assig in form.assignacio %}
-                                        <option value="{{assig}}">{{assig}}</option>
+                                        <option value="{{assig}}"></option>
                                     {% endfor %}
                                 </select>
 
@@ -41,21 +41,21 @@
                                     <!-- Type-->
                                     <select name="tipus" class="status-button">
                                         {% for tipus in form.tipus %}
-                                            <option value="{{tipus}}">{{tipus}}</option>
+                                            <option value="{{tipus}}"></option>
                                         {% endfor %}
                                     </select>
 
                                     <!-- Severity-->
                                     <select name="gravetat" class="status-button">
                                         {% for gravetat in form.gravetat %}
-                                            <option value="{{gravetat}}">{{gravetat}}</option>
+                                            <option value="{{gravetat}}"></option>
                                         {% endfor %}
                                     </select>
                                     
                                     <!-- Priority-->
                                     <select name="prioritat" class="status-button">
                                         {% for prioritat in form.prioritat %}
-                                            <option value="{{prioritat}}">{{prioritat}}</option>
+                                            <option value="{{prioritat}}"></option>
                                         {% endfor %}
                                     </select>
                                 </div>
