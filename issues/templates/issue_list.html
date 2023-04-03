@@ -3,6 +3,8 @@
 
 {% block content %}
 
+
+
 <div class="master" style>
     <div class = "wrapper issues lightbox-generic-form">
          
@@ -37,20 +39,25 @@
             </div>
             <div class="issue-container">
                 
-                <sidebar class="filters-bar" id="filtres" style="display:none" >
+                <sidebar class="filters-bar" id="filtres"  >
                     <div>
                         <div class="filters-step-cat">
-                            <div class="filters-advanced">
-                                <div class="filters-advanced-form">
-                                    <div class="custom-radio"></div>
-                                    <div class="custom-radio"></div>
-                                </div>
-                            </div>
+                           
                             <div class="filters-cat">
                                 <div class="filters-applied">
                                     <div class="filters-included">
                                         <div class="filters-title">Filtrat per:</div>
-                                        <div class="filters-wrapper"></div>
+                                        <div class="filters-wrapper">
+                                            {%for key,value in TTipus%}
+                                            {% if "tipus=" in request.get_full_path and key in request.get_full_path%}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                
+                                                    <div class="name">{{value}}</div>
+                                                    <a href="?tipus=" class="name"onclick="filtrat('bug')">X</a>
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                        </div>
                                     </div>
                                 </div>
                                 <ul>
@@ -74,16 +81,38 @@
                                         </button>
                                         <div class="filter-list" style="display:none"  name="tanca"  id="filtre_tipus" style="display:flex ; flex-direction: column";>
                                             <div>
-                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%">
-                                                    <span class="name" >Bug</span>
+                                                {%for key,value in TTipus%}
+                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%" >
                                                     
+                                                    {% if request.get_full_path != "/issues/" %}
+                                                        <a href="{{request.get_full_path}}&tipus={{key}}" class="name">{{value}}</a>
+                                                    {%else%}
+                                                    <a href="?tipus={{key}}"class="name">{{value}}</a>
+                                                    {%endif%}
                                                     <span class="number"></span>
+                                                    
                                                 </button>
+                                                {%endfor%}
+                                                
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)">
-                                                    <span class="name">Pregunta</span>
+                                                   
+                                                    {% if request.get_full_path != "/issues/" %}
+                                                        
+                                                        <a href="{{request.get_full_path}}&tipus=P" class="name">Pregunta</a>
+                                                    {%else%}
+                                                    <a href="?tipus=P" class="name">Pregunta</a>
+                                                    {%endif%} 
+                                                    
+                                                    
                                                 </button>
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)">
-                                                    <span class="name" >Millora</span>
+                                               
+                                                    {% if request.get_full_path != "/issues/" %}
+                                                        
+                                                    <a href="{{request.get_full_path}}&tipus=M" class="name">Millora</a>
+                                                {%else%}
+                                                <a href="?tipus=M"class="name">Millora</a>
+                                                {%endif%}
                                                 </button>
                                             </div>
                                         </div>
@@ -278,12 +307,31 @@
                 <div class="issue-page"style="width: 100%;">
                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;">
                         <tr class="row title">
-                            <td class="level-field">
-                                <span class="wide">Tipus</span>
+                            <td class="level-field" style="display:flex">
+                                <span >Tipus</span>
+                                    <div style="display:flex;flex-direction: column; padding-left: 10px; align-items: center;">
+                                    <a href="?order_by=tipus" class="name">
+                                        <img src="   https://cdn-icons-png.flaticon.com/512/130/130906.png " width="5" height="5" alt="" title="" class="img-small">
+                                    </a>
+                                    <a href="?order_by=-tipus" class="name">
+                                        <img src="   https://cdn-icons-png.flaticon.com/512/2985/2985150.png " width="7" height="7" alt="" title="" class="img-small">
+                                    </a>
+                                </div>
+                                  
                                 
                             </td>
                             <td class="level-field">
-                                <span class="wide">Gravetat</span>
+                                <div>
+                                <span >Gravetat</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px; align-items: center;">
+                                    <a href="?order_by=gravetat" class="name">
+                                        <img src="   https://cdn-icons-png.flaticon.com/512/130/130906.png " width="5" height="5" alt="" title="" class="img-small">
+                                    </a>
+                                    <a href="?order_by=-gravetat" class="name">
+                                        <img src="   https://cdn-icons-png.flaticon.com/512/2985/2985150.png " width="7" height="7" alt="" title="" class="img-small">
+                                    </a>
+                                </div>
+                                </div>
                             </td>
                             <td class="level-field">
                                 <span class="wide">Prioritat</span>
@@ -340,10 +388,11 @@
                                 <td class="subject" style="text-align: center;
                                 vertical-align: middle;">
                                     
-                                    <a href="/issues/{{issue.id}}" >
+                                    <a href="/issues/{{issue.id}}/edit" >
                                         <span classe="issue-text" style="display: inline-flex;">
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
+                                            
                                         </span>
                                         
                                     </a> 
@@ -366,6 +415,7 @@
                                 <td class="modified-field" style="text-align: center;
                                 vertical-align: middle;">
                                     <span>{{issue.dataModificacio}}</span>
+                                    
                                 </td>
                                 
                                 <td class="assigned-field" style="text-align: center;
@@ -384,6 +434,23 @@
 
     
     <script type="text/javascript">
+
+        
+       /* function filtrat(param){
+            var x = document.getElementById(param);
+            var y = document.getElementById(param+'_select')
+            console.log(x);
+            console.log(y);
+            
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                y.style.display ="none";
+            } else {
+                x.style.display = "none";
+                y.style.display = "block";
+    
+  }
+        }*/
         function myFunction() {
   var x = document.getElementById("filtres");
   if (x.style.display === "none") {
@@ -395,17 +462,17 @@
 }
 
 function tanca_tot(param1){
-    var tanca = document.getElementsByName("tanca"); //divsToHide is an array
+    var tanca = document.getElementsByName("tanca");
     for(var i = 0; i < tanca.length; i++){
         if(tanca[i].id != param1)
-        tanca[i].style.display= "none"; // or
-        //divsToHide[i].style.display = "none"; // depending on what you're doing
+        tanca[i].style.display= "none"; 
+        
     }
     var obre = document.getElementsByName("obre");
     for(var i = 0; i < obre.length; i++){
         if(obre[i].id != param1)
-        obre[i].style.display= "flex"; // or
-        //divsToHide[i].style.display = "none"; // depending on what you're doing
+        obre[i].style.display= "flex"; 
+    
     }
 }
 
