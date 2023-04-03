@@ -76,4 +76,19 @@ class Issue(models.Model):
     dataCreacio = models.DateTimeField(auto_now_add=True, verbose_name=_('Data creació'))
     dataModificacio = models.DateTimeField(auto_now=True, verbose_name=_('Última modificació'))
     dataLimit = models.DateTimeField(null=True, blank=True, verbose_name=_('Data límit'))
-    tags = models.ManyToManyField(Tag, null=True, blank=True, verbose_name=_('Tags'))
+    bloquejat = models.BooleanField(null=False, blank=False, default=False, verbose_name=_('Bloquejat'))
+    motiuBloqueig = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Motiu bloqueig'))
+    tags = models.ManyToManyField(Tag, related_name='issues',  verbose_name=_('Tags'))
+
+
+class Attachment(models.Model):
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
+    document = models.FileField(verbose_name=_('Document'))
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=False, blank=False, related_name='attachments', verbose_name=_('Issue'))
+
+
+class Comentari(models.Model):
+    text = models.CharField(max_length=10000, verbose_name=_('Text'))
+    issue = models.ForeignKey(Issue, related_name='comentaris', null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Issue'))
+    autor = models.ForeignKey(Usuari, related_name='comentaris', null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Autor'))
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data publicació'))
