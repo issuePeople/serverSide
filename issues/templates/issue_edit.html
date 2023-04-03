@@ -41,8 +41,10 @@
                                 
                                 {% for tag in issue.tags.all %}
                                     <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between;">
-                                        <span  style="margin-top: 1px; margin-right: 2px; margin-left: 5px;">{{tag.name}}</span>
-                                    <i class="fa fa-times" aria-hidden="true" href="esborrar tag - issue"></i>
+                                        <span  style="margin-top: 1px; margin-right: 2px; margin-left: 5px;">{{tag.nom}}</span>
+                                        <a href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
+                                            <i class="fa fa-times" aria-hidden="true" href="esborrar tag - issue"></i>
+                                        </a>
                                     </div>>
                                 {% endfor %}
                                 

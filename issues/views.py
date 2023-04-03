@@ -1,4 +1,5 @@
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.views.generic.base import View
 from django_filters.views import FilterView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
@@ -142,3 +143,16 @@ class EsborrarAttachmemtView(IsAuthenticatedMixin, DeleteView):
     def get_success_url(self):
         id_issue = self.object.issue.id
         return reverse('editar_issue', kwargs={'id': id_issue})
+
+
+class EsborrarTagIssueView(View):
+    def get(self, request, *args, **kwargs):
+        id_issue = self.kwargs.get('id_issue')
+        nom_tag = self.kwargs.get('nom_tag')
+
+        issue = get_object_or_404(Issue, id=id_issue)
+        tag = get_object_or_404(Tag, nom=nom_tag)
+
+        issue.tags.remove(tag)
+
+        return redirect(request.META.get('HTTP_REFERER'))
