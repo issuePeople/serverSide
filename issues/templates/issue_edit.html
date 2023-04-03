@@ -140,8 +140,8 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        <a class="history-tab active" href="localhost:8000/issues/41/edit/activites">{{issue.comentaris.all.count}} Comments</a>
-                        <a class="history-tab" href="localhost:8000/issues/41/edit/activites">Activites</a>
+                        <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
+                        <a class="history-tab" href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
                     </nav>
                 </section>
                 <!-- Comments Activites content -->
@@ -184,34 +184,41 @@
                     <span>Open</span>
                 </span>
                 <!-- status-->
-                <select style="margin-left: 10px;" name="estat" type="submit" class="status-button">
-                    {% for estat in form.estat %}
-                        <option value="{{estat}}">{{estat}}</option>
+            
+                <select id="selectStatus" style="margin-left: 10px;" name="estat" type="submit" class="status-button">
+                    {% for key,value in TEstats %}
+                        <option value="{{value}}">{{value}}</option>
                     {% endfor %}    
                 </select>
+                <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
+                
             </section>
             <section class="ticket-section ticket-data-container">
                 <div class="ticket-data-container">
                     <!-- Type-->
-                    <select name="tipus" type="submit" class="status-button">
-                        {% for tipus in form.tipus %}
-                            <option value="{{tipus}}">{{tipus}}</option>
+                    <select id="selectType" name="tipus" type="submit" class="status-button">
+                        {% for key,value in TTipus %}
+                            <option value="{{value}}">{{value}}</option>
                         {% endfor %}
                     </select>
+                    <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
 
                     <!-- Severity-->
-                    <select name="gravetat" type="submit" class="status-button">
-                        {% for gravetat in form.gravetat %}
-                            <option value="{{gravetat}}">{{gravetat}}</option>
+                    <select id="selectGrav" name="gravetat" type="submit" class="status-button" style="margin-top: 5px;">
+                        {% for key,value in TGravetat %}
+                            <option value="{{value}}">{{value}}</option>
                         {% endfor %}
                     </select>
+                    <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
                     
                     <!-- Priority-->
-                    <select name="prioritat" type="submit" class="status-button">
-                        {% for prioritat in form.prioritat %}
-                            <option value="{{prioritat}}">{{prioritat}}</option>
+                    <select id="selectPrior" name="prioritat" type="submit" class="status-button" style="margin-top: 5px;">
+                        {% for key,value in TPrioritat %}
+                            <option value="{{value}}">{{value}}</option>
                         {% endfor %}
                     </select>
+                    <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
+
                 </div>
             </section>
             <!-- Assigned section-->
@@ -279,19 +286,52 @@
 </form>
 
 <script>
-    var myButton = document.getElementById('addTagBtn');
+    var addTagBtn = document.getElementById('addTagBtn');
     var myDiv = document.getElementById('addTag');
 
-    myButton.addEventListener('click', function() {
+    const selectStatus = document.querySelector('#selectStatus');
+    var btnSaveStat = document.getElementById('btnSaveState');
+
+    const selectType = document.querySelector('#selectType');
+    var btnSaveType = document.getElementById('btnSaveType');
+
+    const selectGrav = document.querySelector('#selectGrav');
+    var btnSaveGrav = document.getElementById('btnSaveGrav');
+
+    const selectPrior = document.querySelector('#selectPrior');
+    var btnSavePrior = document.getElementById('btnSavePrior');
+    
+
+    addTagBtn.addEventListener('click', function() {
         event.preventDefault();
         if (myDiv.style.display === 'none') {
             myDiv.style.display = 'flex';
             myDiv.style.justifyContent = 'space-between';
-            myButton.style.display = 'none';
+            addTagBtn.style.display = 'none';
         } else {
             myDiv.style.display = 'none';
         }
     });
+
+    selectStatus.addEventListener('change', function() {
+        btnSaveStat.click();
+    });
+
+    selectType.addEventListener('change', function() {
+        btnSaveType.click();
+    });
+
+    selectGrav.addEventListener('change', function() {
+        btnSaveGrav.click();
+    });
+
+    selectPrior.addEventListener('change', function() {
+        btnSavePrior.click();
+    });
+
+    
+
+
 </script>
 
 {% endblock %}
