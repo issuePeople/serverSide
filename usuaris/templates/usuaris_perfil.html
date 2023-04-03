@@ -3,11 +3,11 @@
 
 {% block body %}
 
-<form type="submit" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 
     <input type="text" name="bio" value="{{ usuari.bio }}">
-    <button type="submit">Save</button>
+    <button type="submit" name="guardar_bio">Save</button>
 
 </form>
 

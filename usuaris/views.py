@@ -30,6 +30,18 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
     def get_object(self, queryset=None):
         return get_object_or_404(Usuari.objects.all(), user=self.request.user)
 
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            if 'guardar_bio' in request.POST:
+                bio = form.cleaned_data['bio']
+                usuari = self.get_object()
+                usuari.bio = bio
+                usuari.save()
+                return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
+
 
 class LoginView(FormView):
     template_name = 'usuaris_login.html'

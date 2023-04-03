@@ -1,19 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 from django.utils.translation import gettext_lazy as _
 from .models import Usuari
 
 
-class UsuariForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        instance = kwargs.pop('instance', None)
-        super(UsuariForm, self).__init__(*args, **kwargs)
-        if instance:
-            self.instance = instance
-
+class UsuariForm(UserChangeForm):
     class Meta:
         model = Usuari
-        fields = ('bio', 'user__first_name')
+        fields = ('bio',)
 
 
 class LoginForm(forms.Form):
