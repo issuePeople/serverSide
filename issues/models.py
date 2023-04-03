@@ -84,4 +84,11 @@ class Issue(models.Model):
 class Attachment(models.Model):
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
     document = models.FileField(verbose_name=_('Document'))
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, verbose_name=_('Issue'), related_name='attachments')
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=False, blank=False, related_name='attachments', verbose_name=_('Issue'))
+
+
+class Comentari(models.Model):
+    text = models.CharField(max_length=10000, verbose_name=_('Text'))
+    issue = models.ForeignKey(Issue, related_name='comentaris', null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Issue'))
+    autor = models.ForeignKey(Usuari, related_name='comentaris', null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Autor'))
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data publicació'))
