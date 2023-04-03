@@ -90,7 +90,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     comentari.save()
             if 'afegir_tag' in request.POST:
                 tag_form = TagForm(request.POST, request.FILES)
-                tag_form.clean()
+                is_valid = tag_form.is_valid()
                 tag = tag_form.cleaned_data['tag']
                 issue = self.get_object()
                 issue.tags.add(tag)
