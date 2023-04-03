@@ -243,16 +243,17 @@
                         </div>
                         <!-- selector d'assignacio -->
                         <div>
-                            <select id="selectAssig" name="tipus" type="submit" class="status-button">
+                            <select id="selectAssig" name="" type="submit" class="status-button">
                                 {% for assig in possibles_assignats %}
                                     <option value="{{assig}}">{{assig}}</option>
                                 {% endfor %}
                             </select>
-                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="
+                            display: none;"></button>
                         </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
-                            <a href="url/assignToMe" class="ticket-users-actions">Assign to me</a>
+                            <button type="submit" name="autoassignar" class="ticket-users-actions">Assign to me</button>
                         </div>
                     </div>
                 </div>
@@ -281,7 +282,7 @@
                             </ul>
                         </div>
                         <div>
-                            <select multiple id="selectObs" name="tipus" type="submit" class="status-button">
+                            <select multiple id="selectObs" name="guardar_observadors" type="submit" class="status-button">
                                 {% for obs in possibles_observadors %}
                                     <option value="{{obs}}">{{obs}}</option>
                                 {% endfor %}
@@ -290,7 +291,13 @@
                         </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
-                            <a href="url/assignToMe" class="ticket-users-actions">Watch</a>
+                            <button type="submit" name="autoobservar" class="ticket-users-actions">
+                                {% if ets_observador %}
+                                    Unwatch???
+                                {% else %}
+                                    Watch
+                                {% endif %}
+                            </button>
                         </div>
                     </div>
                 </div>
