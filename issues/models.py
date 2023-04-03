@@ -78,7 +78,7 @@ class Issue(models.Model):
     dataLimit = models.DateTimeField(null=True, blank=True, verbose_name=_('Data límit'))
     bloquejat = models.BooleanField(null=False, blank=False, default=False, verbose_name=_('Bloquejat'))
     motiuBloqueig = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Motiu bloqueig'))
-    tags = models.ManyToManyField(Tag, verbose_name=_('Tags'))
+    tags = models.ManyToManyField(Tag, related_name='issues',  verbose_name=_('Tags'))
 
 
 class Attachment(models.Model):
