@@ -39,7 +39,7 @@
                             
                             <div style="display: flex; justify-content: space-between;">
                                 
-                                {% for tag in issue.tags %}
+                                {% for tag in issue.tags.all %}
                                     <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between;">
                                         <span  style="margin-top: 1px; margin-right: 2px; margin-left: 5px;">{{tag.name}}</span>
                                     <i class="fa fa-times" aria-hidden="true" href="esborrar tag - issue"></i>
@@ -125,10 +125,16 @@
                     <div class="attachment-list sortable">
                         <ul>
                         {%  for attachment in issue.attachments.all %}
-                            <li>
-                                <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                <span>({{ attachment.document.size|filesizeformat }})</span>
-                                <a href="{% url 'esborrar_attachment' attachment.id %}">BORRAR ATTACH</a>
+                            <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div>
+                                        <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
+                                        <span>({{ attachment.document.size|filesizeformat }})</span>
+                                    </div>
+                                    <a href="{% url 'esborrar_attachment' attachment.id %}">
+                                        <i style="margin-right: 5px;" class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </li>
                         {% endfor %}
                         </ul>
