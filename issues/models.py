@@ -1,7 +1,14 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 from usuaris.models import Usuari
+
+
+class Tag(models.Model):
+    nom = models.CharField(primary_key=True, max_length=20, verbose_name=_('Nom'))
+    # Color codificat en hexadecimal ('#' + 6 valors hexa)
+    color = models.CharField(max_length=7, validators=[RegexValidator(r'^#([A-Fa-f0-9]{6})$')], verbose_name=_('Color'))
 
 
 class Issue(models.Model):
@@ -69,4 +76,12 @@ class Issue(models.Model):
     dataCreacio = models.DateTimeField(auto_now_add=True, verbose_name=_('Data creació'))
     dataModificacio = models.DateTimeField(auto_now=True, verbose_name=_('Última modificació'))
     dataLimit = models.DateTimeField(null=True, blank=True, verbose_name=_('Data límit'))
+    bloquejat = models.BooleanField(null=False, blank=False, default=False, verbose_name=_('Bloquejat'))
+    motiuBloqueig = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Motiu bloqueig'))
+    tags = models.ManyToManyField(Tag, verbose_name=_('Tags'))
 
+
+class Attachment(models.Model):
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
+    document = models.FileField(verbose_name=_('Document'))
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, verbose_name=_('Issue'), related_name='attachments')

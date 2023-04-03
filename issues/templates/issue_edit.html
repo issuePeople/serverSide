@@ -1,8 +1,239 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="master">
+    <div class="wrapper">
+        <div class="main detail">
+            <!-- issue info container  -->
+            <div class="detail-header-container">
+                <!-- Per passar al segunet o anterior issue -->
+                <div class="detail-nav">
+                    <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="url/previous/issue"></i>
+                    <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="url/next/issue"></i>
+                </div>
+                <div class="detail-header">
+                    <!-- Titol issue-->
+                    <div class="detail-title-wrapper">
+                        <span classe="issue-text" style="display: inline-flex;">
+                            <div class="detail-ref">
+                                <span class="issue-ref">#{{issue.id}}</span>
+                            </div>
+                            <input name="subject" style="margin-top: 3px; font-size: 25px;" class="detail-subject" value="{{issue.subject}}">
+                            <button style="background: none;" type="submit"  name="guardar_subject">
+                                <i style="margin-top: 3px; font-size: 25px;" class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="detail-project">
+                        <div class="section-name">Issue</div>
+                    </div>
+                    <!-- Action buttons-->
+                    <div class="action-buttons"></div>
+                    <div class="subheader">
+                        <div class="tags-container">
+                            <button class="btn-filter ng-animate-disabled">
+                                <span>Add tag</span>
+                                <span style="font-size: 20px;">+</span>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="created-by">
+                                <a href="url usser">Created by userName</a>
+                                <div class="created-date">{{issue.dataModificacio}}</div>
+                            </div>
+                            <div class="user-avatar">
+                                <a href="url usser"></a>
+                                <span>Foto perfil</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attachments Comments Activites-->
+            <div class="detail-content">
+                <!-- Descripcio issue-->
+                <section class="duty-content" style="justify-content: flex-start;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <textarea placeholder="Empty space is so boring... go on, be descriptive..." 
+                        name="descripcio" rows="7" 
+                        class="description ng-pristine ng-untouched ng-valid ng-empty"></textarea>
+                        <button style="max-height: 32px; background: none;" type="submit"  name="guardar_descripcio">
+                            <i  class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Attachments -->
+                <section style="margin-top: 10px;" class="attachments attachments-full">
+                    <!-- attachment header-->
+                    <div class="attachments-header">
+                        <h3 class="attachment-title">
+                            <!-- num attachment -->
+                            <span class="attachments-num">1</span>
+                            <span class="attachments-text">Attachments</span>
+                        </h3>
+                        
+                        <!-- add attachment-->
+                        <div class="options ">
+                            <div class="add-attach">
+                                <input type="file" value="+" name="document">
+
+                                <!-- ToDo: Posar maco! Que només aparegui quan hi ha un file chosen -->
+                                <button type="submit" name="afegir_attachment">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- attachment content-->
+
+                <!-- ToDo: Posar macoooo! -->
+
+                    <div class="attachment-list sortable">
+                        <ul>
+                        {%  for attachment in issue.attachments.all %}
+                            <li>
+                                <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
+                                <span>({{ attachment.document.size|filesizeformat }})</span>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Comments Activites header -->
+                <section class="history">
+                    <nav class="history-tabs">
+                        <a class="history-tab active" href="localhost:8000/issues/41/edit/activites">0 Comments</a>
+                        <a class="history-tab" href="localhost:8000/issues/41/edit/activites">Activites</a>
+                    </nav>
+                </section>
+                <!-- Comments Activites content -->
+                <section class="comment" >
+                    <div style="display: flex; justify-content: space-between;">
+                        <input type="text" style="margin-top: 5px; margin-bottom: 5px;"> 
+                        <button type="submit" name="afegir_comentari" style="background: none;">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="commmetns-wrapper">
+                        {%  for desc in issue.descripcio %}
+                            <div >
+                                <!--    <img url/desc.user> -->
+                                <span>{{ desc.user }}</span>
+                                <span>{{ desc.date }}</span>
+                                <span>{{ desc.name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <sidebar class="sidebar ticket-data">
+            <section class="ticket-header">
+                <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
+                    <span>Open</span>
+                </span>
+                <!-- status-->
+                <select style="margin-left: 10px;" name="guardar_estat" type="submit" class="status-button">
+                    {% for estat in form.estat %}
+                        <option value="{{estat}}">{{estat}}</option>
+                    {% endfor %}    
+                </select>
+            </section>
+            <section class="ticket-section ticket-data-container">
+                <div class="ticket-data-container">
+                    <!-- Type-->
+                    <select name="guardar_tipus" type="submit" class="status-button">
+                        {% for tipus in form.tipus %}
+                            <option value="{{tipus}}">{{tipus}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Severity-->
+                    <select name="guardar_gravetat" type="submit" class="status-button">
+                        {% for gravetat in form.gravetat %}
+                            <option value="{{gravetat}}">{{gravetat}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- Priority-->
+                    <select name="guardar_prioritat" type="submit" class="status-button">
+                        {% for prioritat in form.prioritat %}
+                            <option value="{{prioritat}}">{{prioritat}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </section>
+            <!-- Assigned section-->
+            <section class="ticket-section ng-pristine ng-untouched ng-valid ng-not-empty">
+                <div class="ticket-section-label">
+                    <span>Assigned</span>
+                </div>
+                <div class="ticket-user-list-container">
+                    <div class="ticket-user-list-content">
+                        <div class="ticket-user-list"></div>
+                        <div class="ticket-users-actions">
+                            <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
+                            <a href="url/assignToMe" class="ticket-users-actions">Assign to me</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Watchers section-->
+            <section class="ticket-section ticket-watchers">
+                <div class="ticket-section-label">
+                    <span>Watchers</span>
+                </div>
+                <div class="ticket-user-list-container">
+                    <div class="ticket-user-list-content">
+                        <div class="ticket-user-list"></div>
+                        <div class="ticket-users-actions">
+                            <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
+                            <a href="url/assignToMe" class="ticket-users-actions">Watch</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- setting Section-->
+            <section class="ticket-section ticket-detail-settings">
+                <div class="ticket-detail-settings" >
+                    <div>
+                        <!-- obrir desplegable per triar date -->
+                        <button style="background: none;">
+                            <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
+                        </button>
+                        <input 
+                            
+                            type="date" 
+                            id="datePickerInput" 
+                            name="guardar_dataLimit" 
+                            value="T"
+                            style="display: none;"
+                        >
+                    </div>
+                    <div>
+                        <button style="margin-left: 15px; background: none;" type="submit" name="guardar_bloquejat">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <i style="margin-left: 15px;" class="fa fa-trash-o" aria-hidden="true" href="esborrar_issue"></i>
+                    </div>
+                </div>
+            </section>
+        </sidebar>
+    </div>
+</div>
+</form>
+
+<!--
     <form method="post" >
-    {% csrf_token %}
+        {% csrf_token %}
         <input type="text" name="subject" value="{{ form.subject.value }}">
         <input type="text" name="tipus" value="{{ form.tipus.value }}">
         <input type="text" name="estat" value="{{ form.estat.value }}">
@@ -11,6 +242,6 @@
         <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
         <input type="submit" name="save_subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
     </form>
-
+-->
 {% endblock %}
 

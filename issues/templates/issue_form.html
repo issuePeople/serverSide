@@ -60,8 +60,21 @@
                                     </select>
                                 </div>
                                 <div class="ticket-detail-settings">
-                                    <div><input name="subject" value="T" type="button" class="btn-icon is-blocked item-block"></div>
-                                    <div><input name="subject" value="B" type="button" class="btn-icon is-blocked item-block"></div>
+                                    <div>
+                                        <!-- <button id="datePickerBtn" type="button" class="btn-icon is-blocked item-block">T</button> -->
+                                        <input type="date" 
+                                               id="datePickerInput" 
+                                               name="dataLimit"
+                                               value="T"
+                                        >
+                                    </div>
+                                    <div>
+                                        <input name="bloquejat" value="B" type="checkbox" id="btnBlock" style="margin-left: 15px;">
+                                    </div>
+                                    <div>
+                                        <!-- ToDo: Posar macooo! I amb JS perquè només es mostri si estem bloquejant! -->
+                                        <input name="motiuBloqueig">
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -81,6 +94,8 @@
         </form>
         -->
     </div>
+
+    
 
 {% endblock %}
 
