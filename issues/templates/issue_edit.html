@@ -229,6 +229,27 @@
                 <div class="ticket-user-list-container">
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
+                        <div>
+                            {% if ets_assignat != null %}
+                                <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                    <img src="{{ ets_assignat.autor.user.image }}"
+                                        width="60px"
+                                        height="60px"
+                                    >
+                                    <span style="margin-left: 15px;">{{ ets_assignat.autor.user.first_name }}</span>
+                                </div>  
+                            {%endif%}
+
+                        </div>
+                        <!-- selector d'assignacio -->
+                        <div>
+                            <select id="selectAssig" name="tipus" type="submit" class="status-button">
+                                {% for assig in possibles_assignats %}
+                                    <option value="{{assig}}">{{assig}}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                        </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
                             <a href="url/assignToMe" class="ticket-users-actions">Assign to me</a>
@@ -244,6 +265,29 @@
                 <div class="ticket-user-list-container">
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
+                        <div>
+                            <ul>
+                                {%  for obs in ets_observador.all %}
+                                    <li>
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                            <img src="{{ obs.autor.user.image }}"
+                                                width="60px"
+                                                height="60px"
+                                            >
+                                            <span style="margin-right: 15px;">{{ obs.autor.user.first_name }}</span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div>
+                            <select multiple id="selectObs" name="tipus" type="submit" class="status-button">
+                                {% for obs in possibles_observadors %}
+                                    <option value="{{obs}}">{{obs}}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="btnSaveObs" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                        </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
                             <a href="url/assignToMe" class="ticket-users-actions">Watch</a>
@@ -256,22 +300,16 @@
                 <div class="ticket-detail-settings" >
                     <div>
                         <!-- obrir desplegable per triar date -->
-                        <button style="background: none;">
+                        <button id="btnTimeLine" style="background: none;">
                             <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
                         </button>
-                        <input 
-                            
-                            type="date" 
-                            id="datePickerInput" 
-                            name="guardar_dataLimit" 
-                            value="T"
-                            style="display: none;"
-                        >
+                        
                     </div>
                     <div>
-                        <button style="margin-left: 15px; background: none;" type="submit" name="guardar_bloquejat">
-                            <i class="fa fa-lock" aria-hidden="true"></i>
-                        </button>
+                        <!-- save motiuBloqueig  -->
+                        <a href="">
+                            <i style="margin-left: 15px;" class="fa fa-lock" aria-hidden="true"></i>
+                        </a>
                     </div>
                     <div>
                         <a href="{% url 'esborrar_issue' issue.id %}">
@@ -280,6 +318,15 @@
                     </div>
                 </div>
             </section>
+            
+            <input 
+                type="date" 
+                id="datePickerInput" 
+                name="dataLimit"
+                style="display: none;"
+            >
+            <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
+
         </sidebar>
     </div>
 </div>
@@ -288,20 +335,6 @@
 <script>
     var addTagBtn = document.getElementById('addTagBtn');
     var myDiv = document.getElementById('addTag');
-
-    const selectStatus = document.querySelector('#selectStatus');
-    var btnSaveStat = document.getElementById('btnSaveState');
-
-    const selectType = document.querySelector('#selectType');
-    var btnSaveType = document.getElementById('btnSaveType');
-
-    const selectGrav = document.querySelector('#selectGrav');
-    var btnSaveGrav = document.getElementById('btnSaveGrav');
-
-    const selectPrior = document.querySelector('#selectPrior');
-    var btnSavePrior = document.getElementById('btnSavePrior');
-    
-
     addTagBtn.addEventListener('click', function() {
         event.preventDefault();
         if (myDiv.style.display === 'none') {
@@ -313,23 +346,53 @@
         }
     });
 
+    const selectStatus = document.querySelector('#selectStatus');
+    var btnSaveStat = document.getElementById('btnSaveState');
     selectStatus.addEventListener('change', function() {
         btnSaveStat.click();
     });
 
+    const selectType = document.querySelector('#selectType');
+    var btnSaveType = document.getElementById('btnSaveType');
     selectType.addEventListener('change', function() {
         btnSaveType.click();
     });
 
+    const selectGrav = document.querySelector('#selectGrav');
+    var btnSaveGrav = document.getElementById('btnSaveGrav');
     selectGrav.addEventListener('change', function() {
         btnSaveGrav.click();
     });
 
+    const selectPrior = document.querySelector('#selectPrior');
+    var btnSavePrior = document.getElementById('btnSavePrior');
     selectPrior.addEventListener('change', function() {
         btnSavePrior.click();
     });
 
-    
+    const selectAssig = document.querySelector('#selectAssig');
+    var btnSaveAssig = document.getElementById('btnSaveAssig');
+    selectAssig.addEventListener('change', function() {
+        btnSaveAssig.click();
+    });
+
+    const selectObs = document.querySelector('#selectObs');
+    var btnSaveObs = document.getElementById('btnSaveObs');
+    selectObs.addEventListener('change', function() {
+        btnSaveObs.click();
+    });
+
+    var btnTimeLine = document.getElementById('btnTimeLine');
+    var datePickerInput = document.getElementById('datePickerInput');
+    var btnSaveDate = document.getElementById('btnSaveDate');
+    btnTimeLine.addEventListener('click', function() {
+        event.preventDefault();
+        datePickerInput.style.display = 'block';
+    });
+    datePickerInput.addEventListener('blur'), function() {
+        event.preventDefault();
+        btnSaveDate.click();
+    }
 
 
 </script>
