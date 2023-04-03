@@ -4,7 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Issue, Tag, Attachment
-from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm
+from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
 from usuaris.models import Usuari
 from .filters import IssueFilter
 
@@ -88,6 +88,13 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     comentari.issue = self.get_object()
                     comentari.autor = Usuari.objects.get(user=self.request.user)
                     comentari.save()
+            if 'afegir_tag' in request.POST:
+                tag_form = TagForm(request.POST, request.FILES)
+                tag_form.clean()
+                tag = tag_form.cleaned_data['tag']
+                issue = self.get_object()
+                issue.tags.add(tag)
+                issue.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
