@@ -229,6 +229,27 @@
                 <div class="ticket-user-list-container">
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
+                        <div>
+                            {% if ets_assignat != null %}
+                                <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                    <img src="{{ ets_assignat.autor.user.image }}"
+                                        width="60px"
+                                        height="60px"
+                                    >
+                                    <span style="margin-left: 15px;">{{ ets_assignat.autor.user.first_name }}</span>
+                                </div>  
+                            {%endif%}
+
+                        </div>
+                        <!-- selector d'assignacio -->
+                        <div>
+                            <select id="selectAssig" name="tipus" type="submit" class="status-button">
+                                {% for assig in possibles_assignats %}
+                                    <option value="{{assig}}">{{assig}}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                        </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
                             <a href="url/assignToMe" class="ticket-users-actions">Assign to me</a>
@@ -244,6 +265,29 @@
                 <div class="ticket-user-list-container">
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
+                        <div>
+                            <ul>
+                                {%  for obs in ets_observador.all %}
+                                    <li>
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                            <img src="{{ obs.autor.user.image }}"
+                                                width="60px"
+                                                height="60px"
+                                            >
+                                            <span style="margin-right: 15px;">{{ obs.autor.user.first_name }}</span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div>
+                            <select multiple id="selectObs" name="tipus" type="submit" class="status-button">
+                                {% for obs in possibles_observadors %}
+                                    <option value="{{obs}}">{{obs}}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="btnSaveObs" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                        </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
                             <a href="url/assignToMe" class="ticket-users-actions">Watch</a>
@@ -301,6 +345,12 @@
     const selectPrior = document.querySelector('#selectPrior');
     var btnSavePrior = document.getElementById('btnSavePrior');
     
+    const selectAssig = document.querySelector('#selectAssig');
+    var btnSaveAssig = document.getElementById('btnSaveAssig');
+
+    const selectObs = document.querySelector('#selectObs');
+    var btnSaveObs = document.getElementById('btnSaveObs');
+    
 
     addTagBtn.addEventListener('click', function() {
         event.preventDefault();
@@ -329,7 +379,14 @@
         btnSavePrior.click();
     });
 
-    
+    selectAssig.addEventListener('change', function() {
+        btnSaveAssig.click();
+    });
+
+    selectObs.addEventListener('change', function() {
+        btnSaveObs.click();
+    });
+
 
 
 </script>
