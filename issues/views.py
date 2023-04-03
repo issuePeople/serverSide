@@ -3,7 +3,7 @@ from django_filters.views import FilterView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
-from .models import Issue
+from .models import Issue, Tag
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm
 from usuaris.models import Usuari
 from .filters import IssueFilter
@@ -17,10 +17,14 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'TTipus': Issue.TTIPUS})
-        context.update({'TEstats': Issue.TESTATS})
-        context.update({'TGravetat': Issue.TGRAVETAT})
-        context.update({'TPrioritat': Issue.TPRIORITAT})
+        context.update({
+            'TTipus': Issue.TTIPUS,
+            'TEstats': Issue.TESTATS,
+            'TGravetat': Issue.TGRAVETAT,
+            'TPrioritat': Issue.TPRIORITAT,
+            'usuaris': Usuari.objects.all(),
+            'tags': Tag.objects.all()
+        })
         return context
 
     def get_queryset(self):
