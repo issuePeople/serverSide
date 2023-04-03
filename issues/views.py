@@ -103,6 +103,20 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                 issue = self.get_object()
                 issue.tags.add(tag)
                 issue.save()
+            if 'autoassignar' in request.POST:
+                usuari = Usuari.objects.get(user=self.request.user)
+                issue = self.get_object()
+                if issue.assignacio == usuari:
+                    issue.assignacio = None
+                else:
+                    issue.assignacio = usuari
+            if 'autoobservar' in request.POST:
+                usuari = Usuari.objects.get(user=self.request.user)
+                issue = self.get_object()
+                if issue.observadors.contains(usuari):
+                    issue.observadors.remove(usuari)
+                else:
+                    issue.observadors.add(usuari)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
