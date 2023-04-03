@@ -4,6 +4,18 @@ from django.utils.translation import gettext_lazy as _
 from .models import Usuari
 
 
+class UsuariForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.pop('instance', None)
+        super(UsuariForm, self).__init__(*args, **kwargs)
+        if instance:
+            self.instance = instance
+
+    class Meta:
+        model = Usuari
+        fields = ('bio', 'user__first_name')
+
+
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)
     password = forms.CharField(required=True, widget=forms.PasswordInput)

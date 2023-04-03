@@ -1,0 +1,60 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<nav class ="navbar" style>
+    <div class="nav-left">
+        <a href="/issues/list/" title="Homepage" class="logo">
+
+        </a>
+        
+    </div>
+</nav>
+
+
+<div class="profile centered" style="margin-left: 50px;">
+    <section class="profile-bar">
+        <div>
+            <img src="https://static9.depositphotos.com/1010305/1139/i/600/depositphotos_11390423-stock-photo-kitten-on-a-white-background.jpg"
+            width="200"
+            height="200">
+        </div>
+
+        <div class="profile-data">
+            <h1 class="not-full-name">
+                <p>usuario</p>
+                <p>{{ usuari.user.username }}</p>
+            </h1>
+            <div class="username">
+                <p>@usuario</p>
+            </div>
+            <h2>Posicion</h2>
+        </div>
+        <div class="profile-stats">
+            <div class ="stat">
+                <span class="stat-number">X</span>
+                <span class="stat-name">
+                    Projectes
+                </span>
+            </div>
+            <div class ="stat">
+                <span class="stat-number">Y</span>
+                <span class="stat-name">US tancats</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">Z</span>
+                <span class="stat-name">Contactes</span>
+            </div>
+        </div>
+    </section>
+    <div class="main">
+        <p>
+            Hola buenas, timelineContent
+        </p>
+    </div>
+</div>
+
+
+
+{% endblock %}
