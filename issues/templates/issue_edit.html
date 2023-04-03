@@ -40,18 +40,12 @@
                             <div style="display: flex; justify-content: space-between;">
                                 
                                 {% for tag in issue.tags.all %}
-                                    <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between;">
-                                        <span  style="margin-top: 1px; margin-right: 2px; margin-left: 5px;">{{tag.name}}</span>
-                                    <i class="fa fa-times" aria-hidden="true" href="esborrar tag - issue"></i>
-                                    </div>>
+                                    <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                        <span  style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
+                                        <i class="fa fa-times" aria-hidden="true" href="esborrar tag - issue"></i>
+                                    </div>
                                 {% endfor %}
-                                
-                                <!--   
-                                <div style="background-color: red; display: flex; justify-content: space-between;">
-                                    <span  style="margin-top: 1px; margin-right: 2px; margin-left: 5px;">aaaa</span>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                                --> 
+
                                 <button class="btn-filter ng-animate-disabled" id="addTagBtn">
                                     <span>Add tag</span>
                                     <span style="font-size: 20px;">+</span>
@@ -161,14 +155,14 @@
                         <ul>
                             {%  for comentari in issue.comentaris.all %}
                                 <li>
-                                    <div style="display: flex; justify-content: space-between;">
+                                    <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
                                         <img src="{{ comentari.autor.user.image }}"
                                             width="60px"
                                             height="60px"
                                         >
                                         <div>
                                             <div style="display: flex; justify-content: space-between;">
-                                                <span>{{ comentari.autor.user.first_name }}</span>
+                                                <span style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</span>
                                                 <span>{{ comentari.data }}</span>
                                             </div>
                                             <span>{{ comentari.text }}</span>
