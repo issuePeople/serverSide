@@ -59,12 +59,19 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
 
     def get_object(self, queryset=None):
         id = self.kwargs.get('id')
-        queryset = Issue.objects.prefetch_related('attachments', 'comentaris').order_by('-attachments__data', '-comentaris__data')
+        queryset = Issue.objects.prefetch_related('attachments', 'comentaris', 'assignacio', 'observadors')\
+            .order_by('-attachments__data', '-comentaris__data')
         return get_object_or_404(queryset, id=id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(Issue.get_types(self))
+        context.update({
+            'possibles_observadors': Usuari.objects.exclude(observats=self.get_object()),
+            'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
+            'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
+            'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user))
+        })
         return context
 
     def post(self, request, *args, **kwargs):
