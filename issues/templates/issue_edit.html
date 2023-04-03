@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'navbar.html' %}
+{% block body %}
 
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
@@ -10,8 +10,8 @@
             <div class="detail-header-container">
                 <!-- Per passar al segunet o anterior issue -->
                 <div class="detail-nav">
-                    <a title="Previous" href="url/previous/issue">arwL</a>
-                    <a title="Next" href="url/next/issue">arwR</a>
+                    <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="url/previous/issue"></i>
+                    <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="url/next/issue"></i>
                 </div>
                 <div class="detail-header">
                     <!-- Titol issue-->
@@ -21,6 +21,9 @@
                                 <span class="issue-ref">#{{issue.id}}</span>
                             </div>
                             <input name="subject" style="margin-top: 3px; font-size: 25px;" class="detail-subject" value="{{issue.subject}}">
+                            <button style="background: none;" type="submit"  name="guardar_subject">
+                                <i style="margin-top: 3px; font-size: 25px;" class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
                         </span>
                     </div>
                     <div class="detail-project">
@@ -29,11 +32,37 @@
                     <!-- Action buttons-->
                     <div class="action-buttons"></div>
                     <div class="subheader">
+                    
+                          
+                    
                         <div class="tags-container">
-                            <button class="btn-filter ng-animate-disabled">
-                                <span>Add tag</span>
-                                <span style="font-size: 20px;">+</span>
-                            </button>
+                            
+                            <div style="display: flex; justify-content: space-between;">
+                                
+                                {% for tag in issue.tags.all %}
+                                    <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                        <span  style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
+                                        <a href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+
+                                <button class="btn-filter ng-animate-disabled" id="addTagBtn">
+                                    <span>Add tag</span>
+                                    <span style="font-size: 20px;">+</span>
+                                </button> 
+
+                                <div id="addTag" style="display: none;">
+                                    <input name="nom" type="text" placeholder="Enter tag" >
+                                    <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
+                                    <button type="submit" name="afegir_tag" style="background: none;">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            
                         </div>
                         <div>
                             <div class="created-by">
@@ -57,12 +86,14 @@
                         <textarea placeholder="Empty space is so boring... go on, be descriptive..." 
                         name="descripcio" rows="7" 
                         class="description ng-pristine ng-untouched ng-valid ng-empty"></textarea>
-                        <input style="max-height: 32px;" type="button" name="guardarDescripcio" class="btn-small" value="S">
+                        <button style="max-height: 32px; background: none;" type="submit"  name="guardar_descripcio">
+                            <i  class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </section>
 
                 <!-- Attachments -->
-                <section class="attachments attachments-full">
+                <section style="margin-top: 10px;" class="attachments attachments-full">
                     <!-- attachment header-->
                     <div class="attachments-header">
                         <h3 class="attachment-title">
@@ -77,8 +108,9 @@
                                 <input type="file" value="+" name="document">
 
                                 <!-- ToDo: Posar maco! Que només aparegui quan hi ha un file chosen -->
-
-                                <button type="submit" name="add_attachment">Add attachment</button>
+                                <button type="submit" name="afegir_attachment">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -89,9 +121,16 @@
                     <div class="attachment-list sortable">
                         <ul>
                         {%  for attachment in issue.attachments.all %}
-                            <li>
-                                <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                <span>({{ attachment.document.size|filesizeformat }})</span>
+                            <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div>
+                                        <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
+                                        <span>({{ attachment.document.size|filesizeformat }})</span>
+                                    </div>
+                                    <a href="{% url 'esborrar_attachment' attachment.id %}">
+                                        <i style="margin-right: 5px;" class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </li>
                         {% endfor %}
                         </ul>
@@ -101,14 +140,39 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        <a class="history-tab active">0 Comments</a>
-                        <a class="history-tab">Activites</a>
+                        <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
+                        <a class="history-tab" href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
                     </nav>
                 </section>
                 <!-- Comments Activites content -->
                 <section class="comment" >
+                    <div style="display: flex; justify-content: space-between;">
+                        <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
+                        <button type="submit" name="afegir_comentari" style="background: none;">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
                     <div class="commmetns-wrapper">
-                        list of coments
+                        <ul>
+                            {%  for comentari in issue.comentaris.all %}
+                                <li>
+                                    <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                        <img src="{{ comentari.autor.user.image }}"
+                                            width="60px"
+                                            height="60px"
+                                        >
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <span style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</span>
+                                                <span>{{ comentari.data }}</span>
+                                            </div>
+                                            <span>{{ comentari.text }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </section>
 
@@ -120,34 +184,41 @@
                     <span>Open</span>
                 </span>
                 <!-- status-->
-                <select name="estat" class="status-button">
-                    {% for estat in form.estat %}
-                        <option value="{{estat}}">{{estat}}</option>
+            
+                <select id="selectStatus" style="margin-left: 10px;" name="estat" type="submit" class="status-button">
+                    {% for key,value in TEstats %}
+                        <option value="{{value}}">{{value}}</option>
                     {% endfor %}    
                 </select>
+                <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
+                
             </section>
             <section class="ticket-section ticket-data-container">
                 <div class="ticket-data-container">
                     <!-- Type-->
-                    <select name="tipus" class="status-button">
-                        {% for tipus in form.tipus %}
-                            <option value="{{tipus}}">{{tipus}}</option>
+                    <select id="selectType" name="tipus" type="submit" class="status-button">
+                        {% for key,value in TTipus %}
+                            <option value="{{value}}">{{value}}</option>
                         {% endfor %}
                     </select>
+                    <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
 
                     <!-- Severity-->
-                    <select name="gravetat" class="status-button">
-                        {% for gravetat in form.gravetat %}
-                            <option value="{{gravetat}}">{{gravetat}}</option>
+                    <select id="selectGrav" name="gravetat" type="submit" class="status-button" style="margin-top: 5px;">
+                        {% for key,value in TGravetat %}
+                            <option value="{{value}}">{{value}}</option>
                         {% endfor %}
                     </select>
+                    <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
                     
                     <!-- Priority-->
-                    <select name="prioritat" class="status-button">
-                        {% for prioritat in form.prioritat %}
-                            <option value="{{prioritat}}">{{prioritat}}</option>
+                    <select id="selectPrior" name="prioritat" type="submit" class="status-button" style="margin-top: 5px;">
+                        {% for key,value in TPrioritat %}
+                            <option value="{{value}}">{{value}}</option>
                         {% endfor %}
                     </select>
+                    <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
+
                 </div>
             </section>
             <!-- Assigned section-->
@@ -158,6 +229,27 @@
                 <div class="ticket-user-list-container">
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
+                        <div>
+                            {% if ets_assignat != null %}
+                                <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                    <img src="{{ ets_assignat.autor.user.image }}"
+                                        width="60px"
+                                        height="60px"
+                                    >
+                                    <span style="margin-left: 15px;">{{ ets_assignat.autor.user.first_name }}</span>
+                                </div>  
+                            {%endif%}
+
+                        </div>
+                        <!-- selector d'assignacio -->
+                        <div>
+                            <select id="selectAssig" name="tipus" type="submit" class="status-button">
+                                {% for assig in possibles_assignats %}
+                                    <option value="{{assig}}">{{assig}}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                        </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
                             <a href="url/assignToMe" class="ticket-users-actions">Assign to me</a>
@@ -173,6 +265,29 @@
                 <div class="ticket-user-list-container">
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
+                        <div>
+                            <ul>
+                                {%  for obs in ets_observador.all %}
+                                    <li>
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                            <img src="{{ obs.autor.user.image }}"
+                                                width="60px"
+                                                height="60px"
+                                            >
+                                            <span style="margin-right: 15px;">{{ obs.autor.user.first_name }}</span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div>
+                            <select multiple id="selectObs" name="tipus" type="submit" class="status-button">
+                                {% for obs in possibles_observadors %}
+                                    <option value="{{obs}}">{{obs}}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="btnSaveObs" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                        </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
                             <a href="url/assignToMe" class="ticket-users-actions">Watch</a>
@@ -182,39 +297,105 @@
             </section>
             <!-- setting Section-->
             <section class="ticket-section ticket-detail-settings">
-                <div class="ticket-detail-settings">
+                <div class="ticket-detail-settings" >
                     <div>
-                        <!-- <button id="datePickerBtn" type="button" class="btn-icon is-blocked item-block">T</button> -->
-                        <input type="date" 
-                               id="datePickerInput" 
-                               name="timeline" 
-                               value="T"
-                        >
+                        <!-- obrir desplegable per triar date -->
+                        <button id="btnTimeLine" style="background: none;">
+                            <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
+                        </button>
+                        
                     </div>
                     <div>
-                        <input name="subject" value="B" type="checkbox" id="btnBlock" style="margin-left: 15px;">
+                        <!-- save motiuBloqueig  -->
+                        <a href="">
+                            <i style="margin-left: 15px;" class="fa fa-lock" aria-hidden="true"></i>
+                        </a>
                     </div>
                     <div>
-                        <input name="subject" value="D" type="button" id="btnBlock" style="margin-left: 15px;">
+                        <a href="{% url 'esborrar_issue' issue.id %}">
+                            <i style="margin-left: 15px;" class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div>
             </section>
+            
+            <input 
+                type="date" 
+                id="datePickerInput" 
+                name="dataLimit"
+                style="display: none;"
+            >
+            <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
+
         </sidebar>
     </div>
 </div>
 </form>
 
-<!--
-    <form method="post" >
-        {% csrf_token %}
-        <input type="text" name="subject" value="{{ form.subject.value }}">
-        <input type="text" name="tipus" value="{{ form.tipus.value }}">
-        <input type="text" name="estat" value="{{ form.estat.value }}">
-        <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
-        <input type="text" name="prioritat" value="{{ form.prioritat.value }}">
-        <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
-        <input type="submit" name="save_subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
-    </form>
--->
+<script>
+    var addTagBtn = document.getElementById('addTagBtn');
+    var myDiv = document.getElementById('addTag');
+    addTagBtn.addEventListener('click', function() {
+        event.preventDefault();
+        if (myDiv.style.display === 'none') {
+            myDiv.style.display = 'flex';
+            myDiv.style.justifyContent = 'space-between';
+            addTagBtn.style.display = 'none';
+        } else {
+            myDiv.style.display = 'none';
+        }
+    });
+
+    const selectStatus = document.querySelector('#selectStatus');
+    var btnSaveStat = document.getElementById('btnSaveState');
+    selectStatus.addEventListener('change', function() {
+        btnSaveStat.click();
+    });
+
+    const selectType = document.querySelector('#selectType');
+    var btnSaveType = document.getElementById('btnSaveType');
+    selectType.addEventListener('change', function() {
+        btnSaveType.click();
+    });
+
+    const selectGrav = document.querySelector('#selectGrav');
+    var btnSaveGrav = document.getElementById('btnSaveGrav');
+    selectGrav.addEventListener('change', function() {
+        btnSaveGrav.click();
+    });
+
+    const selectPrior = document.querySelector('#selectPrior');
+    var btnSavePrior = document.getElementById('btnSavePrior');
+    selectPrior.addEventListener('change', function() {
+        btnSavePrior.click();
+    });
+
+    const selectAssig = document.querySelector('#selectAssig');
+    var btnSaveAssig = document.getElementById('btnSaveAssig');
+    selectAssig.addEventListener('change', function() {
+        btnSaveAssig.click();
+    });
+
+    const selectObs = document.querySelector('#selectObs');
+    var btnSaveObs = document.getElementById('btnSaveObs');
+    selectObs.addEventListener('change', function() {
+        btnSaveObs.click();
+    });
+
+    var btnTimeLine = document.getElementById('btnTimeLine');
+    var datePickerInput = document.getElementById('datePickerInput');
+    var btnSaveDate = document.getElementById('btnSaveDate');
+    btnTimeLine.addEventListener('click', function() {
+        event.preventDefault();
+        datePickerInput.style.display = 'block';
+    });
+    datePickerInput.addEventListener('blur'), function() {
+        event.preventDefault();
+        btnSaveDate.click();
+    }
+
+
+</script>
+
 {% endblock %}
 

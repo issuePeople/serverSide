@@ -1,59 +1,73 @@
 
-{% extends 'base.html' %}
+{% extends 'navbar.html' %}
 
-{% block content %}
+{% block body %}
 
-<nav class ="navbar" style>
-    <div class="nav-left">
-        <a href="/issues/list/" title="Homepage" class="logo">
+<body class="vsc-initialized">
+    <nav class ="navbar" style>
+        <div class="nav-left">
+            <a href="/issues/list/" title="Homepage" class="logo">
 
-        </a>
-        
-    </div>
-</nav>
+            </a>
 
-
-<div class="profile centered" style="margin-left: 50px;">
-    <section class="profile-bar">
-        <div>
-            <img src="https://static9.depositphotos.com/1010305/1139/i/600/depositphotos_11390423-stock-photo-kitten-on-a-white-background.jpg"
-            width="200"
-            height="200">
         </div>
+    </nav>
 
-        <div class="profile-data">
-            <h1 class="not-full-name">
-                <p>usuario</p>
-                <p>{{ usuari.user.username }}</p>
-            </h1>
-            <div class="username">
-                <p>@usuario</p>
+
+    <div class="profile centered" style="margin-left: 50px;">
+        <section class="profile-bar">
+            <div>
+                <img src="https://static9.depositphotos.com/1010305/1139/i/600/depositphotos_11390423-stock-photo-kitten-on-a-white-background.jpg"
+                width="200"
+                height="200">
             </div>
-            <h2>Posicion</h2>
-        </div>
-        <div class="profile-stats">
-            <div class ="stat">
-                <span class="stat-number">X</span>
-                <span class="stat-name">
-                    Projectes
+
+            <div class="profile-data">
+                <h1 class="not-full-name">
+                    <p>{{usuari.user}}Aqui deberia salir el usuario</p>
+                </h1>
+                <div class="username">
+                    <p>@usuario</p>
+                </div>
+                <h2>Posicion</h2>
+            </div>
+            <div class="profile-stats">
+                <div class ="stat">
+                    <span class="stat-number">X</span>
+                    <span class="stat-name">
+                        Projectes
+                    </span>
+                </div>
+                <div class ="stat">
+                    <span class="stat-number">Y</span>
+                    <span class="stat-name">US tancats</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">Z</span>
+                    <span class="stat-name">Contactes</span>
+                </div>
+            </div>
+            <div class="profile-quote">
+                <span>
+                    Aqui sale la bio
+                    {{usuari.bio}}
                 </span>
             </div>
-            <div class ="stat">
-                <span class="stat-number">Y</span>
-                <span class="stat-name">US tancats</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number">Z</span>
-                <span class="stat-name">Contactes</span>
-            </div>
+        </section>
+        <div class="main">
+            <p>
+                Hola buenas, timelineContent
+            </p>
         </div>
-    </section>
-    <div class="main">
-        <p>
-            Hola buenas, timelineContent
-        </p>
+        <button class="btn-big edit-profile" style="height:60px;">
+            <a href="/issues">
+                <span>
+                    Editar bio
+                </span>
+            </a>
+        </button>
     </div>
-</div>
+</body>
 
 
 
