@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.ListIssueView.as_view(), name='tots_issues'),
     path('create/', views.CrearIssueView.as_view(), name='crear_issue'),
     path('bulk/', views.CrearBulkView.as_view(), name='bulk_issue'),
-    path('<int:pk>/edit', views.EditarIssueView.as_view(), name='editar_issue'),
+    path('<int:id>/edit', views.EditarIssueView.as_view(), name='editar_issue'),
     path('<int:id>/delete', views.EsborrarIssueView.as_view(), name='esborrar_issue'),
+    path('attachments/<int:id>/delete', views.EsborrarAttachmemtView.as_view(), name='esborrar_attachment'),
 ]

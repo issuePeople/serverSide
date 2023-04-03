@@ -98,6 +98,7 @@
                             <li>
                                 <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
                                 <span>({{ attachment.document.size|filesizeformat }})</span>
+                                <a href="{% url 'esborrar_attachment' attachment.id %}">BORRAR ATTACH</a>
                             </li>
                         {% endfor %}
                         </ul>
