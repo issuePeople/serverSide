@@ -6,4 +6,5 @@ urlpatterns = [
     path('create/', views.CrearIssueView.as_view(), name='crear_issue'),
     path('bulk/', views.CrearBulkView.as_view(), name='bulk_issue'),
     path('<int:pk>/edit', views.EditarIssueView.as_view(), name='editar_issue'),
+    path('<int:id>/delete', views.EsborrarIssueView.as_view(), name='esborrar_issue'),
 ]
