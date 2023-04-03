@@ -32,11 +32,37 @@
                     <!-- Action buttons-->
                     <div class="action-buttons"></div>
                     <div class="subheader">
+                    
+                          
+                    
                         <div class="tags-container">
-                            <button class="btn-filter ng-animate-disabled">
-                                <span>Add tag</span>
-                                <span style="font-size: 20px;">+</span>
-                            </button>
+                            
+                            <div style="display: flex; justify-content: space-between;">
+                                
+                                {% for tag in issue.tags.all %}
+                                    <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                        <span  style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
+                                        <a href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+
+                                <button class="btn-filter ng-animate-disabled" id="addTagBtn">
+                                    <span>Add tag</span>
+                                    <span style="font-size: 20px;">+</span>
+                                </button> 
+
+                                <div id="addTag" style="display: none;">
+                                    <input name="nom" type="text" placeholder="Enter tag" >
+                                    <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
+                                    <button type="submit" name="afegir_tag" style="background: none;">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            
                         </div>
                         <div>
                             <div class="created-by">
@@ -95,10 +121,16 @@
                     <div class="attachment-list sortable">
                         <ul>
                         {%  for attachment in issue.attachments.all %}
-                            <li>
-                                <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                <span>({{ attachment.document.size|filesizeformat }})</span>
-                                <a href="{% url 'esborrar_attachment' attachment.id %}">BORRAR ATTACH</a>
+                            <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div>
+                                        <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
+                                        <span>({{ attachment.document.size|filesizeformat }})</span>
+                                    </div>
+                                    <a href="{% url 'esborrar_attachment' attachment.id %}">
+                                        <i style="margin-right: 5px;" class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </li>
                         {% endfor %}
                         </ul>
@@ -108,7 +140,7 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        <a class="history-tab active" href="localhost:8000/issues/41/edit/activites">0 Comments</a>
+                        <a class="history-tab active" href="localhost:8000/issues/41/edit/activites">{{issue.comentaris.all.count}} Comments</a>
                         <a class="history-tab" href="localhost:8000/issues/41/edit/activites">Activites</a>
                     </nav>
                 </section>
@@ -121,25 +153,26 @@
                         </button>
                     </div>
 
-                    <div>
-                    <ul>
-                        {%  for comentari in issue.comentaris.all %}
-                            <li>
-                                <p>{{ comentari.text }} ---- {{ comentari.autor.user.first_name }} ----- {{ comentari.data }}</p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    </div>
-
                     <div class="commmetns-wrapper">
-                        {%  for desc in issue.descripcio %}
-                            <div >
-                                <!--    <img url/desc.user> -->
-                                <span>{{ desc.user }}</span>
-                                <span>{{ desc.date }}</span>
-                                <span>{{ desc.name }}</span>
-                            </div>
-                        {% endfor %}
+                        <ul>
+                            {%  for comentari in issue.comentaris.all %}
+                                <li>
+                                    <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                        <img src="{{ comentari.autor.user.image }}"
+                                            width="60px"
+                                            height="60px"
+                                        >
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <span style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</span>
+                                                <span>{{ comentari.data }}</span>
+                                            </div>
+                                            <span>{{ comentari.text }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </section>
 
@@ -245,17 +278,21 @@
 </div>
 </form>
 
-<!--
-    <form method="post" >
-        {% csrf_token %}
-        <input type="text" name="subject" value="{{ form.subject.value }}">
-        <input type="text" name="tipus" value="{{ form.tipus.value }}">
-        <input type="text" name="estat" value="{{ form.estat.value }}">
-        <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
-        <input type="text" name="prioritat" value="{{ form.prioritat.value }}">
-        <input type="text" name="gravetat" value="{{ form.gravetat.value }}">
-        <input type="submit" name="save_subject" class="btn-big add-item" style="margin-top: 10px; margin-bottom: 10px;">
-    </form>
--->
+<script>
+    var myButton = document.getElementById('addTagBtn');
+    var myDiv = document.getElementById('addTag');
+
+    myButton.addEventListener('click', function() {
+        event.preventDefault();
+        if (myDiv.style.display === 'none') {
+            myDiv.style.display = 'flex';
+            myDiv.style.justifyContent = 'space-between';
+            myButton.style.display = 'none';
+        } else {
+            myDiv.style.display = 'none';
+        }
+    });
+</script>
+
 {% endblock %}
 

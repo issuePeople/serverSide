@@ -1,10 +1,11 @@
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.views.generic.base import View
 from django_filters.views import FilterView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Issue, Tag, Attachment
-from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm
+from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
 from usuaris.models import Usuari
 from .filters import IssueFilter
 
@@ -17,11 +18,8 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(Issue.get_types(self))
         context.update({
-            'TTipus': Issue.TTIPUS,
-            'TEstats': Issue.TESTATS,
-            'TGravetat': Issue.TGRAVETAT,
-            'TPrioritat': Issue.TPRIORITAT,
             'usuaris': Usuari.objects.all(),
             'tags': Tag.objects.all()
         })
@@ -64,6 +62,11 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
         queryset = Issue.objects.prefetch_related('attachments', 'comentaris').order_by('-attachments__data', '-comentaris__data')
         return get_object_or_404(queryset, id=id)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(Issue.get_types(self))
+        return context
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -86,6 +89,13 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     comentari.issue = self.get_object()
                     comentari.autor = Usuari.objects.get(user=self.request.user)
                     comentari.save()
+            if 'afegir_tag' in request.POST:
+                tag_form = TagForm(request.POST, request.FILES)
+                is_valid = tag_form.is_valid()
+                tag = tag_form.cleaned_data['tag']
+                issue = self.get_object()
+                issue.tags.add(tag)
+                issue.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -133,3 +143,16 @@ class EsborrarAttachmemtView(IsAuthenticatedMixin, DeleteView):
     def get_success_url(self):
         id_issue = self.object.issue.id
         return reverse('editar_issue', kwargs={'id': id_issue})
+
+
+class EsborrarTagIssueView(View):
+    def get(self, request, *args, **kwargs):
+        id_issue = self.kwargs.get('id_issue')
+        nom_tag = self.kwargs.get('nom_tag')
+
+        issue = get_object_or_404(Issue, id=id_issue)
+        tag = get_object_or_404(Tag, nom=nom_tag)
+
+        issue.tags.remove(tag)
+
+        return redirect(request.META.get('HTTP_REFERER'))
