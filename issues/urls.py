@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:id>/edit', views.EditarIssueView.as_view(), name='editar_issue'),
     path('<int:id>/delete', views.EsborrarIssueView.as_view(), name='esborrar_issue'),
     path('attachments/<int:id>/delete', views.EsborrarAttachmemtView.as_view(), name='esborrar_attachment'),
+    path('<int:id_issue>/tags/<str:nom_tag>/delete', views.EsborrarTagIssueView.as_view(), name='esborrar_tag_issue'),
 ]
