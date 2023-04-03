@@ -114,11 +114,22 @@
                 <!-- Comments Activites content -->
                 <section class="comment" >
                     <div style="display: flex; justify-content: space-between;">
-                        <input type="text" style="margin-top: 5px; margin-bottom: 5px;"> 
+                        <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
                         <button type="submit" name="afegir_comentari" style="background: none;">
                             <i class="fa fa-floppy-o" aria-hidden="true"></i>
                         </button>
                     </div>
+
+                    <div>
+                    <ul>
+                        {%  for comentari in issue.comentaris.all %}
+                            <li>
+                                <p>{{ comentari.text }} ---- {{ comentari.autor.user.first_name }} ----- {{ comentari.data }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    </div>
+
                     <div class="commmetns-wrapper">
                         {%  for desc in issue.descripcio %}
                             <div >
@@ -139,7 +150,7 @@
                     <span>Open</span>
                 </span>
                 <!-- status-->
-                <select style="margin-left: 10px;" name="guardar_estat" type="submit" class="status-button">
+                <select style="margin-left: 10px;" name="estat" type="submit" class="status-button">
                     {% for estat in form.estat %}
                         <option value="{{estat}}">{{estat}}</option>
                     {% endfor %}    
@@ -148,21 +159,21 @@
             <section class="ticket-section ticket-data-container">
                 <div class="ticket-data-container">
                     <!-- Type-->
-                    <select name="guardar_tipus" type="submit" class="status-button">
+                    <select name="tipus" type="submit" class="status-button">
                         {% for tipus in form.tipus %}
                             <option value="{{tipus}}">{{tipus}}</option>
                         {% endfor %}
                     </select>
 
                     <!-- Severity-->
-                    <select name="guardar_gravetat" type="submit" class="status-button">
+                    <select name="gravetat" type="submit" class="status-button">
                         {% for gravetat in form.gravetat %}
                             <option value="{{gravetat}}">{{gravetat}}</option>
                         {% endfor %}
                     </select>
                     
                     <!-- Priority-->
-                    <select name="guardar_prioritat" type="submit" class="status-button">
+                    <select name="prioritat" type="submit" class="status-button">
                         {% for prioritat in form.prioritat %}
                             <option value="{{prioritat}}">{{prioritat}}</option>
                         {% endfor %}

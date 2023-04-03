@@ -8,8 +8,15 @@ class AttachmentForm(forms.ModelForm):
         fields = ('document',)
 
 
+class ComentariForm(forms.ModelForm):
+    class Meta:
+        model = models.Comentari
+        fields = ('text', )
+
+
 class IssueForm(forms.ModelForm):
     attachment = AttachmentForm()
+    comenntari = ComentariForm()
 
     class Meta:
         model = models.Issue

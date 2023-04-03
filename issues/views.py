@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Issue
-from .forms import IssueForm, IssueBulkForm, AttachmentForm
+from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm
 from usuaris.models import Usuari
 from .filters import IssueFilter
 
@@ -57,24 +57,31 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        queryset = Issue.objects.prefetch_related('attachments').order_by('-attachments__data')
+        queryset = Issue.objects.prefetch_related('attachments', 'comentaris').order_by('-attachments__data', '-comentaris__data')
         return get_object_or_404(queryset, pk=pk)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            if 'save_subject' in request.POST:
+            if 'guardar_subject' in request.POST:
                 self.object = self.get_object()
                 subject = form.cleaned_data['subject']
                 self.object.subject = subject
                 self.object.save()
                 return self.form_valid(form)
-            if 'add_attachment' in request.POST:
+            if 'afegir_attachment' in request.POST:
                 attachment_form = AttachmentForm(request.POST, request.FILES)
                 if attachment_form.is_valid():
                     attachment = attachment_form.save(commit=False)
                     attachment.issue = self.get_object()
                     attachment.save()
+            if 'afegir_comentari' in request.POST:
+                comentari_form = ComentariForm(request.POST, request.FILES)
+                if comentari_form.is_valid():
+                    comentari = comentari_form.save(commit=False)
+                    comentari.issue = self.get_object()
+                    comentari.autor = Usuari.objects.get(user=self.request.user)
+                    comentari.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
