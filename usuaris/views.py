@@ -1,16 +1,46 @@
 from django.contrib.auth import authenticate, login as djangologin, logout as djangologout
 from django.contrib.auth.models import User
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView, FormView
-from .forms import LoginForm, RegistreForm
+from django.views.generic import DetailView, UpdateView, FormView
+from .forms import UsuariForm, LoginForm, RegistreForm
 from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Usuari
 
 
-class VeureUsuariView(IsAuthenticatedMixin, TemplateView):
+class VeureUsuariView(IsAuthenticatedMixin, DetailView):
+    model = Usuari
+    template_name = 'usuaris_info.html'
+    context_object_name = 'usuari'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        queryset = Usuari.objects.all()
+        return get_object_or_404(queryset, pk=pk)
+
+
+class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
+    model = Usuari
     template_name = 'usuaris_perfil.html'
+    form_class = UsuariForm
+    context_object_name = 'usuari'
+    success_url = reverse_lazy('perfil')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Usuari.objects.all(), user=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            if 'guardar_bio' in request.POST:
+                bio = form.cleaned_data['bio']
+                usuari = self.get_object()
+                usuari.bio = bio
+                usuari.save()
+                return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
 
 
 class LoginView(FormView):
