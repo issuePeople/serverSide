@@ -80,6 +80,14 @@ class Issue(models.Model):
     motiuBloqueig = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Motiu bloqueig'))
     tags = models.ManyToManyField(Tag, related_name='issues',  verbose_name=_('Tags'))
 
+    def get_types(self):
+        return {
+            'TTipus': Issue.TTIPUS,
+            'TEstats': Issue.TESTATS,
+            'TGravetat': Issue.TGRAVETAT,
+            'TPrioritat': Issue.TPRIORITAT
+        }
+
 
 class Attachment(models.Model):
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
