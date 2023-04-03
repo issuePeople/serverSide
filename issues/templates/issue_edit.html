@@ -187,7 +187,7 @@
             
                 <select id="selectStatus" style="margin-left: 10px;" name="estat" type="submit" class="status-button">
                     {% for key,value in TEstats %}
-                        <option value="{{value}}">{{value}}</option>
+                        <option value="{{key}}">{{value}}</option>
                     {% endfor %}    
                 </select>
                 <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
@@ -198,7 +198,7 @@
                     <!-- Type-->
                     <select id="selectType" name="tipus" type="submit" class="status-button">
                         {% for key,value in TTipus %}
-                            <option value="{{value}}">{{value}}</option>
+                            <option value="{{key}}">{{value}}</option>
                         {% endfor %}
                     </select>
                     <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
@@ -206,7 +206,7 @@
                     <!-- Severity-->
                     <select id="selectGrav" name="gravetat" type="submit" class="status-button" style="margin-top: 5px;">
                         {% for key,value in TGravetat %}
-                            <option value="{{value}}">{{value}}</option>
+                            <option value="{{key}}">{{value}}</option>
                         {% endfor %}
                     </select>
                     <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
@@ -214,7 +214,7 @@
                     <!-- Priority-->
                     <select id="selectPrior" name="prioritat" type="submit" class="status-button" style="margin-top: 5px;">
                         {% for key,value in TPrioritat %}
-                            <option value="{{value}}">{{value}}</option>
+                            <option value="{{key}}">{{value}}</option>
                         {% endfor %}
                     </select>
                     <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
