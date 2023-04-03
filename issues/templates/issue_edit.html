@@ -144,7 +144,7 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        <a class="history-tab active" href="localhost:8000/issues/41/edit/activites">0 Comments</a>
+                        <a class="history-tab active" href="localhost:8000/issues/41/edit/activites">{{issue.comentaris.all.count}} Comments</a>
                         <a class="history-tab" href="localhost:8000/issues/41/edit/activites">Activites</a>
                     </nav>
                 </section>
@@ -157,25 +157,26 @@
                         </button>
                     </div>
 
-                    <div>
-                    <ul>
-                        {%  for comentari in issue.comentaris.all %}
-                            <li>
-                                <p>{{ comentari.text }} ---- {{ comentari.autor.user.first_name }} ----- {{ comentari.data }}</p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    </div>
-
                     <div class="commmetns-wrapper">
-                        {%  for desc in issue.descripcio %}
-                            <div >
-                                <!--    <img url/desc.user> -->
-                                <span>{{ desc.user }}</span>
-                                <span>{{ desc.date }}</span>
-                                <span>{{ desc.name }}</span>
-                            </div>
-                        {% endfor %}
+                        <ul>
+                            {%  for comentari in issue.comentaris.all %}
+                                <li>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <img src="{{ comentari.autor.user.image }}"
+                                            width="60px"
+                                            height="60px"
+                                        >
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <span>{{ comentari.autor.user.first_name }}</span>
+                                                <span>{{ comentari.data }}</span>
+                                            </div>
+                                            <span>{{ comentari.text }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </section>
 
