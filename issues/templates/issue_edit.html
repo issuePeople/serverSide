@@ -300,22 +300,16 @@
                 <div class="ticket-detail-settings" >
                     <div>
                         <!-- obrir desplegable per triar date -->
-                        <button style="background: none;">
+                        <button id="btnTimeLine" style="background: none;">
                             <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
                         </button>
-                        <input 
-                            
-                            type="date" 
-                            id="datePickerInput" 
-                            name="guardar_dataLimit" 
-                            value="T"
-                            style="display: none;"
-                        >
+                        
                     </div>
                     <div>
-                        <button style="margin-left: 15px; background: none;" type="submit" name="guardar_bloquejat">
-                            <i class="fa fa-lock" aria-hidden="true"></i>
-                        </button>
+                        <!-- save motiuBloqueig  -->
+                        <a href="">
+                            <i style="margin-left: 15px;" class="fa fa-lock" aria-hidden="true"></i>
+                        </a>
                     </div>
                     <div>
                         <a href="{% url 'esborrar_issue' issue.id %}">
@@ -324,6 +318,15 @@
                     </div>
                 </div>
             </section>
+            
+            <input 
+                type="date" 
+                id="datePickerInput" 
+                name="dataLimit"
+                style="display: none;"
+            >
+            <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
+
         </sidebar>
     </div>
 </div>
@@ -332,26 +335,6 @@
 <script>
     var addTagBtn = document.getElementById('addTagBtn');
     var myDiv = document.getElementById('addTag');
-
-    const selectStatus = document.querySelector('#selectStatus');
-    var btnSaveStat = document.getElementById('btnSaveState');
-
-    const selectType = document.querySelector('#selectType');
-    var btnSaveType = document.getElementById('btnSaveType');
-
-    const selectGrav = document.querySelector('#selectGrav');
-    var btnSaveGrav = document.getElementById('btnSaveGrav');
-
-    const selectPrior = document.querySelector('#selectPrior');
-    var btnSavePrior = document.getElementById('btnSavePrior');
-    
-    const selectAssig = document.querySelector('#selectAssig');
-    var btnSaveAssig = document.getElementById('btnSaveAssig');
-
-    const selectObs = document.querySelector('#selectObs');
-    var btnSaveObs = document.getElementById('btnSaveObs');
-    
-
     addTagBtn.addEventListener('click', function() {
         event.preventDefault();
         if (myDiv.style.display === 'none') {
@@ -363,30 +346,53 @@
         }
     });
 
+    const selectStatus = document.querySelector('#selectStatus');
+    var btnSaveStat = document.getElementById('btnSaveState');
     selectStatus.addEventListener('change', function() {
         btnSaveStat.click();
     });
 
+    const selectType = document.querySelector('#selectType');
+    var btnSaveType = document.getElementById('btnSaveType');
     selectType.addEventListener('change', function() {
         btnSaveType.click();
     });
 
+    const selectGrav = document.querySelector('#selectGrav');
+    var btnSaveGrav = document.getElementById('btnSaveGrav');
     selectGrav.addEventListener('change', function() {
         btnSaveGrav.click();
     });
 
+    const selectPrior = document.querySelector('#selectPrior');
+    var btnSavePrior = document.getElementById('btnSavePrior');
     selectPrior.addEventListener('change', function() {
         btnSavePrior.click();
     });
 
+    const selectAssig = document.querySelector('#selectAssig');
+    var btnSaveAssig = document.getElementById('btnSaveAssig');
     selectAssig.addEventListener('change', function() {
         btnSaveAssig.click();
     });
 
+    const selectObs = document.querySelector('#selectObs');
+    var btnSaveObs = document.getElementById('btnSaveObs');
     selectObs.addEventListener('change', function() {
         btnSaveObs.click();
     });
 
+    var btnTimeLine = document.getElementById('btnTimeLine');
+    var datePickerInput = document.getElementById('datePickerInput');
+    var btnSaveDate = document.getElementById('btnSaveDate');
+    btnTimeLine.addEventListener('click', function() {
+        event.preventDefault();
+        datePickerInput.style.display = 'block';
+    });
+    datePickerInput.addEventListener('blur'), function() {
+        event.preventDefault();
+        btnSaveDate.click();
+    }
 
 
 </script>
