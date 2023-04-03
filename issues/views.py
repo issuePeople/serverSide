@@ -17,11 +17,8 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(Issue.get_types(self))
         context.update({
-            'TTipus': Issue.TTIPUS,
-            'TEstats': Issue.TESTATS,
-            'TGravetat': Issue.TGRAVETAT,
-            'TPrioritat': Issue.TPRIORITAT,
             'usuaris': Usuari.objects.all(),
             'tags': Tag.objects.all()
         })
@@ -63,6 +60,11 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
         id = self.kwargs.get('id')
         queryset = Issue.objects.prefetch_related('attachments', 'comentaris').order_by('-attachments__data', '-comentaris__data')
         return get_object_or_404(queryset, id=id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(Issue.get_types(self))
+        return context
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
