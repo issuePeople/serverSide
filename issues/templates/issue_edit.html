@@ -158,7 +158,7 @@
                             {%  for comentari in issue.comentaris.all %}
                                 <li>
                                     <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                        <img src="{{ comentari.autor.user.image }}"
+                                        <img src="{{ comentari.autor.user.avatar.url }}"
                                             width="60px"
                                             height="60px"
                                         >
@@ -187,18 +187,30 @@
             
                 <select id="selectStatus" style="margin-left: 10px;" name="estat" type="submit" class="status-button">
                     {% for key,value in TEstats %}
-                        <option value="{{key}}">{{value}}</option>
-                    {% endfor %}    
+
+                        {% if issue.estat == key %}
+                            <option selected="selected" value="{{key}}">{{value}}</option>
+                        {%else %}
+                            <option value="{{key}}">{{value}}</option>
+                        {%endif%}
+
+                    {% endfor %} 
                 </select>
                 <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
-                
+
             </section>
             <section class="ticket-section ticket-data-container">
                 <div class="ticket-data-container">
                     <!-- Type-->
                     <select id="selectType" name="tipus" type="submit" class="status-button">
                         {% for key,value in TTipus %}
-                            <option value="{{key}}">{{value}}</option>
+
+                            {% if issue.tipus == key %}
+                                <option selected="selected" value="{{key}}">{{value}}</option>
+                            {%else %}
+                                <option value="{{key}}">{{value}}</option>
+                            {%endif%}
+
                         {% endfor %}
                     </select>
                     <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
@@ -206,7 +218,13 @@
                     <!-- Severity-->
                     <select id="selectGrav" name="gravetat" type="submit" class="status-button" style="margin-top: 5px;">
                         {% for key,value in TGravetat %}
-                            <option value="{{key}}">{{value}}</option>
+
+                            {% if issue.gravetat == key %}
+                                <option selected="selected" value="{{key}}">{{value}}</option>
+                            {%else %}
+                                <option value="{{key}}">{{value}}</option>
+                            {%endif%}
+
                         {% endfor %}
                     </select>
                     <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
@@ -214,7 +232,13 @@
                     <!-- Priority-->
                     <select id="selectPrior" name="prioritat" type="submit" class="status-button" style="margin-top: 5px;">
                         {% for key,value in TPrioritat %}
-                            <option value="{{key}}">{{value}}</option>
+                            
+                            {% if issue.gravetat == key %}
+                                <option selected="selected" value="{{key}}">{{value}}</option>
+                            {%else %}
+                                <option value="{{key}}">{{value}}</option>
+                            {%endif%}
+
                         {% endfor %}
                     </select>
                     <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
@@ -232,7 +256,7 @@
                         <div>
                             {% if ets_assignat != null %}
                                 <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                    <img src="{{ ets_assignat.autor.user.image }}"
+                                    <img src="{{ ets_assignat.autor.user.avatar.url }}"
                                         width="60px"
                                         height="60px"
                                     >
@@ -271,7 +295,7 @@
                                 {%  for obs in ets_observador.all %}
                                     <li>
                                         <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                            <img src="{{ obs.autor.user.image }}"
+                                            <img src="{{ obs.autor.user.avatar.url }}"
                                                 width="60px"
                                                 height="60px"
                                             >
@@ -314,9 +338,9 @@
                     </div>
                     <div>
                         <!-- save motiuBloqueig  -->
-                        <a href="">
+                        <button id="btnBloqueig" style="background: none;">
                             <i style="margin-left: 15px;" class="fa fa-lock" aria-hidden="true"></i>
-                        </a>
+                        </button>
                     </div>
                     <div>
                         <a href="{% url 'esborrar_issue' issue.id %}">
@@ -333,6 +357,14 @@
                 style="display: none;"
             >
             <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
+
+            <input 
+                type="text" 
+                id="inputMotiuBloqueig" 
+                name="motiuBloqueig"
+                style="display: none;"
+            >
+            <button id="btnSaveMotiuBloqueig" type="submit" name="guardar_bloquejat" style="display: none;"></button>
 
         </sidebar>
     </div>
@@ -392,7 +424,7 @@
     var btnTimeLine = document.getElementById('btnTimeLine');
     var datePickerInput = document.getElementById('datePickerInput');
     var btnSaveDate = document.getElementById('btnSaveDate');
-    btnTimeLine.addEventListener('click', function() {
+    btnTimeLine.addEventListener('click', () => {
         event.preventDefault();
         datePickerInput.style.display = 'block';
     });
@@ -401,6 +433,18 @@
         btnSaveDate.click();
     }
 
+    var btnBloqueig = document.getElementById('btnBloqueig');
+    var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
+    var btnSaveMotiuBloqueig = document.getElementById('btnSaveMotiuBloqueig');
+    btnBloqueig.addEventListener('click', () => {
+        event.preventDefault();
+        inputMotiuBloqueig.style.display = 'block';
+    });
+    inputMotiuBloqueig.addEventListener('blur'), function() {
+        event.preventDefault();
+        btnSaveMotiuBloqueig.click();
+    }
+    
 
 </script>
 
