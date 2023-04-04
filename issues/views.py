@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
 from . import forms, models
+from usuaris.models import Usuari
+from .models import Tag
 from .filters import IssueFilter
 
 
@@ -19,6 +21,10 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
         context.update({'TEstats': models.Issue.TESTATS})
         context.update({'TGravetat': models.Issue.TGRAVETAT})
         context.update({'TPrioritat': models.Issue.TPRIORITAT})
+        context.update({
+            'usuaris': Usuari.objects.all(),
+            'tags': Tag.objects.all()
+        })
         return context
 
     def get_queryset(self):

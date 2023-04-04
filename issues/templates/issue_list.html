@@ -90,7 +90,34 @@
                                             {% if "estat="|add:key in request.get_full_path %}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{value}}</div>
-                                                    <a href="?estat=" class="name"onclick="filtrat('bug')">X</a>
+                                                    <a href="?estat=" class="name">X</a>
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for usuari in usuaris%}
+                                            {% if "assignat="|add:usuari.user.username in request.get_full_path %}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{usuari.user.username}}</div>
+                                                    <a href="?assignat=" class="name">X</a>
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for tag in tags%}
+                                            {% if "tag="|add:tag.nom in request.get_full_path %}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{tag.nom}}</div>
+                                                    <a href="?estat=" class="name">X</a>
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for usuari in usuaris%}
+                                            {% if "creat="|add:usuari.user.username in request.get_full_path %}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{usuari.user.username}}</div>
+                                                    <a href="?creat=" class="name">X</a>
                                             </div>
                                             {%endif%}
                                             {%endfor%}
@@ -287,6 +314,14 @@
                                             </div>
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_assignat">
+                                            <div>
+                                                {%for usuari in usuaris%}
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
+                                                    <a href="{{request.get_full_path}}&assignat={{usuari.user.username}}" class="name">{{usuari.user.username}}</a>
+                                                </button>
+                                                
+                                                {%endfor%}
+                                            </div>
                                             
                                         </div>
                                     </li>
@@ -309,7 +344,14 @@
                                             
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_rol">
-                                            
+                                            <div>
+                                                {%for tag in tags%}
+                                                <button class="single-filter single-filter-type-general" style="border-color:'tag.color';">
+                                                    <a href="{{request.get_full_path}}&creat={{tag.nom}}" class="name">{{tag.nom}}</a>
+                                                </button>
+                                                
+                                                {%endfor%}
+                                            </div>
                                         </div>
                                     </li>
                                     <li>
@@ -331,7 +373,14 @@
                                             
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
-                                            
+                                            <div>
+                                                {%for usuari in usuaris%}
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
+                                                    <a href="{{request.get_full_path}}&creat={{usuari.user.username}}" class="name">{{usuari.user.username}}</a>
+                                                </button>
+                                                
+                                                {%endfor%}
+                                            </div>
                                         </div>
                                     </li>
                                 </ul>
