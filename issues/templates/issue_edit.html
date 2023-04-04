@@ -233,7 +233,7 @@
                     <select id="selectPrior" name="prioritat" type="submit" class="status-button" style="margin-top: 5px;">
                         {% for key,value in TPrioritat %}
                             
-                            {% if issue.gravetat == key %}
+                            {% if issue.prioritat == key %}
                                 <option selected="selected" value="{{key}}">{{value}}</option>
                             {%else %}
                                 <option value="{{key}}">{{value}}</option>
