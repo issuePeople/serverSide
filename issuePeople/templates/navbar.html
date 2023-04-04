@@ -3,7 +3,20 @@
 {% block content %}
     <!-- ToDo NAVBAR -->
 
-    <p>NAAAAVBAAAAARRRR</p>
+    <div>
+        <nav class="navbar" style>
+            <div class="nav-left">
+                <a href="/issues" title="Homepage" class="logo">
+                    <img src="logo_IssuePeople.png">
+                </a>
+            </div>
+            <div class="nav-right">
+                <a href="/usuaris/perfil" title="Usuari" class="logo">
+                    <img src={{usuari.avatar.url}} style="width: 32px; height: 32px;">
+                </a>
+            </div>
+        </nav>
+    </div>
 
     {% block body %}
     {% endblock %}
