@@ -6,6 +6,17 @@
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 
+    <!-- Això és per penjar i canviar avatar. Ho he copiat del que va fer l'Àngel a issue_edit per penjar attachments -->
+    <input type="file" value="+" name="avatar">
+
+    <button type="submit" name="guardar_avatar">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+
+    <!-- Això és la foto de perfil (avatar) -->
+    <img src="{{ usuari.avatar.url }}">
+
+    <!-- Això és x canviar la bio -->
     <input type="text" name="bio" value="{{ usuari.bio }}">
     <button type="submit" name="guardar_bio">Save</button>
 

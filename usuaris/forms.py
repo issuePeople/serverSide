@@ -8,7 +8,7 @@ from .models import Usuari
 class UsuariForm(UserChangeForm):
     class Meta:
         model = Usuari
-        fields = ('bio',)
+        fields = ('bio', 'avatar')
 
 
 class LoginForm(forms.Form):

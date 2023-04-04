@@ -33,12 +33,10 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            if 'guardar_bio' in request.POST:
-                bio = form.cleaned_data['bio']
-                usuari = self.get_object()
-                usuari.bio = bio
-                usuari.save()
-                return redirect(self.success_url)
+            usuari = form.save(commit=False)
+            usuari.user = self.request.user
+            usuari.save()
+            return redirect(self.success_url)
         else:
             return self.form_invalid(form)
 
