@@ -15,3 +15,8 @@ class Issue(admin.ModelAdmin):
 @admin.register(models.Attachment)
 class Attachment(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.Comentari)
+class Comentari(admin.ModelAdmin):
+    pass

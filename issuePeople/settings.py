@@ -136,8 +136,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-AWS_ACCESS_KEY_ID = os.environ.get('STORAGE_KEY', '')
-AWS_SECRET_ACCESS_KEY = os.environ.get('STORAGE_PASSWORD', '')
+AWS_ACCESS_KEY_ID = 'AKIAUENQNCDLSNV5XFN5'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'issuestorage'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
@@ -148,6 +148,8 @@ AWS_LOCATION = 'static'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+DEFAULT_AVATAR_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/default.png'
 
 if DEBUG:
     STATIC_URL = 'static/'
