@@ -78,11 +78,35 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
         form = self.get_form()
         if form.is_valid():
             if 'guardar_subject' in request.POST:
-                self.object = self.get_object()
+                issue = self.get_object()
                 subject = form.cleaned_data['subject']
-                self.object.subject = subject
-                self.object.save()
-                return self.form_valid(form)
+                issue.subject = subject
+                issue.save()
+            if 'guardar_descripcio' in request.POST:
+                issue = self.get_object()
+                descripcio = form.cleaned_data['descripcio']
+                issue.descripcio = descripcio
+                issue.save()
+            if 'guardar_tipus' in request.POST:
+                issue = self.get_object()
+                tipus = form.cleaned_data['tipus']
+                issue.tipus = tipus
+                issue.save()
+            if 'guardar_estat' in request.POST:
+                issue = self.get_object()
+                estat = form.cleaned_data['estat']
+                issue.estat = estat
+                issue.save()
+            if 'guardar_gravetat' in request.POST:
+                issue = self.get_object()
+                gravetat = form.cleaned_data['gravetat']
+                issue.gravetat = gravetat
+                issue.save()
+            if 'guardar_prioritat' in request.POST:
+                issue = self.get_object()
+                prioritat = form.cleaned_data['prioritat']
+                issue.prioritat = prioritat
+                issue.save()
             if 'afegir_attachment' in request.POST:
                 attachment_form = AttachmentForm(request.POST, request.FILES)
                 if attachment_form.is_valid():
