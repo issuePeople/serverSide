@@ -158,7 +158,7 @@
                             {%  for comentari in issue.comentaris.all %}
                                 <li>
                                     <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                        <img src="{{ comentari.autor.user.avatar.url }}"
+                                        <img src="{{ comentari.autor.avatar.url }}"
                                             width="60px"
                                             height="60px"
                                         >
@@ -254,13 +254,14 @@
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
                         <div>
-                            {% if ets_assignat != null %}
+                            {% if issue.assignacio != null %}
                                 <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
                                     <img src="{{ ets_assignat.autor.user.avatar.url }}"
                                         width="60px"
                                         height="60px"
                                     >
                                     <span style="margin-left: 15px;">{{ ets_assignat.autor.user.first_name }}</span>
+                                    <i></i>
                                 </div>  
                             {%endif%}
 
@@ -292,10 +293,10 @@
                         <div class="ticket-user-list"></div>
                         <div>
                             <ul>
-                                {%  for obs in ets_observador.all %}
+                                {%  for obs in issue.observadors.all %}
                                     <li>
                                         <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                            <img src="{{ obs.autor.user.avatar.url }}"
+                                            <img src="{{ obs.avatar.url }}"
                                                 width="60px"
                                                 height="60px"
                                             >
@@ -445,9 +446,14 @@
         event.preventDefault();
         btnSaveMotiuBloqueig.click();
     });
+    /*
+    btnGuardarBloqueix.addEventListener('blur', function() {
+        event.preventDefault();
+        btnSaveMotiuBloqueig.click();
+    });
+    */
     
 
 </script>
 
 {% endblock %}
-
