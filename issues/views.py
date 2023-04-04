@@ -18,7 +18,10 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(Issue.get_types(self))
+        context.update({'TTipus': models.Issue.TTIPUS})
+        context.update({'TEstats': models.Issue.TESTATS})
+        context.update({'TGravetat': models.Issue.TGRAVETAT})
+        context.update({'TPrioritat': models.Issue.TPRIORITAT})
         context.update({
             'usuaris': Usuari.objects.all(),
             'tags': Tag.objects.all()
