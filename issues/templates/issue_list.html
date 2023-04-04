@@ -10,6 +10,7 @@
                 <header class="issue-header">
                     <h1>
                         <span>Issues</span>
+                        
                     </h1>
                     <div class="taskboard-actions">
                         <div class="issue-table-options-start" >
@@ -18,8 +19,11 @@
                                 
                                 <span class="text" style="margin: 5px;">Filtres</span>
                             </button>
-                            <div>
-                                <input class="ng-pristine ng-valid ng-empty ng-touched">
+                            <div style="display: flex; flex-direction:row;padding-left: 10px;">
+                                <input type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
+                                <button type="sumbit">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
                             </div>
                             
                         </div>
@@ -27,6 +31,7 @@
                             <button class="btn-small" >
                                 <span class="icon icon-add" style="font-size: large;padding-right: 5px;">+</span>
                                 <a href="/issues/create/" > New Issue</a>
+                               
                             </button>
                             
                             <button class="btn-icon" >
@@ -55,69 +60,161 @@
                                         <div class="filters-title">Filtrat per:</div>
                                         <div class="filters-wrapper">
                                             {%for key,value in TTipus%}
-                                            {% if "tipus="|add:key in request.get_full_path %}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                            {% if "?tipus="|add:key in request.get_full_path %}
+                                            {%with "?tipus="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            
+                                            <div class="single-applied-filter ng-animate-disabled include" >
                                                 <div class="name">{{value}}</div>
-                                               
-                                                <p>{{patata}}</p>
-                                                <p>{{potota}}</p>
-                                                    <a href="" class="name">X</a>
-                                               
+                                 
+                                                    <a href="{{link}}" class="name" onclick="borra()">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%elif "&tipus="|add:key in request.get_full_path%}
+                                            {%with "&tipus="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                        
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            {%for key,value in TGravetat%}
+                                            {% if "?gravetat="|add:key in request.get_full_path %}
+                                            {%with "?gravetat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                                <a href="{{link}}" class="name">X</a>
+                                            {%endwith%}
+                                            {%endwith%}
+                                            </div>
+                                            
+                                            {%elif "&gravetat="|add:key in request.get_full_path%}
+                                            {%with "&gravetat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
                                                 
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
-                                            {%for key,value in TGravetat%}
-                                            {% if "gravetat="|add:key in request.get_full_path %}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
-                                                <div class="name">{{value}}</div>
-                                                    <a href="?gravetat=" class="name"onclick="filtrat('bug')">X</a>
-                                            </div>
-                                            {%endif%}
-                                            {%endfor%}
-                                            
                                             {%for key,value in TPrioritat%}
-                                            {% if "prioritat="|add:key in request.get_full_path %}
+                                            {% if "?prioritat="|add:key in request.get_full_path %}
+                                            {%with "?prioritat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{value}}</div>
                                                     <a href="?prioritat=" class="name"onclick="filtrat('bug')">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&prioritat="|add:key in request.get_full_path%}
+                                            {%with "&prioritat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for key,value in TEstats%}
-                                            {% if "estat="|add:key in request.get_full_path %}
+                                            {% if "?estat="|add:key in request.get_full_path %}
+                                            {%with "?estat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{value}}</div>
                                                     <a href="?estat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&estat="|add:key in request.get_full_path%}
+                                            {%with "&estat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for usuari in usuaris%}
-                                            {% if "assignat="|add:usuari.user.username in request.get_full_path %}
+                                            {% if "?assignat="|add:usuari.user.username in request.get_full_path %}
+                                            {%with "?assignat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{usuari.user.username}}</div>
                                                     <a href="?assignat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&assignat="|add:key in request.get_full_path%}
+                                            {%with "&assignat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{usuari.user.username}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for tag in tags%}
-                                            {% if "tag="|add:tag.nom in request.get_full_path %}
+                                            {% if "?tag="|add:tag.nom in request.get_full_path %}
+                                            {%with "?tag="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{tag.nom}}</div>
                                                     <a href="?estat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&tag="|add:key in request.get_full_path%}
+                                            {%with "&tag="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for usuari in usuaris%}
-                                            {% if "creat="|add:usuari.user.username in request.get_full_path %}
+                                            {% if "?creat="|add:usuari.user.username in request.get_full_path %}
+                                            {%with "?creat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{usuari.user.username}}</div>
                                                     <a href="?creat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
                                             </div>
                                             {%endif%}
                                             {%endfor%}
@@ -153,8 +250,9 @@
                                                     {%else%} 
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)">
                                                     {%endif%} 
-                                                    {% if request.get_full_path != "/issues/" %}
+                                                    {% if request.get_full_path != "/issues/" and "tipus" not in request.get_full_path%}
                                                         <a href="{{request.get_full_path}}&tipus={{key}}" class="name">{{value}}</a>
+                                                    
                                                     {%else%}
                                                         <a href="?tipus={{key}}"class="name">{{value}}</a>
                                                     {%endif%}
@@ -391,41 +489,163 @@
                 <div class="issue-page"style="width: 100%;">
                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;">
                         <tr class="row title">
-                            <td class="level-field" style="display:flex">
-                                <span >Tipus</span>
-                                    <div style="display:flex;flex-direction: column; padding-left: 10px; align-items: center;">
-                                    <a href="?order_by=tipus" class="name">
-                                        <img src="   https://cdn-icons-png.flaticon.com/512/130/130906.png " width="5" height="5" alt="" title="" class="img-small">
+                            <td class="level-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span class="wide" style="padding-top: 6px;">Tipus</span>
+                                <div class="mobile"style="padding-top:6px;">
+                                    <span class="first-letter">Tipus</span>
+                                </div>
+                                <div class ="icon-arrow-down" style="display:flex; flex-direction: column;padding-left: 10px;">
+                                    <a href="?order_by=tipus" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                    {%if "=tipus" in request.get_full_path%}
+                                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                    {%else%}
+                                        <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                    {%endif%}
                                     </a>
                                     <a href="?order_by=-tipus" class="name">
-                                        <img src="   https://cdn-icons-png.flaticon.com/512/2985/2985150.png " width="7" height="7" alt="" title="" class="img-small">
+                                    {%if "=-tipus" in request.get_full_path%}
+                                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                    {%else%}
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    {%endif%}
                                     </a>
                                 </div>
-                                  
-                                
+                            </div>
                             </td>
                             <td class="level-field">
-                                <div>
-                                <span >Gravetat</span>
-                                <div style="display:flex;flex-direction: column; padding-left: 10px; align-items: center;">
-                                    <a href="?order_by=gravetat" class="name">
-                                        <img src="   https://cdn-icons-png.flaticon.com/512/130/130906.png " width="5" height="5" alt="" title="" class="img-small">
-                                    </a>
-                                    <a href="?order_by=-gravetat" class="name">
-                                        <img src="   https://cdn-icons-png.flaticon.com/512/2985/2985150.png " width="7" height="7" alt="" title="" class="img-small">
-                                    </a>
-                                </div>
+                                <div style="display:flex; flex-direction: row;">
+                                    <span class="wide"style="padding-top: 6px;">Gravetat</span>
+                                    <div class="mobile"style="padding-top:6px;">
+                                        <span class="first-letter">Gravetat</span>
+                                    </div>
+                                    <div style="display:flex;flex-direction: column; padding-left: 10px; ">
+                                        <a href="?order_by=gravetat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                            {%if "=gravetat" in request.get_full_path%}
+                                                <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                            {%else%}
+                                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                            {%endif%}
+                                        </a>
+                                        <a href="?order_by=-gravetat" class="name">
+                                            {%if "=-gravetat" in request.get_full_path%}
+                                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                            {%else%}
+                                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                            {%endif%}
+                                        </a>
+                                    </div>
                                 </div>
                             </td>
                             <td class="level-field">
-                                <span class="wide">Prioritat</span>
+                                <div style="display:flex; flex-direction: row;">
+                                <span class="wide"style="padding-top: 6px;">Prioritat</span>
+                                <div class="mobile"style="padding-top: 6px;">
+                                    <span class="first-letter">Prioritat</span>
+                                </div>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=prioritat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=prioritat" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-prioritat" class="name">
+                                        {%if "=-prioritat" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
                             </td>
                             <td class="subject">
-                                <span class="wide">Issue</span>
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Issue</span>
+                                
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=id" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=id" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-id" class="name">
+                                        {%if "=-id" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
                             </td>
-                            <td class="issue-field"></td>
-                            <td class="modified-field"></td>
-                            <td class="assigned-field"></td>
+                            <td class="issue-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Estat</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=estat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=estat" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-estat" class="name">
+                                        {%if "=-estat" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
+                            <td class="modified-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Modificat</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=dataModificacio" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=dataModificacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-dataModificacio" class="name">
+                                        {%if "=-dataModificacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
+                            <td class="assigned-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Assignat a</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=assignacio" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=assignacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-assignacio" class="name">
+                                        {%if "=-assignacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
                         </tr>
                         {% for issue in issues %}
                             <tr class="row table-main" style="height: 80px;">
@@ -482,18 +702,20 @@
                                     </a> 
                                 </td>
                                 
-                                <td style="text-align: center;
+                                <td  style="text-align: center;
                                 vertical-align: middle;">
-                                    <div class="assigned-field" >
-                                    
-                                    {%if issue.estat == 'C'%}
-                                        <span style="color:#70b578">{{issue.get_estat_display}}</span>
-                                    {%elif issue.estat == 'R'%}
-                                        <span style="color:#FF0000">{{issue.get_estat_display}}</span>
-                                    {%else %}
-                                        <span>{{issue.get_estat_display}}</span>
-                                    {%endif%} 
-                                    </div>
+                                <form>
+                                <select id="selectStatus" name="estat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                    {% for key,value in TEstats %}
+                                        {% if issue.estat == key %}
+                                            <option selected="selected" value="{{key}}">{{value}}</option>
+                                        {%else %}
+                                            <option value="{{key}}">{{value}}</option>
+                                        {%endif%}
+                                    {% endfor %}
+                                </select>
+                                <button type="submit"  name="guardar_estat" style="display: none;"></button>
+                                </form>
                                 </td>
                                 
                                 <td class="modified-field" style="text-align: center;
@@ -504,6 +726,18 @@
                                 
                                 <td class="assigned-field" style="text-align: center;
                                 vertical-align: middle;">   
+                                <form>
+                                    <select id="selectUsuari" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                        {% for ususari in usuaris %}
+                                            {% if issue.assignacio.user.username == usuari.user.username %}
+                                                <option selected="selected" value="{{usuari.user.username}}">{{usuari.user.username}}</option>
+                                            {%else %}
+                                                <option value="{{usuari.user}}">{{usuari.user}}</option>
+                                            {%endif%}
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit"  name="guardar_assignat" style="display: none;"></button>
+                                    </form>
                                     <span class="issue-assignedto">{{issue.assignacio.user.username}}</span>
                                 </td>
                                 
@@ -519,12 +753,18 @@
     
 <script type="text/javascript">
     
-    function borra(key) {
-        console.log(window.location)
-        window.location = window.location.delete(key);
+
+    function borra() {
+        var querystring = window.location.href;
+        console.log(querystring);
+        const params = new URLSearchParams(querystring)
+        var aa= params.get('estat');
+        console.log(params.has('estat'));
+        
     }
     
     function myFunction() {
+        
         var x = document.getElementById("filtres");
         if (x.style.display === "none") {
             x.style.display = "block";

@@ -60,14 +60,15 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
     context_object_name = 'issue'
 
     def get_object(self, queryset=None):
-        pk = self.kwargs.get('pk')
-        queryset = models.Issue.objects.prefetch_related('attachments').order_by('-attachments__data')
-        return get_object_or_404(queryset, pk=pk)
+        id = self.kwargs.get('id')
+        queryset = Issue.objects.prefetch_related('attachments', 'comentaris', 'assignacio', 'observadors')\
+            .order_by('-attachments__data', '-comentaris__data')
+        return get_object_or_404(queryset, id=id)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            if 'save_subject' in request.POST:
+            if 'guardar_subject' in request.POST:
                 self.object = self.get_object()
                 subject = form.cleaned_data['subject']
                 self.object.subject = subject
