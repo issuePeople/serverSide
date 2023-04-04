@@ -25,6 +25,17 @@
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </div>
+                            <div style="display:flex; flex-direction:row; padding-left:10px">
+                            <div  onclick="toggle()" style="padding-right:10px">
+                                <div  id="tag_on">
+                                    <i class="fa fa-toggle-on" aria-hidden="true"></i>
+                                </div>
+                                <div  id="tag_off" style="display:none">
+                                    <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <span>Tags</span>
+                        </div>
                             
                         </div>
                         <div class="new-issue">
@@ -648,7 +659,11 @@
                             </td>
                         </tr>
                         {% for issue in issues %}
-                            <tr class="row table-main" style="height: 80px;">
+                            {%if issue.blocked %}
+                                <tr class="row table-main is-blocked" style="height: 80px;">
+                            {%else%}
+                                <tr class="row table-main" style="height: 80px;">
+                            {%endif%}
                             
                                 <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;
                                 vertical-align: middle">
@@ -728,12 +743,10 @@
                                 vertical-align: middle;">   
                                 <form>
                                     <select id="selectUsuari" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
-                                        {% for ususari in usuaris %}
-                                            {% if issue.assignacio.user.username == usuari.user.username %}
-                                                <option selected="selected" value="{{usuari.user.username}}">{{usuari.user.username}}</option>
-                                            {%else %}
-                                                <option value="{{usuari.user}}">{{usuari.user}}</option>
-                                            {%endif%}
+                                        {% for usuari in usuaris %}
+                                            
+                                                <option value="{{usuari.user.username}}">{{usuari.user.username}}</option>
+                                            
                                         {% endfor %}
                                     </select>
                                     <button type="submit"  name="guardar_assignat" style="display: none;"></button>
@@ -761,6 +774,17 @@
         var aa= params.get('estat');
         console.log(params.has('estat'));
         
+    }
+    function toggle(){
+        var x = document.getElementById("tag_on");
+        var y = document.getElementById("tag_off");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.style.display = "none";
+        } else {
+         x.style.display = "none";
+         y.style.display ="block";
+        }
     }
     
     function myFunction() {
