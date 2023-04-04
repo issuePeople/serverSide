@@ -692,7 +692,7 @@
                                 <td class="subject" style="text-align: center;
                                 vertical-align: middle;">
                                     
-                                    <a href="/issues/{{issue.id}}/edit" >
+                                    <a href="{% url 'editar_issue' issue.id %}" >
                                         <span classe="issue-text" style="display: inline-flex;">
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
