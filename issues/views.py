@@ -114,12 +114,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                 issue.save()
             if 'guardar_bloquejat' in request.POST:
                 issue = self.get_object()
-                issue.bloquejat = not issue.bloquejat
-                if issue.bloquejat:
-                    issue.motiuBloqueig = None
+                motiuBloqueig = form.cleaned_data['motiuBloqueig']
+                if motiuBloqueig is None:
+                    issue.bloquejat = False
                 else:
-                    motiu = form.cleaned_data['motiuBloqueig']
-                    issue.motiuBloqueig = motiu
+                    issue.bloquejat = True
+                issue.motiuBloqueig = motiuBloqueig
                 issue.save()
             if 'afegir_attachment' in request.POST:
                 attachment_form = AttachmentForm(request.POST, request.FILES)
