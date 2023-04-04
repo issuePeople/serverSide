@@ -421,17 +421,18 @@
         btnSaveObs.click();
     });
 
+    
     var btnTimeLine = document.getElementById('btnTimeLine');
-    var datePickerInput = document.getElementById('datePickerInput');
     var btnSaveDate = document.getElementById('btnSaveDate');
+    var datePickerInput = document.querySelector('#datePickerInput');
     btnTimeLine.addEventListener('click', () => {
         event.preventDefault();
         datePickerInput.style.display = 'block';
     });
-    datePickerInput.addEventListener('blur'), function() {
+    datePickerInput.addEventListener('blur', () => {
         event.preventDefault();
         btnSaveDate.click();
-    }
+    });
 
     var btnBloqueig = document.getElementById('btnBloqueig');
     var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
@@ -439,11 +440,11 @@
     btnBloqueig.addEventListener('click', () => {
         event.preventDefault();
         inputMotiuBloqueig.style.display = 'block';
-    });
-    inputMotiuBloqueig.addEventListener('blur'), function() {
+    })
+    inputMotiuBloqueig.addEventListener('blur', function() {
         event.preventDefault();
         btnSaveMotiuBloqueig.click();
-    }
+    });
     
 
 </script>
