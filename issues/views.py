@@ -107,6 +107,20 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                 prioritat = form.cleaned_data['prioritat']
                 issue.prioritat = prioritat
                 issue.save()
+            if 'guardar_dataLimit' in request.POST:
+                issue = self.get_object()
+                dataLimit = form.cleaned_data['dataLimit']
+                issue.dataLimit = dataLimit
+                issue.save()
+            if 'guardar_bloquejat' in request.POST:
+                issue = self.get_object()
+                issue.bloquejat = not issue.bloquejat
+                if issue.bloquejat:
+                    issue.motiuBloqueig = None
+                else:
+                    motiu = form.cleaned_data['motiuBloqueig']
+                    issue.motiuBloqueig = motiu
+                issue.save()
             if 'afegir_attachment' in request.POST:
                 attachment_form = AttachmentForm(request.POST, request.FILES)
                 if attachment_form.is_valid():
