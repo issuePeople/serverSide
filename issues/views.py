@@ -250,6 +250,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                 log.save()
                 issue.assignacio = assignat
                 issue.save()
+            elif 'guardar_observador' in request.POST:
+                issue = self.get_object()
+                id_observador = request.POST.get('observador')
+                observador = get_object_or_404(Usuari, pk=id_observador)
+                issue.observadors.add(observador)
+                issue.save()
             elif 'autoassignar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
