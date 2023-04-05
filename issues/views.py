@@ -277,6 +277,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue.assignacio = usuari
                     log.valor_nou = usuari.user.first_name
                 log.save()
+                issue.save()
             elif 'autoobservar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
@@ -284,6 +285,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue.observadors.remove(usuari)
                 else:
                     issue.observadors.add(usuari)
+                issue.save()
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
@@ -391,6 +393,20 @@ class EsborrarAssignacioIssue(IsAuthenticatedMixin, View):
             valor_nou="Sense assignar"
         )
         issue.assignacio = None
+        issue.save()
+
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+class EsborrarObservadorIssue(IsAuthenticatedMixin, View):
+    def get(self, request, *args, **kwargs):
+        id_issue = self.kwargs.get('id_issue')
+        id_usuari = self.kwargs.get('id_usuari')
+
+        issue = get_object_or_404(Issue, id=id_issue)
+        usuari = get_object_or_404(Usuari, pk=id_usuari)
+
+        issue.observadors.remove(usuari)
         issue.save()
 
         return redirect(request.META.get('HTTP_REFERER'))
