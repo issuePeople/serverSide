@@ -90,12 +90,6 @@ class Issue(models.Model):
             'TPrioritat': Issue.TPRIORITAT
         }
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None, *args, **kwargs
-    ):
-        super().save(*args, **kwargs)
-        print("hola")
-
 
 class Attachment(models.Model):
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
