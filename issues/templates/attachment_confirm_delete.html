@@ -1,14 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Are you sure you want to delete the issue?</h1>
 
-    <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-    <span>({{ attachment.document.size|filesizeformat }})</span>
-  
+  <div class="lightbox lightbox-generic-delete open" style="display: flex;">
+    <a class="close" href="/issues">
+      X
+    </a>
+    <form method="post" class="ng-pristine ng-valid" style="display: block;">
+      {% csrf_token %}
+      <h2 class="title">Esborrar fitxer...</h2>
+      <p>
+        <span class="subtitle">Segur que vols esborrar el fitxer?</span>
+        <span class="message">{{attachment.document}}</span>
+      </p>
+      <div class="options">
+        <a href="{% url 'editar_issue' attachment.issue.id %}" variant="icon" class="btn-link btn-cancel js-cancel">
+          <span>Cancelar</span>
+        </a>
+        <input type="submit" variant="destructive" value="Esborrar" class="btn-small btn-confirm js-confirm" style>
+      </div>
+    </form>
+  </div>
+
   <form method="post">
     {% csrf_token %}
     <input type="submit" value="Yes, delete" class="btn btn-danger">
     <a href="{% url 'editar_issue' attachment.issue.id %}" class="btn btn-secondary">Cancel</a>
   </form>
+  
 {% endblock %}
