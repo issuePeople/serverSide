@@ -1,13 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.safestring import mark_safe
-from django.utils.html import escape, format_html
 from django.utils.translation import gettext_lazy as _
 from issuePeople import settings
 
 
 def get_default_avatar_url():
-    return settings.DEFAULT_AVATAR_URL
+    return settings.DEFAULT_AVATAR
 
 
 class Usuari(models.Model):
