@@ -233,6 +233,23 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                 )
                 log.save()
                 issue.save()
+            elif 'guardar_assignat' in request.POST:
+                issue = self.get_object()
+                id_assignat = request.POST.get('assignat')
+                assignat = get_object_or_404(Usuari, pk=id_assignat)
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.ASSIGN,
+                    valor_nou=assignat.user.first_name
+                )
+                if issue.assignacio:
+                    log.valor_previ = issue.assignacio.user.first_name
+                else:
+                    log.valor_previ = "Sense assignar"
+                log.save()
+                issue.assignacio = assignat
+                issue.save()
             elif 'autoassignar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
