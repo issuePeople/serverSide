@@ -79,7 +79,8 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             'possibles_observadors': Usuari.objects.exclude(observats=self.get_object()),
             'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
-            'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user))
+            'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
+            'logs': Log.objects.filter(issue=self.get_object())
         })
         return context
 
