@@ -26,14 +26,14 @@
                                 </button>
                             </div>
                             <div style="display:flex; flex-direction:row; padding-left:10px">
-                            <div  onclick="toggle()" style="padding-right:10px">
+                            <button  onclick="toggle()" style="padding-right:10px">
                                 <div  id="tag_on">
                                     <i class="fa fa-toggle-on" aria-hidden="true"></i>
                                 </div>
                                 <div  id="tag_off" style="display:none">
                                     <i class="fa fa-toggle-off" aria-hidden="true"></i>
                                 </div>
-                            </div>
+                            </button>
                             <span>Tags</span>
                         </div>
                             
@@ -197,12 +197,12 @@
                                             {% if "?tag="|add:tag.nom in request.get_full_path %}
                                             {%with "?tag="|add:key as parametre%}
                                             {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
-                                                    <div class="name">{{tag.nom}}</div>
+                                            <button class="single-applied-filter ng-animate-disabled include"style="background-color: {{tag.color}};">
+                                                    <div class="name" style="background-color: {{tag.color}};">{{tag.nom}}</div>
                                                     <a href="?estat=" class="name">X</a>
                                                     {%endwith%}
                                                {%endwith%}
-                                            </div>
+                                            </button>
                                             {%elif "&tag="|add:key in request.get_full_path%}
                                             {%with "&tag="|add:key as parametre%}
                                             {%with request.get_full_path|cut:parametre as link%}
@@ -711,15 +711,26 @@
                                         <span classe="issue-text" style="display: inline-flex;">
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
-                                            
+                                            <div id="tag_show">
+                                            {%for tag in issue.tags.all%}
+                                            <span id ="tag_show"class="tag" style="padding-right: 5px;background-color: {{tag.color}}; ">{{tag.nom}}</span>
+                                            {%endfor%}
+                                            </div>
                                         </span>
                                         
                                     </a> 
+                                    <div>
+                                        
+                                        
+                                    </div>
                                 </td>
                                 
                                 <td  style="text-align: center;
                                 vertical-align: middle;">
-                                <form>
+                              
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_issue" value="{{issue.id}}">
                                 <select id="selectStatus" name="estat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
                                     {% for key,value in TEstats %}
                                         {% if issue.estat == key %}
@@ -729,7 +740,7 @@
                                         {%endif%}
                                     {% endfor %}
                                 </select>
-                                <button type="submit"  name="guardar_estat" style="display: none;"></button>
+                                <button id="btnSaveState" type="submit"  name="guardar_estat" style="display: none;"></button>
                                 </form>
                                 </td>
                                 
@@ -741,8 +752,10 @@
                                 
                                 <td class="assigned-field" style="text-align: center;
                                 vertical-align: middle;">   
-                                <form>
-                                    <select id="selectUsuari" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_issue" value="{{issue.id}}">
+                                    <select id="selectAssig" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
                                         {% for usuari in usuaris %}
                                             
                                                 <option value="{{usuari.user.username}}">{{usuari.user.username}}</option>
@@ -751,7 +764,7 @@
                                     </select>
                                     <button type="submit"  name="guardar_assignat" style="display: none;"></button>
                                     </form>
-                                    <span class="issue-assignedto">{{issue.assignacio.user.username}}</span>
+                                    <span class="issue-assignedto">{{issue.assignacio.user.avatar.url}}</span>
                                 </td>
                                 
                             </tr> 
@@ -766,7 +779,12 @@
     
 <script type="text/javascript">
     
-
+    const selectStatus = document.querySelector('#selectStatus');
+    var btnSaveStat = document.getElementById('btnSaveState');
+    selectStatus.addEventListener('change', function() {
+        btnSaveStat.click();
+    });
+    
     function borra() {
         var querystring = window.location.href;
         console.log(querystring);
@@ -777,13 +795,18 @@
     }
     function toggle(){
         var x = document.getElementById("tag_on");
-        var y = document.getElementById("tag_off");
+        var p = document.getElementById("tag_off");
+        var zz = document.getElementById("tag_show");
+        
+        
         if (x.style.display === "none") {
             x.style.display = "block";
-            y.style.display = "none";
+            p.style.display = "none";
+            zz.style.display = "none";
         } else {
          x.style.display = "none";
-         y.style.display ="block";
+         p.style.display ="block";
+         zz.style.display ="block";
         }
     }
     
