@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView, FormView
 from .forms import UsuariForm, LoginForm, RegistreForm
 from issuePeople.mixins import IsAuthenticatedMixin
-from issues.models import Log
+from issues.models import Issue, Log
 from .models import Usuari
 
 
@@ -17,12 +17,14 @@ class VeureUsuariView(IsAuthenticatedMixin, DetailView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        queryset = Usuari.objects.all()
+        queryset = Usuari.objects.all().prefetch_related('observats')
         return get_object_or_404(queryset, pk=pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'logs': Log.objects.filter(usuari=self.get_object())})
+        context.update({
+            'logs': Log.objects.filter(usuari=self.get_object()),
+        })
         return context
 
 
