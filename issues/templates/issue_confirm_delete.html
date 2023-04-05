@@ -25,10 +25,4 @@
       </div>
     </form>
   </div>
-  
-  <form method="post">
-    {% csrf_token %}
-    <input type="submit" value="Yes, delete" class="btn btn-danger">
-    <a href="{% url 'editar_issue' issue.id %}" class="btn btn-secondary">Cancel</a>
-  </form>
 {% endblock %}

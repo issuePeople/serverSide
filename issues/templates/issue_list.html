@@ -5,257 +5,480 @@
 
 <div class="master" style>
     <div class = "wrapper issues lightbox-generic-form">
-         
-       <tg-project-menu>
-        <div class="sticky-project-menu"></div>
-       </tg-project-menu>
-       
         <div class="main issue-main">
             <div class="issue-top">
                 <header class="issue-header">
                     <h1>
                         <span>Issues</span>
+                        
                     </h1>
                     <div class="taskboard-actions">
                         <div class="issue-table-options-start" >
                             <button class="btn-filter" onclick="myFunction()">
-                                <img src="   https://cdn-icons-png.flaticon.com/512/10035/10035140.png " width="15" height="15" alt="" title="" class="img-small" >
-                                <span class="text" style="margin: 5px;">Filters</span>
+                                <i class="fa fa-sliders" aria-hidden="true"></i>
+                                
+                                <span class="text" style="margin: 5px;">Filtres</span>
                             </button>
+                            <div style="display: flex; flex-direction:row;padding-left: 10px;">
+                                <input type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
+                                <button type="sumbit">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            
                         </div>
                         <div class="new-issue">
                             <button class="btn-small" >
-                                <a href="/issues/create/" style="color:black"> New Issue</a>
+                                <span class="icon icon-add" style="font-size: large;padding-right: 5px;">+</span>
+                                <a href="/issues/create/" > New Issue</a>
+                               
+                            </button>
+                            
+                            <button class="btn-icon" >
+                                
+                                    <a href="/issues/bulk/" >
+                                        <i class="fa fa-plus" aria-hidden="true"></i>  
+                                    </a> 
+
+                                
+                                
                             </button>
                         </div>
+                        
                     </div>
                 </header>
             </div>
             <div class="issue-container">
                 
-                <sidebar class="filters-bar" id="filtres" style="display:none" >
+                <sidebar class="filters-bar" id="filtres"  >
                     <div>
                         <div class="filters-step-cat">
-                            <div class="filters-advanced">
-                                <div class="filters-advanced-form">
-                                    <div class="custom-radio"></div>
-                                    <div class="custom-radio"></div>
-                                </div>
-                            </div>
+                           
                             <div class="filters-cat">
+                                <div class="filters-applied">
+                                    <div class="filters-included">
+                                        <div class="filters-title">Filtrat per:</div>
+                                        <div class="filters-wrapper">
+                                            {%for key,value in TTipus%}
+                                            {% if "?tipus="|add:key in request.get_full_path %}
+                                            {%with "?tipus="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            
+                                            <div class="single-applied-filter ng-animate-disabled include" >
+                                                <div class="name">{{value}}</div>
+                                 
+                                                    <a href="{{link}}" class="name" onclick="borra()">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%elif "&tipus="|add:key in request.get_full_path%}
+                                            {%with "&tipus="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                        
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            {%for key,value in TGravetat%}
+                                            {% if "?gravetat="|add:key in request.get_full_path %}
+                                            {%with "?gravetat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                                <a href="{{link}}" class="name">X</a>
+                                            {%endwith%}
+                                            {%endwith%}
+                                            </div>
+                                            
+                                            {%elif "&gravetat="|add:key in request.get_full_path%}
+                                            {%with "&gravetat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for key,value in TPrioritat%}
+                                            {% if "?prioritat="|add:key in request.get_full_path %}
+                                            {%with "?prioritat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{value}}</div>
+                                                    <a href="?prioritat=" class="name"onclick="filtrat('bug')">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&prioritat="|add:key in request.get_full_path%}
+                                            {%with "&prioritat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for key,value in TEstats%}
+                                            {% if "?estat="|add:key in request.get_full_path %}
+                                            {%with "?estat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{value}}</div>
+                                                    <a href="?estat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&estat="|add:key in request.get_full_path%}
+                                            {%with "&estat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for usuari in usuaris%}
+                                            {% if "?assignat="|add:usuari.user.username in request.get_full_path %}
+                                            {%with "?assignat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{usuari.user.username}}</div>
+                                                    <a href="?assignat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&assignat="|add:key in request.get_full_path%}
+                                            {%with "&assignat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{usuari.user.username}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for tag in tags%}
+                                            {% if "?tag="|add:tag.nom in request.get_full_path %}
+                                            {%with "?tag="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{tag.nom}}</div>
+                                                    <a href="?estat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%elif "&tag="|add:key in request.get_full_path%}
+                                            {%with "&tag="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include">
+                                                <div class="name">{{value}}</div>
+                                           
+                                                    <a href="{{link}}" class="name">X</a>
+                                               {%endwith%}
+                                               {%endwith%}
+                                                
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%for usuari in usuaris%}
+                                            {% if "?creat="|add:usuari.user.username in request.get_full_path %}
+                                            {%with "?creat="|add:key as parametre%}
+                                            {%with request.get_full_path|cut:parametre as link%}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{usuari.user.username}}</div>
+                                                    <a href="?creat=" class="name">X</a>
+                                                    {%endwith%}
+                                               {%endwith%}
+                                            </div>
+                                            {%endif%}
+                                            {%endfor%}
+                                        </div>
+                                    </div>
+                                </div>
                                 <ul>
                                     <li>
-                                        <button class="filters-cat-single"  id="categoria_filtre_tipus" onclick="filtre_tipus(1)" style="display: flex">
+                                        <button class="filters-cat-single"  id="categoria_filtre_tipus" name = "obre"onclick="filtre_tipus('filtre_tipus')" style="display: flex">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: block">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_tipus_selected" onclick="filtre_tipus(1)" style="display: none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_tipus_selected" onclick="filtre_tipus('filtre_tipus')" style="display: none">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_tipus" style="display:flex ; flex-direction: column";>
+                                        <div class="filter-list" style="display:none"  name="tanca"  id="filtre_tipus" style="display:flex ; flex-direction: column";>
                                             <div>
-                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%">
-                                                    <span class="name" >Bug</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)">
-                                                    <span class="name">Pregunta</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)">
-                                                    <span class="name" >Millora</span>
-                                                </button>
+                                                {%for key,value in TTipus%}
+                                                    {%if key == 'B'%}
+                                                        <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%" >
+                                                    {%elif key == 'P'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)">
+                                                    {%else%} 
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)">
+                                                    {%endif%} 
+                                                    {% if request.get_full_path != "/issues/" and "tipus" not in request.get_full_path%}
+                                                        <a href="{{request.get_full_path}}&tipus={{key}}" class="name">{{value}}</a>
+                                                    
+                                                    {%else%}
+                                                        <a href="?tipus={{key}}"class="name">{{value}}</a>
+                                                    {%endif%}
+                                                    <span class="number"></span>
+                                                    </button>
+                                                {%endfor%}
                                             </div>
                                         </div>
-                                        
-                                        
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_gravetat" onclick="filtre_tipus(2)">
+                                        <button class="filters-cat-single" id="categoria_filtre_gravetat" name = "obre"onclick="filtre_tipus('filtre_gravetat')">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
-                                            
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_gravetat_selected" onclick="filtre_tipus(2)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_gravetat_selected" onclick="filtre_tipus('filtre_gravetat')" style="display:none">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_gravetat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_gravetat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143); width:100%">
-                                                    <span class="name" >Desitjada</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228);">
-                                                    <span class="name">Menor</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 124);">
-                                                    <span class="name" >Normal</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 162, 64);">
-                                                    <span class="name">Important</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(211, 84, 80);">
-                                                    <span class="name" >Crítica</span>
-                                                </button>
+                                                {%for key,value in TGravetat%}
+                                                    {%if key == 'D'%}
+                                                        <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143); width:100%">
+                                                    {%elif key == 'M'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228);">
+                                                    {%elif key == 'N'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 124);">
+                                                    {%elif key == 'I'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 162, 64);">
+                                                    {%else%} 
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(211, 84, 80);">
+                                                    {%endif%} 
+                                                    
+                                                    {% if request.get_full_path != "/issues/" %}
+                                                        <a href="{{request.get_full_path}}&gravetat={{key}}" class="name">{{value}}</a>
+                                                    {%else%}
+                                                        <a href="?gravetat={{key}}"class="name">{{value}}</a>
+                                                    {%endif%}
+                                                    <span class="number"></span>
+                                                    </button>
+                                                {%endfor%}  
                                             </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_prioritat" onclick="filtre_tipus(3)">
+                                        <button class="filters-cat-single" id="categoria_filtre_prioritat" name = "obre"onclick="filtre_tipus('filtre_prioritat')">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_prioritat_selected" onclick="filtre_tipus(3)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_prioritat_selected" onclick="filtre_tipus('filtre_prioritat')" style="display:none">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_prioritat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_prioritat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general"style="border-color: rgb(168, 228, 64); width:100%">
-                                                    <span class="name" >Baixa</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64);">
-                                                    <span class="name">Mitja</span>
-                                                </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64);">
-                                                    <span class="name" >Alta</span>
-                                                </button>
+                                                {%for key,value in TPrioritat%}
+                                                    {%if key == 'B'%}
+                                                        <button class="single-filter single-filter-type-general"style="border-color: rgb(168, 228, 64); width:100%">
+                                                    {%elif key == 'M'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64);">
+                                                    {%else%} 
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64);">
+                                                    {%endif%} 
+                                                    {% if request.get_full_path != "/issues/" %}
+                                                        <a href="{{request.get_full_path}}&prioritat={{key}}" class="name">{{value}}</a>
+                                                    {%else%}
+                                                        <a href="?prioritat={{key}}"class="name">{{value}}</a>
+                                                    {%endif%}
+                                                    <span class="number"></span>
+                                                    </button>
+                                                {%endfor%}
+                                                
                                             </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_estat" onclick="filtre_tipus(4)">
+                                        <button class="filters-cat-single" id="categoria_filtre_estat" name = "obre"onclick="filtre_tipus('filtre_estat')">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_estat_selected" onclick="filtre_tipus(4)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_estat_selected" onclick="filtre_tipus('filtre_estat')" style="display:none">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_estat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_estat">
                                             <div>
-                                            <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143);; width:100%">
-                                                <span class="name" >Nova</span>
-                                            </button>
-                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228);;">
-                                                <span class="name">En curs</span>
-                                            </button>
-                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64);">
-                                                <span class="name" >Testejar</span>
-                                            </button>
-                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
-                                                <span class="name">Tancada</span>
-                                            </button>
-                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87);">
-                                                <span class="name" >Necessita informació</span>
-                                            </button>
-                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188);">
-                                                <span class="name">Rebutjada</span>
-                                            </button>
-                                            <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
-                                                <span class="name" >Proposada</span>
-                                            </button>
-                                        </div>
+                                                {%for key,value in TEstats%}
+                                                    {%if key == 'N'%}
+                                                        <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143);; width:100%">
+                                                    {%elif key == 'D'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228);">
+                                                    {%elif key == 'T'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64);">
+                                                    {%elif key == 'C'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
+                                                    {%elif key == 'I'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87);">
+                                                    {%elif key == 'R'%}
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188);">
+                                                    {%else%} 
+                                                        <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
+                                                    {%endif%} 
+                                                    
+                                                    {% if request.get_full_path != "/issues/" %}
+                                                        <a href="{{request.get_full_path}}&estat={{key}}" class="name">{{value}}</a>
+                                                    {%else%}
+                                                        <a href="?estat={{key}}"class="name">{{value}}</a>
+                                                    {%endif%}
+                                                    <span class="number"></span>
+                                                    </button>
+                                                {%endfor%}
+                                            </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_assignat" onclick="filtre_tipus(5)">
+                                        <button class="filters-cat-single" id="categoria_filtre_assignat" name = "obre"onclick="filtre_tipus('filtre_assignat')">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_assignat_selected" onclick="filtre_tipus(5)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_assignat_selected" onclick="filtre_tipus('filtre_assignat')" style="display:none">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_assignat">
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_assignat">
+                                            <div>
+                                                {%for usuari in usuaris%}
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
+                                                    <a href="{{request.get_full_path}}&assignat={{usuari.user.username}}" class="name">{{usuari.user.username}}</a>
+                                                </button>
+                                                
+                                                {%endfor%}
+                                            </div>
                                             
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_rol" onclick="filtre_tipus(6)">
-                                            <span>Rol</span>
+                                        <button class="filters-cat-single" id="categoria_filtre_rol" name = "obre"onclick="filtre_tipus('filtre_rol')">
+                                            <span>Tags</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_rol_selected" onclick="filtre_tipus(6)" style="display:none">
-                                            <span>Rol</span>
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_rol_selected" onclick="filtre_tipus('filtre_rol')" style="display:none">
+                                            <span>Tags</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_rol">
-                                            
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_rol">
+                                            <div>
+                                                {%for tag in tags%}
+                                                <button class="single-filter single-filter-type-general" style="border-color:'tag.color';">
+                                                    <a href="{{request.get_full_path}}&creat={{tag.nom}}" class="name">{{tag.nom}}</a>
+                                                </button>
+                                                
+                                                {%endfor%}
+                                            </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <button class="filters-cat-single" id="categoria_filtre_creat" onclick="filtre_tipus(7)">
+                                        <button class="filters-cat-single" id="categoria_filtre_creat" name = "obre"onclick="filtre_tipus('filtre_creat')">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/271/271228.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" id="categoria_filtre_creat_selected" onclick="filtre_tipus(7)" style="display:none">
+                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_creat_selected" onclick="filtre_tipus('filtre_creat')" style="display:none">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
                                                 <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <img src="   https://cdn-icons-png.flaticon.com/512/9589/9589774.png " width="10" height="10" alt="" title="" class="img-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
                                             
                                         </button>
-                                        <div class="filter-list" style="display:none" id="filtre_creat">
-                                            
+                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
+                                            <div>
+                                                {%for usuari in usuaris%}
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
+                                                    <a href="{{request.get_full_path}}&creat={{usuari.user.username}}" class="name">{{usuari.user.username}}</a>
+                                                </button>
+                                                
+                                                {%endfor%}
+                                            </div>
                                         </div>
                                     </li>
                                 </ul>
@@ -267,26 +490,167 @@
                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;">
                         <tr class="row title">
                             <td class="level-field">
-                                <span class="wide">Tipus</span>
-                                <div class="mobile">
-                                    <div class="tooltip pop-help">Type</div><span class="first-letter">Type</span>
-                                  </div>
+                                <div style="display:flex; flex-direction: row;">
+                                <span class="wide" style="padding-top: 6px;">Tipus</span>
+                                <div class="mobile"style="padding-top:6px;">
+                                    <span class="first-letter">Tipus</span>
+                                </div>
+                                <div class ="icon-arrow-down" style="display:flex; flex-direction: column;padding-left: 10px;">
+                                    <a href="?order_by=tipus" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                    {%if "=tipus" in request.get_full_path%}
+                                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                    {%else%}
+                                        <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                    {%endif%}
+                                    </a>
+                                    <a href="?order_by=-tipus" class="name">
+                                    {%if "=-tipus" in request.get_full_path%}
+                                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                    {%else%}
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    {%endif%}
+                                    </a>
+                                </div>
+                            </div>
                             </td>
                             <td class="level-field">
-                                <span class="wide">Gravetat</span>
+                                <div style="display:flex; flex-direction: row;">
+                                    <span class="wide"style="padding-top: 6px;">Gravetat</span>
+                                    <div class="mobile"style="padding-top:6px;">
+                                        <span class="first-letter">Gravetat</span>
+                                    </div>
+                                    <div style="display:flex;flex-direction: column; padding-left: 10px; ">
+                                        <a href="?order_by=gravetat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                            {%if "=gravetat" in request.get_full_path%}
+                                                <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                            {%else%}
+                                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                            {%endif%}
+                                        </a>
+                                        <a href="?order_by=-gravetat" class="name">
+                                            {%if "=-gravetat" in request.get_full_path%}
+                                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                            {%else%}
+                                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                            {%endif%}
+                                        </a>
+                                    </div>
+                                </div>
                             </td>
                             <td class="level-field">
-                                <span class="wide">Prioritat</span>
+                                <div style="display:flex; flex-direction: row;">
+                                <span class="wide"style="padding-top: 6px;">Prioritat</span>
+                                <div class="mobile"style="padding-top: 6px;">
+                                    <span class="first-letter">Prioritat</span>
+                                </div>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=prioritat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=prioritat" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-prioritat" class="name">
+                                        {%if "=-prioritat" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
                             </td>
-                            <td class="subject"></td>
-                            <td class="issue-field"></td>
-                            <td class="modified-field"></td>
-                            <td class="assigned-field"></td>
+                            <td class="subject">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Issue</span>
+                                
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=id" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=id" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-id" class="name">
+                                        {%if "=-id" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
+                            <td class="issue-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Estat</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=estat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=estat" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-estat" class="name">
+                                        {%if "=-estat" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
+                            <td class="modified-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Modificat</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=dataModificacio" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=dataModificacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-dataModificacio" class="name">
+                                        {%if "=-dataModificacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
+                            <td class="assigned-field">
+                                <div style="display:flex; flex-direction: row;">
+                                <span style="padding-top: 6px;">Assignat a</span>
+                                <div style="display:flex;flex-direction: column; padding-left: 10px;">
+                                    <a href="?order_by=assignacio" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        {%if "=assignacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                    <a href="?order_by=-assignacio" class="name">
+                                        {%if "=-assignacio" in request.get_full_path%}
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        {%else%}
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        {%endif%}
+                                    </a>
+                                </div>
+                            </div>
+                            </td>
                         </tr>
                         {% for issue in issues %}
                             <tr class="row table-main" style="height: 80px;">
                             
-                                <td class="level-field" style="width: 10%; text-align: center;
+                                <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;
                                 vertical-align: middle">
                                         {% if issue.tipus == "B" %}
                                             <div class="level" style="background: rgb(228, 64, 87)"></div>
@@ -298,7 +662,7 @@
                                       
                                 </td>
                                 
-                                 <td class="level-field" style="width: 10%;text-align: center;
+                                 <td class="level-field" style="padding-right: 20px;text-align: center;
                                  vertical-align: middle;">
                                     {% if issue.gravetat == "D" %}
                                         <div class="level" style="background: rgb(112, 114, 143)"></div>
@@ -314,7 +678,7 @@
                                     
                                  </td>
                                  
-                                 <td class="level-field" style="width: 10%t;text-align: center;
+                                 <td class="level-field" style="padding-right: 20px;text-align: center;
                                  vertical-align: middle;">
                                         {% if issue.prioritat == "B" %}
                                             <p class="level" style="background: rgb(168, 228, 64);"></p>
@@ -328,43 +692,52 @@
                                 <td class="subject" style="text-align: center;
                                 vertical-align: middle;">
                                     
-                                    <a href="/issues/{{issue.id}}/edit" >
+                                    <a href="{% url 'editar_issue' issue.id %}" >
                                         <span classe="issue-text" style="display: inline-flex;">
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
+                                            
                                         </span>
                                         
                                     </a> 
                                 </td>
                                 
-                                <td style="text-align: center;
+                                <td  style="text-align: center;
                                 vertical-align: middle;">
-                                    <div class="assigned-field" >
-                                    {%if issue.estat == 'N' %}
-                                        <span>Nova</span> 
-                                    {%elif issue.estat == 'D'%}
-                                        <span>En curs</span>
-                                    {%elif issue.estat == 'T'%}
-                                        <span>Llesta per testejar</span>
-                                    {%elif issue.estat == 'C'%}
-                                        <span style="color:#70b578">Tancada</span>
-                                    {%elif issue.estat == 'I'%}
-                                        <span>Necessita informació</span>
-                                    {%elif issue.estat == 'R'%}
-                                        <span style="color:#FF0000">Rebutjada</span>
-                                    {%elif issue.estat == 'P'%}
-                                        <span>Proposada</span>
-                                    {%endif%} 
-                                    </div>
+                                <form>
+                                <select id="selectStatus" name="estat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                    {% for key,value in TEstats %}
+                                        {% if issue.estat == key %}
+                                            <option selected="selected" value="{{key}}">{{value}}</option>
+                                        {%else %}
+                                            <option value="{{key}}">{{value}}</option>
+                                        {%endif%}
+                                    {% endfor %}
+                                </select>
+                                <button type="submit"  name="guardar_estat" style="display: none;"></button>
+                                </form>
                                 </td>
                                 
                                 <td class="modified-field" style="text-align: center;
                                 vertical-align: middle;">
                                     <span>{{issue.dataModificacio}}</span>
+                                    
                                 </td>
                                 
                                 <td class="assigned-field" style="text-align: center;
                                 vertical-align: middle;">   
+                                <form>
+                                    <select id="selectUsuari" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                        {% for ususari in usuaris %}
+                                            {% if issue.assignacio.user.username == usuari.user.username %}
+                                                <option selected="selected" value="{{usuari.user.username}}">{{usuari.user.username}}</option>
+                                            {%else %}
+                                                <option value="{{usuari.user}}">{{usuari.user}}</option>
+                                            {%endif%}
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit"  name="guardar_assignat" style="display: none;"></button>
+                                    </form>
                                     <span class="issue-assignedto">{{issue.assignacio.user.username}}</span>
                                 </td>
                                 
@@ -378,67 +751,91 @@
 </div>
 
     
-    <script type="text/javascript">
-        function myFunction() {
-  var x = document.getElementById("filtres");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
+<script type="text/javascript">
     
-  }
-}
 
-function filtre_tipus(param1) {
-    if(param1 == 1){
-        var x = document.getElementById("filtre_tipus");
-        var y = document.getElementById("categoria_filtre_tipus");
-        var z = document.getElementById("categoria_filtre_tipus_selected")
+    function borra() {
+        var querystring = window.location.href;
+        console.log(querystring);
+        const params = new URLSearchParams(querystring)
+        var aa= params.get('estat');
+        console.log(params.has('estat'));
+        
     }
-    if(param1 == 2){
-        var x = document.getElementById("filtre_gravetat");
-        var y = document.getElementById("categoria_filtre_gravetat");
-        var z = document.getElementById("categoria_filtre_gravetat_selected")
-    }
-    if(param1 == 3){
-        var x = document.getElementById("filtre_prioritat");
-        var y = document.getElementById("categoria_filtre_prioritat");
-        var z = document.getElementById("categoria_filtre_prioritat_selected")
-    }
-    if(param1 == 4){
-        var x = document.getElementById("filtre_estat");
-        var y = document.getElementById("categoria_filtre_estat");
-        var z = document.getElementById("categoria_filtre_estat_selected")
-    }
-    if(param1 == 5){
-        var x = document.getElementById("filtre_assignat");
-        var y = document.getElementById("categoria_filtre_assignat");
-        var z = document.getElementById("categoria_filtre_assignat_selected")
-    }
-    if(param1 == 6){
-        var x = document.getElementById("filtre_rol");
-        var y = document.getElementById("categoria_filtre_rol");
-        var z = document.getElementById("categoria_filtre_rol_selected")
-    }
-    if(param1 == 7){
-        var x = document.getElementById("filtre_creat");
-        var y = document.getElementById("categoria_filtre_creat");
-        var z = document.getElementById("categoria_filtre_creat_selected")
-    }
-  
-  if (y.style.display === "none") {
-    x.style.display = "none";
-    y.style.display = "flex";
-    z.style.display = "none";
-  } else {
-    x.style.display = "flex";
-    y.style.display = "none";
-    z.style.display = "flex";
     
-  }
-}
+    function myFunction() {
+        
+        var x = document.getElementById("filtres");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+         x.style.display = "none";
+        }
+    }
 
+    function tanca_tot(param1){
+        var tanca = document.getElementsByName("tanca");
+        for(var i = 0; i < tanca.length; i++){
+            if(tanca[i].id != param1)
+            tanca[i].style.display= "none"; 
+        }
+        var obre = document.getElementsByName("obre");
+        for(var i = 0; i < obre.length; i++){
+            if(obre[i].id != param1)
+            obre[i].style.display= "flex"; 
+        }
+    }
 
+    function filtre_tipus(param1) {
+        if(param1 == "filtre_tipus"){
+            var x = document.getElementById("filtre_tipus");
+            var y = document.getElementById("categoria_filtre_tipus");
+            var z = document.getElementById("categoria_filtre_tipus_selected")
+        }
+        if(param1 == "filtre_gravetat"){
+            var x = document.getElementById("filtre_gravetat");
+            var y = document.getElementById("categoria_filtre_gravetat");
+            var z = document.getElementById("categoria_filtre_gravetat_selected")
+        }
+        if(param1 == "filtre_prioritat"){
+            var x = document.getElementById("filtre_prioritat");
+            var y = document.getElementById("categoria_filtre_prioritat");
+            var z = document.getElementById("categoria_filtre_prioritat_selected")
+        }
+        if(param1 == "filtre_estat"){
+            var x = document.getElementById("filtre_estat");
+            var y = document.getElementById("categoria_filtre_estat");
+            var z = document.getElementById("categoria_filtre_estat_selected")
+        }
+        if(param1 == "filtre_assignat"){
+            var x = document.getElementById("filtre_assignat");
+            var y = document.getElementById("categoria_filtre_assignat");
+            var z = document.getElementById("categoria_filtre_assignat_selected")
+        }
+        if(param1 == "filtre_rol"){
+            var x = document.getElementById("filtre_rol");
+            var y = document.getElementById("categoria_filtre_rol");
+            var z = document.getElementById("categoria_filtre_rol_selected")
+        }
+        if(param1 == "filtre_creat"){
+            var x = document.getElementById("filtre_creat");
+            var y = document.getElementById("categoria_filtre_creat");
+            var z = document.getElementById("categoria_filtre_creat_selected")
+        }
 
-        </script>
+      
+        if (y.style.display === "none") {
+            tanca_tot(param1);
+            x.style.display = "none";
+            y.style.display = "flex";
+            z.style.display = "none";
+        } else {
+            tanca_tot(param1);
+            x.style.display = "flex";
+            y.style.display = "none";
+            z.style.display = "flex";
+        }
+    }
+</script>
+
 {% endblock %}

@@ -2,8 +2,13 @@
 {% block content %}
 
     <div class="lightbox lightbox-generic-form lightbox-create-edit open">
+<<<<<<< HEAD
         <a class="close" href="/issues/list">
             X
+=======
+        <a class="close" href="/issues">
+            <i class="fa fa-times" aria-hidden="true"></i>
+>>>>>>> main
         </a>
         <div> 
             <form method="post" >
@@ -16,7 +21,84 @@
                         <!-- left side -->
                         <div class="main">
                             <input value="" type="text" name="subject">
+<<<<<<< HEAD
                             <textarea name="descripcio" rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
+=======
+                            <!-- Tags -->
+                            <div class="tags-container">
+                            
+                                <div style="display: flex; justify-content: space-between;">
+                                    
+                                    {% for tag in issue.tags.all %}
+                                        <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                            <span  style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
+                                            <a href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+    
+                                    <button class="btn-filter ng-animate-disabled" id="addTagBtn" style="margin-top: 5px; margin-bottom: 5px;">
+                                        <span>Add tag</span>
+                                        <span style="font-size: 20px;">+</span>
+                                    </button> 
+    
+                                    <div id="addTag" style="display: none;">
+                                        <input name="nom" type="text" placeholder="Enter tag" >
+                                        <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
+                                        <button type="submit" name="afegir_tag" style="background: none;">
+                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            <!-- Tags -->
+                            <textarea name="descripcio" rows="7" class="description ng-pristine ng-untouched ng-valid ng-empty">Description</textarea>
+                            <!-- attachments -->
+                            <section style="margin-top: 10px;" class="attachments attachments-full">
+                                <!-- attachment header-->
+                                <div class="attachments-header">
+                                    <h3 class="attachment-title">
+                                        <!-- num attachment -->
+                                        <span class="attachments-num">1</span>
+                                        <span class="attachments-text">Attachments</span>
+                                    </h3>
+                                    
+                                    <!-- add attachment-->
+                                    <div class="options ">
+                                        <div class="add-attach">
+                                            <input type="file" value="+" name="document">
+            
+                                            <!-- ToDo: Posar maco! Que només aparegui quan hi ha un file chosen -->
+                                            <button type="submit" name="afegir_attachment">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- attachment content-->
+            
+                                <div class="attachment-list sortable">
+                                    <ul>
+                                    {%  for attachment in issue.attachments.all %}
+                                        <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <div>
+                                                    <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
+                                                    <span>({{ attachment.document.size|filesizeformat }})</span>
+                                                </div>
+                                                <a href="{% url 'esborrar_attachment' attachment.id %}">
+                                                    <i style="margin-right: 5px;" class="fa fa-trash-o" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </section>
+>>>>>>> main
                         </div>
 
                         <!-- right side -->
@@ -25,10 +107,18 @@
                             <div>
                                 <!-- status-->
                                 <select name="estat" class="status-button">
+<<<<<<< HEAD
                                     {% for estat in form.estat %}
                                         <option value="{{estat}}">{{estat}}</option>
                                     {% endfor %}    
                                 </select>
+=======
+                                    {% for key,value in TEstats %}
+                                        <option value="{{key}}">{{value}}</option>
+                                    {% endfor %} 
+                                </select>
+                                
+>>>>>>> main
 
                                 <!-- assign ? -->
                                 <select class="status-button">
@@ -40,20 +130,31 @@
                                 <div class="ticket-data-container">
                                     <!-- Type-->
                                     <select name="tipus" class="status-button">
+<<<<<<< HEAD
                                         {% for tipus in form.tipus %}
                                             <option value="{{tipus}}">{{tipus}}</option>
+=======
+                                        {% for key,value in TTipus %}
+                                            <option value="{{key}}">{{value}}</option>
+>>>>>>> main
                                         {% endfor %}
                                     </select>
 
                                     <!-- Severity-->
                                     <select name="gravetat" class="status-button">
+<<<<<<< HEAD
                                         {% for gravetat in form.gravetat %}
                                             <option value="{{gravetat}}">{{gravetat}}</option>
+=======
+                                        {% for key,value in TGravetat %}
+                                            <option value="{{key}}">{{value}}</option>
+>>>>>>> main
                                         {% endfor %}
                                     </select>
                                     
                                     <!-- Priority-->
                                     <select name="prioritat" class="status-button">
+<<<<<<< HEAD
                                         {% for prioritat in form.prioritat %}
                                             <option value="{{prioritat}}">{{prioritat}}</option>
                                         {% endfor %}
@@ -77,6 +178,49 @@
                                     </div>
                                 </div>
                                 
+=======
+                                        {% for key,value in TPrioritat %}
+                                            <option value="{{key}}">{{value}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <section class="ticket-section ticket-detail-settings">
+                                    <div class="ticket-detail-settings" >
+                                        <button id="btnTimeLine" >
+                                            <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
+                                        </button>
+                                        <button id="btnBloqueig" style="margin-left: 5px;">
+                                            <i style="margin-left: 15px;" class="fa fa-lock" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </section>
+                                <div style="display: felx; justify-content: space-between;">
+                                    <input 
+                                        type="date" 
+                                        id="datePickerInput" 
+                                        name="dataLimit"
+                                        style="display: none;"
+                                    >
+                                    <button id="btnSaveDateDirect" type="submit" name="guardar_dataLimit" style="display: none;">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
+
+                                <div style="display: felx; justify-content: space-between;">
+                                    <input 
+                                        type="text" 
+                                        id="inputMotiuBloqueig" 
+                                        name="motiuBloqueig"
+                                        style="display: none;"
+                                    >
+                                    <button id="btnSaveBloqueigDirect" type="submit" name="guardar_bloquejat" style="display: none;">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <button id="btnSaveMotiuBloqueig" type="submit" name="guardar_bloquejat" style="display: none;"></button>
+
+>>>>>>> main
                             </div>
                         </sidebar>
                         
@@ -95,7 +239,58 @@
         -->
     </div>
 
+<<<<<<< HEAD
     
 
 {% endblock %}
 
+=======
+    <script>
+        /*
+        var addTagBtn = document.getElementById('addTagBtn');
+        var myDiv = document.getElementById('addTag');
+        addTagBtn.addEventListener('click', function() {
+            event.preventDefault();
+            if (myDiv.style.display === 'none') {
+                myDiv.style.display = 'flex';
+                myDiv.style.justifyContent = 'space-between';
+                addTagBtn.style.display = 'none';
+            } else {
+                myDiv.style.display = 'none';
+            }
+        });
+        */
+
+        var btnTimeLine = document.getElementById('btnTimeLine');
+        var datePickerInput = document.getElementById('datePickerInput');
+        var btnSaveDate = document.getElementById('btnSaveDate');
+        var btnSaveDateDirect = document.getElementById('btnSaveDateDirect');
+        btnTimeLine.addEventListener('click', () => {
+            event.preventDefault();
+            datePickerInput.style.display = 'block';
+            btnSaveDateDirect.style.display = 'block';
+        });
+        datePickerInput.addEventListener('blur', function() {
+            event.preventDefault();
+            btnSaveDate.click();
+        });
+
+        var btnBloqueig = document.getElementById('btnBloqueig');
+        var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
+        var btnSaveMotiuBloqueig = document.getElementById('btnSaveMotiuBloqueig');
+        var btnSaveBloqueigDirect = document.getElementById('btnSaveBloqueigDirect');
+        btnBloqueig.addEventListener('click', () => {
+            event.preventDefault();
+            inputMotiuBloqueig.style.display = 'block';
+            btnSaveBloqueigDirect.style.display = 'block';
+        });
+        inputMotiuBloqueig.addEventListener('blur', function() {
+            event.preventDefault();
+            btnSaveMotiuBloqueig.click();
+        });
+
+    </script>
+    
+
+{% endblock %}
+>>>>>>> main
