@@ -105,9 +105,10 @@
                                 
 
                                 <!-- assign ? -->
-                                <select class="status-button">
-                                    {% for assig in form.assignacio %}
-                                        <option value="{{assig}}">{{assig}}</option>
+                                <select name="assignacio" class="status-button">
+                                    <option value="" selected>---------</option>
+                                    {% for usuari in usuaris %}
+                                        <option value="{{usuari.user.id}}">{{usuari.user.first_name}}</option>
                                     {% endfor %}
                                 </select>
 

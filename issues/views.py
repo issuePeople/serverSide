@@ -46,6 +46,14 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
     form_class = IssueForm
     success_url = reverse_lazy('tots_issues')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(Issue.get_types(self))
+        context.update({
+            'usuaris': Usuari.objects.all(),
+        })
+        return context
+
     def form_valid(self, form):
         # Especifiquem el creador de l'issue
         form.instance.creador = Usuari.objects.get(user=self.request.user)
