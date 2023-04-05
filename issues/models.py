@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.apps import apps
 from django.utils.translation import gettext_lazy as _
 
 from usuaris.models import Usuari
@@ -89,6 +90,12 @@ class Issue(models.Model):
             'TPrioritat': Issue.TPRIORITAT
         }
 
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None, *args, **kwargs
+    ):
+        super().save(*args, **kwargs)
+        print("hola")
+
 
 class Attachment(models.Model):
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
@@ -101,3 +108,48 @@ class Comentari(models.Model):
     issue = models.ForeignKey(Issue, related_name='comentaris', null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Issue'))
     autor = models.ForeignKey(Usuari, related_name='comentaris', null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Autor'))
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data publicació'))
+
+
+class Log(models.Model):
+    # Canvis d'atributs del model Issue
+    SUBJ = 'Assumpte'
+    DESCR = 'Descripció'
+    TIPUS = 'Tipus'
+    ESTAT = 'Estat'
+    GRAV = 'Gravetat'
+    PRIO = 'Prioritat'
+    ASSIGN = 'Assignada a'
+    LIMIT = 'Data límit'
+    BLOQ = 'Bloquejat'
+
+    # Altres accions amb els Issues
+    CREAR = 'Creada'
+    ADD_ATT = 'Nou attachment'
+    DEL_ATT = 'Attachment esborrat'
+    ADD_TAG = 'Tag afegida'
+    DEL_TAG = 'Tag esborrada'
+
+    # Choices
+    TLOG = (
+        (SUBJ, _('Assumpte')),
+        (DESCR, _('Descripció')),
+        (TIPUS, _('Tipus')),
+        (ESTAT, _('Estat')),
+        (GRAV, _('Gravetat')),
+        (PRIO, _('Prioritat')),
+        (ASSIGN, _('Assignada a')),
+        (LIMIT, _('Data límit')),
+        (BLOQ, _('Bloquejat')),
+        (CREAR, _('Creada')),
+        (ADD_ATT, _('Nou attachment')),
+        (DEL_ATT, _('Attachment esborrat')),
+        (ADD_TAG, _('Tag afegida')),
+        (DEL_TAG, _('Tag esborrada'))
+    )
+
+    issue = models.ForeignKey(Issue, related_name='logs', null=True, blank=True, on_delete=models.DO_NOTHING, verbose_name=_('Issue'))
+    usuari = models.ForeignKey(Usuari, related_name='logs', null=True, blank=True, on_delete=models.DO_NOTHING, verbose_name=_('Usuari'))
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data creació'))
+    tipus = models.CharField(max_length=20, choices=TLOG, verbose_name=_('Tipus'))
+    valor_previ = models.CharField(max_length=524288, null=True, blank=True, verbose_name=_('Valor previ'))
+    valor_nou = models.CharField(max_length=524288, null=True, blank=True, verbose_name=_('Valor nou'))
