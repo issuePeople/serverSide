@@ -758,7 +758,7 @@
                                     <select id="selectAssig" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
                                         {% for usuari in usuaris %}
                                             
-                                                <option value="{{usuari.user.username}}">{{usuari.user.username}}</option>
+                                                <option value="{{usuari.user.id}}">{{usuari.user.username}}</option>
                                             
                                         {% endfor %}
                                     </select>
