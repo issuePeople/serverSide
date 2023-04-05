@@ -7,6 +7,7 @@ from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Issue, Tag, Attachment, Log
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
 from usuaris.models import Usuari
+from usuaris.views import get_context_navbar
 from .filters import IssueFilter
 
 
@@ -19,11 +20,10 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(Issue.get_types(self))
+        context.update(get_context_navbar(self.request))
         context.update({
             'usuaris': Usuari.objects.all(),
             'tags': Tag.objects.all(),
-            # 'usuari': Usuari.objects.get(user=self.request.user)
-
         })
         return context
 
@@ -75,12 +75,14 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(Issue.get_types(self))
+        context.update(get_context_navbar(self.request))
         context.update({
             'possibles_observadors': Usuari.objects.exclude(observats=self.get_object()),
             'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
             'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
-            'logs': Log.objects.filter(issue=self.get_object())
+            'logs': Log.objects.filter(issue=self.get_object()),
+            # Necessari per la navbar
         })
         return context
 
