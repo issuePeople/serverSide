@@ -49,12 +49,12 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
                     issue=issue,
                     usuari=Usuari.objects.get(user=request.user),
                     tipus=Log.ESTAT,
-                    valor_previ=issue.estat,
-                    valor_nou=estat
+                    valor_previ=issue.get_estat_display(),
                 )
-                log.save()
                 issue.estat = estat
                 issue.save()
+                log.valor_nou = issue.get_estat_display()
+                log.save()
         elif 'guardar_assignat' in request.POST:
             id_assignat = request.POST.get('assignat')
             assignat = get_object_or_404(Usuari, pk=id_assignat)
