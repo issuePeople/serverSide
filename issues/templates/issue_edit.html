@@ -263,7 +263,7 @@
                                         height="60px"
                                     >
                                     <span style="margin-left: 15px;">{{ issue.assignacio.first_name }}</span>
-                                    <a href="{% url 'esborrar_assignat' issue.assignacio %}">
+                                    <a href="{% url 'esborrar_assignat' issue.id issue.assignacio.user.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 </div>  
@@ -304,7 +304,7 @@
                                                 height="60px"
                                             >
                                             <span style="margin-right: 15px;">{{ obs.autor.user.first_name }}</span>
-                                            <a href="{% url 'esborrar_observador' obs %}">
+                                            <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
                                         </div>

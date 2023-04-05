@@ -4,7 +4,7 @@ from django_filters.views import FilterView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
-from .models import Issue, Tag, Attachment
+from .models import Issue, Tag, Attachment, Log
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
 from usuaris.models import Usuari
 from .filters import IssueFilter
@@ -21,7 +21,9 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
         context.update(Issue.get_types(self))
         context.update({
             'usuaris': Usuari.objects.all(),
-            'tags': Tag.objects.all()
+            'tags': Tag.objects.all(),
+            # 'usuari': Usuari.objects.get(user=self.request.user)
+
         })
         return context
 
@@ -42,12 +44,31 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
         issue = get_object_or_404(Issue, id=id_issue)
         if 'guardar_estat' in request.POST:
             estat = request.POST.get('estat')
-            issue.estat = estat
-            issue.save()
+            if estat != issue.estat:
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=request.user),
+                    tipus=Log.ESTAT,
+                    valor_previ=issue.estat,
+                    valor_nou=estat
+                )
+                log.save()
+                issue.estat = estat
+                issue.save()
         elif 'guardar_assignat' in request.POST:
             id_assignat = request.POST.get('assignat')
-            issue.assignacio = get_object_or_404(Usuari, pk=id_assignat)
-            issue.save()
+            assignat = get_object_or_404(Usuari, pk=id_assignat)
+            if assignat != issue.assignacio:
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=request.user),
+                    tipus=Log.ASSIGN,
+                    valor_previ=issue.assignacio.user.first_name,
+                    valor_nou=assignat.user.first_name
+                )
+                log.save()
+                issue.assignacio = get_object_or_404(Usuari, pk=id_assignat)
+                issue.save()
         return redirect('tots_issues')
 
 
@@ -60,7 +81,14 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
     def form_valid(self, form):
         # Especifiquem el creador de l'issue
         form.instance.creador = Usuari.objects.get(user=self.request.user)
-        return super().form_valid(form)
+        issue = form.save()
+        log = Log(
+            issue=issue,
+            usuari=issue.creador,
+            tipus=Log.CREAR
+        )
+        log.save()
+        return redirect(self.success_url)
 
 
 class EditarIssueView(IsAuthenticatedMixin, UpdateView):
@@ -83,7 +111,8 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             'possibles_observadors': Usuari.objects.exclude(observats=self.get_object()),
             'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
-            'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user))
+            'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
+            'logs': Log.objects.filter(issue=self.get_object())
         })
         return context
 
@@ -93,82 +122,176 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             if 'guardar_subject' in request.POST:
                 issue = self.get_object()
                 subject = form.cleaned_data['subject']
-                issue.subject = subject
-                issue.save()
-            if 'guardar_descripcio' in request.POST:
+                if subject != issue.subject:
+                    log = Log(
+                        issue=issue,
+                        usuari=Usuari.objects.get(user=self.request.user),
+                        tipus=Log.SUBJ,
+                        valor_previ=issue.subject,
+                        valor_nou=subject
+                    )
+                    log.save()
+                    issue.subject = subject
+                    issue.save()
+            elif 'guardar_descripcio' in request.POST:
                 issue = self.get_object()
                 descripcio = form.cleaned_data['descripcio']
-                issue.descripcio = descripcio
-                issue.save()
-            if 'guardar_tipus' in request.POST:
+                if descripcio != issue.descripcio:
+                    log = Log(
+                        issue=issue,
+                        usuari=Usuari.objects.get(user=self.request.user),
+                        tipus=Log.DESCR,
+                        valor_previ=issue.descripcio,
+                        valor_nou=descripcio
+                    )
+                    log.save()
+                    issue.descripcio = descripcio
+                    issue.save()
+            elif 'guardar_tipus' in request.POST:
                 issue = self.get_object()
                 tipus = form.cleaned_data['tipus']
-                issue.tipus = tipus
-                issue.save()
-            if 'guardar_estat' in request.POST:
+                if tipus != issue.tipus:
+                    log = Log(
+                        issue=issue,
+                        usuari=Usuari.objects.get(user=self.request.user),
+                        tipus=Log.TIPUS,
+                        valor_previ=issue.tipus,
+                        valor_nou=tipus
+                    )
+                    log.save()
+                    issue.tipus = tipus
+                    issue.save()
+            elif 'guardar_estat' in request.POST:
                 issue = self.get_object()
                 estat = form.cleaned_data['estat']
-                issue.estat = estat
-                issue.save()
-            if 'guardar_gravetat' in request.POST:
+                if estat != issue.estat:
+                    log = Log(
+                        issue=issue,
+                        usuari=Usuari.objects.get(user=self.request.user),
+                        tipus=Log.ESTAT,
+                        valor_previ=issue.estat,
+                        valor_nou=estat
+                    )
+                    log.save()
+                    issue.estat = estat
+                    issue.save()
+            elif 'guardar_gravetat' in request.POST:
                 issue = self.get_object()
                 gravetat = form.cleaned_data['gravetat']
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.GRAV,
+                    valor_previ=issue.gravetat,
+                    valor_nou=gravetat
+                )
+                log.save()
                 issue.gravetat = gravetat
                 issue.save()
-            if 'guardar_prioritat' in request.POST:
+            elif 'guardar_prioritat' in request.POST:
                 issue = self.get_object()
                 prioritat = form.cleaned_data['prioritat']
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.PRIO,
+                    valor_previ=issue.prioritat,
+                    valor_nou=prioritat
+                )
+                log.save()
                 issue.prioritat = prioritat
                 issue.save()
-            if 'guardar_dataLimit' in request.POST:
+            elif 'guardar_dataLimit' in request.POST:
                 issue = self.get_object()
                 dataLimit = form.cleaned_data['dataLimit']
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.LIMIT,
+                    valor_previ=str(issue.dataLimit),
+                    valor_nou=str(dataLimit)
+                )
+                log.save()
                 issue.dataLimit = dataLimit
                 issue.save()
-            if 'guardar_bloquejat' in request.POST:
+            elif 'guardar_bloquejat' in request.POST:
                 issue = self.get_object()
                 motiuBloqueig = form.cleaned_data['motiuBloqueig']
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.BLOQ,
+                    valor_previ=str(issue.bloquejat),
+                )
                 if motiuBloqueig is None:
                     issue.bloquejat = False
                 else:
                     issue.bloquejat = True
+                log.valor_nou = str(issue.bloquejat)
+                log.save()
                 issue.motiuBloqueig = motiuBloqueig
                 issue.save()
-            if 'afegir_attachment' in request.POST:
+            elif 'afegir_attachment' in request.POST:
                 attachment_form = AttachmentForm(request.POST, request.FILES)
                 if attachment_form.is_valid():
                     attachment = attachment_form.save(commit=False)
                     attachment.issue = self.get_object()
                     attachment.save()
-            if 'afegir_comentari' in request.POST:
+                    log = Log(
+                        issue=attachment.issue,
+                        usuari=Usuari.objects.get(user=self.request.user),
+                        tipus=Log.ADD_ATT,
+                        valor_nou=attachment.document.name
+                    )
+                    log.save()
+            elif 'afegir_comentari' in request.POST:
                 comentari_form = ComentariForm(request.POST, request.FILES)
                 if comentari_form.is_valid():
                     comentari = comentari_form.save(commit=False)
                     comentari.issue = self.get_object()
                     comentari.autor = Usuari.objects.get(user=self.request.user)
                     comentari.save()
-            if 'afegir_tag' in request.POST:
+            elif 'afegir_tag' in request.POST:
                 tag_form = TagForm(request.POST, request.FILES)
                 is_valid = tag_form.is_valid()
                 tag = tag_form.cleaned_data['tag']
                 issue = self.get_object()
                 issue.tags.add(tag)
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.ADD_TAG,
+                    valor_nou=tag.nom
+                )
+                log.save()
                 issue.save()
-            if 'autoassignar' in request.POST:
+            elif 'autoassignar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
+                log = Log(
+                    issue=issue,
+                    usuari=usuari,
+                    tipus=Log.ASSIGN
+                )
+                if issue.assignacio:
+                    log.valor_previ = issue.assignacio.user.first_name
+                else:
+                    log.valor_previ = "Sense assignar"
                 if issue.assignacio == usuari:
                     issue.assignacio = None
+                    log.valor_nou = "Sense assignar"
                 else:
                     issue.assignacio = usuari
-            if 'autoobservar' in request.POST:
+                    log.valor_nou = usuari.user.first_name
+                log.save()
+            elif 'autoobservar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
                 if issue.observadors.contains(usuari):
                     issue.observadors.remove(usuari)
                 else:
                     issue.observadors.add(usuari)
-            return self.form_valid(form)
+            return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
 
@@ -193,6 +316,12 @@ class CrearBulkView(IsAuthenticatedMixin, FormView):
                 creador=Usuari.objects.get(user=self.request.user)
             )
             issues.append(issue)
+            log = Log(
+                issue=issue,
+                usuari=issue.creador,
+                tipus=Log.CREAR
+            )
+            log.save()
         Issue.objects.bulk_create(issues)
         return redirect(self.success_url)
 
@@ -203,6 +332,14 @@ class EsborrarIssueView(IsAuthenticatedMixin, DeleteView):
     success_url = reverse_lazy('tots_issues')
     template_name = 'issue_confirm_delete.html'
     context_object_name = 'issue'
+
+    def post(self, request, *args, **kwargs):
+        issue = self.get_object()
+        logs = Log.objects.filter(issue=issue)
+        for log in logs:
+            log.issue = None
+            log.save()
+        return super().post(request, *args, **kwargs)
 
 
 class EsborrarAttachmemtView(IsAuthenticatedMixin, DeleteView):
@@ -216,8 +353,20 @@ class EsborrarAttachmemtView(IsAuthenticatedMixin, DeleteView):
         id_issue = self.object.issue.id
         return reverse('editar_issue', kwargs={'id': id_issue})
 
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
-class EsborrarTagIssueView(View):
+    def post(self, request, *args, **kwargs):
+        Log.objects.create(
+            issue=self.object.issue,
+            usuari=Usuari.objects.get(user=self.request.user),
+            tipus=Log.DEL_ATT,
+            valor_previ=self.object.document.name
+        )
+        return super().post(request, *args, **kwargs)
+
+
+class EsborrarTagIssueView(IsAuthenticatedMixin, View):
     def get(self, request, *args, **kwargs):
         id_issue = self.kwargs.get('id_issue')
         nom_tag = self.kwargs.get('nom_tag')
@@ -226,5 +375,12 @@ class EsborrarTagIssueView(View):
         tag = get_object_or_404(Tag, nom=nom_tag)
 
         issue.tags.remove(tag)
+
+        Log.objects.create(
+            issue=issue,
+            usuari=Usuari.objects.get(user=self.request.user),
+            tipus=Log.DEL_TAG,
+            valor_previ=tag.nom
+        )
 
         return redirect(request.META.get('HTTP_REFERER'))

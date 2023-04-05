@@ -20,3 +20,8 @@ class Attachment(admin.ModelAdmin):
 @admin.register(models.Comentari)
 class Comentari(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.Log)
+class Log(admin.ModelAdmin):
+    pass
