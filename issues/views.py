@@ -123,12 +123,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                         issue=issue,
                         usuari=Usuari.objects.get(user=self.request.user),
                         tipus=Log.TIPUS,
-                        valor_previ=issue.tipus,
-                        valor_nou=tipus
+                        valor_previ=issue.get_tipus_display()
                     )
-                    log.save()
                     issue.tipus = tipus
                     issue.save()
+                    log.valor_nou = issue.get_tipus_display()
+                    log.save()
             elif 'guardar_estat' in request.POST:
                 issue = self.get_object()
                 estat = form.cleaned_data['estat']
@@ -137,12 +137,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                         issue=issue,
                         usuari=Usuari.objects.get(user=self.request.user),
                         tipus=Log.ESTAT,
-                        valor_previ=issue.estat,
-                        valor_nou=estat
+                        valor_previ=issue.get_estat_display(),
                     )
-                    log.save()
                     issue.estat = estat
                     issue.save()
+                    log.valor_nou = issue.get_estat_display()
+                    log.save()
             elif 'guardar_gravetat' in request.POST:
                 issue = self.get_object()
                 gravetat = form.cleaned_data['gravetat']
@@ -150,12 +150,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.GRAV,
-                    valor_previ=issue.gravetat,
-                    valor_nou=gravetat
+                    valor_previ=issue.get_gravetat_display(),
                 )
-                log.save()
                 issue.gravetat = gravetat
                 issue.save()
+                log.valor_nou = issue.get_gravetat_display()
+                log.save()
             elif 'guardar_prioritat' in request.POST:
                 issue = self.get_object()
                 prioritat = form.cleaned_data['prioritat']
@@ -163,12 +163,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.PRIO,
-                    valor_previ=issue.prioritat,
-                    valor_nou=prioritat
+                    valor_previ=issue.get_prioritat_display(),
                 )
-                log.save()
                 issue.prioritat = prioritat
                 issue.save()
+                log.valor_nou = issue.get_prioritat_display()
+                log.save()
             elif 'guardar_dataLimit' in request.POST:
                 issue = self.get_object()
                 dataLimit = form.cleaned_data['dataLimit']
