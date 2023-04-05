@@ -377,3 +377,20 @@ class EsborrarTagIssueView(IsAuthenticatedMixin, View):
         )
 
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+class EsborrarAssignacioIssue(IsAuthenticatedMixin, View):
+    def get(self, request, *args, **kwargs):
+        id_issue = self.kwargs.get('id_issue')
+        issue = get_object_or_404(Issue, id=id_issue)
+        Log.objects.create(
+            issue=issue,
+            usuari=Usuari.objects.get(user=self.request.user),
+            tipus=Log.ASSIGN,
+            valor_previ=issue.assignacio.user.first_name,
+            valor_nou="Sense assignar"
+        )
+        issue.assignacio = None
+        issue.save()
+
+        return redirect(request.META.get('HTTP_REFERER'))

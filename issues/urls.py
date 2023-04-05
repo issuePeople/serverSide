@@ -9,6 +9,6 @@ urlpatterns = [
     path('<int:id>/delete/', views.EsborrarIssueView.as_view(), name='esborrar_issue'),
     path('attachments/<int:id>/delete/', views.EsborrarAttachmemtView.as_view(), name='esborrar_attachment'),
     path('<int:id_issue>/tags/<str:nom_tag>/delete/', views.EsborrarTagIssueView.as_view(), name='esborrar_tag_issue'),
-    path('<int:id_issue>/assignat/<int:id_usuari>/delete/', views.EsborrarTagIssueView.as_view(), name='esborrar_assignat'),
+    path('<int:id_issue>/assignacio/delete/', views.EsborrarAssignacioIssue.as_view(), name='esborrar_assignacio'),
     path('<int:id_issue>/observador/<int:id_usuari>/delete/', views.EsborrarTagIssueView.as_view(), name='esborrar_observador'),
 ]
