@@ -19,24 +19,26 @@
                                 
                                 <span class="text" style="margin: 5px;">Filtres</span>
                             </button>
+                            <!--Busqueda -->
                             <div style="display: flex; flex-direction:row;padding-left: 10px;">
-                                <input type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
-                                <button type="sumbit">
+                                <input id="busca" type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
+                                <button type="sumbit" onclick="filtre_buscar()">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </div>
+                            <!--Toggle Tags-->
                             <div style="display:flex; flex-direction:row; padding-left:10px">
-                            <button  onclick="toggle()" style="padding-right:10px">
-                                <div  id="tag_on">
-                                    <i class="fa fa-toggle-on" aria-hidden="true"></i>
-                                </div>
-                                <div  id="tag_off" style="display:none">
-                                    <i class="fa fa-toggle-off" aria-hidden="true"></i>
-                                </div>
-                            </button>
-                            <span>Tags</span>
-                        </div>
-                            
+                                
+                                <button  onclick="toggle()" style="padding-right:10px">
+                                    <div  id="tag_on">
+                                        <i class="fa fa-toggle-on" aria-hidden="true"></i>
+                                    </div>
+                                    <div  id="tag_off" style="display:none">
+                                        <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                                    </div>
+                                </button>
+                                <span>Tags</span>
+                            </div>
                         </div>
                         <div class="new-issue">
                             <button class="btn-small" >
@@ -711,6 +713,17 @@
                                         <span classe="issue-text" style="display: inline-flex;">
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
+                                            
+                                            {%if issue.blocked%}
+                                            <div class="blocked">
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                            </div>
+                                            {%endif%}
+                                            {% if issue.dataLimit != null%}
+                                            <div class="due-date">
+                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            </div>
+                                            {%endif%}
                                             <div id="tag_show">
                                             {%for tag in issue.tags.all%}
                                             <span id ="tag_show"class="tag" style="padding-right: 5px;background-color: {{tag.color}}; ">{{tag.nom}}</span>
@@ -784,6 +797,18 @@
     selectStatus.addEventListener('change', function() {
         btnSaveStat.click();
     });
+    
+    function filtre_buscar(){
+        
+        var x = document.getElementById('busca').value;
+       if(window.location.href.length == 29){
+        console.log(window.location.href);
+        window.location.href = window.location.href+"?search="+x;
+       }
+       else{
+        window.location.href= window.location.href+"&search="+x;
+       }
+    }
     
     function borra() {
         var querystring = window.location.href;
