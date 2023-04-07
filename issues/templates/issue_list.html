@@ -19,13 +19,26 @@
                                 
                                 <span class="text" style="margin: 5px;">Filtres</span>
                             </button>
+                            <!--Busqueda -->
                             <div style="display: flex; flex-direction:row;padding-left: 10px;">
-                                <input type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
-                                <button type="sumbit">
+                                <input id="busca" type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
+                                <button type="sumbit" onclick="filtre_buscar()">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </div>
-                            
+                            <!--Toggle Tags-->
+                            <div style="display:flex; flex-direction:row; padding-left:10px">
+                                
+                                <button  onclick="toggle()" style="padding-right:10px">
+                                    <div  id="tag_on">
+                                        <i class="fa fa-toggle-on" aria-hidden="true"></i>
+                                    </div>
+                                    <div  id="tag_off" style="display:none">
+                                        <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                                    </div>
+                                </button>
+                                <span>Tags</span>
+                            </div>
                         </div>
                         <div class="new-issue">
                             <button class="btn-small" >
@@ -186,12 +199,12 @@
                                             {% if "?tag="|add:tag.nom in request.get_full_path %}
                                             {%with "?tag="|add:key as parametre%}
                                             {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
-                                                    <div class="name">{{tag.nom}}</div>
+                                            <button class="single-applied-filter ng-animate-disabled include"style="background-color: {{tag.color}};">
+                                                    <div class="name" style="background-color: {{tag.color}};">{{tag.nom}}</div>
                                                     <a href="?estat=" class="name">X</a>
                                                     {%endwith%}
                                                {%endwith%}
-                                            </div>
+                                            </button>
                                             {%elif "&tag="|add:key in request.get_full_path%}
                                             {%with "&tag="|add:key as parametre%}
                                             {%with request.get_full_path|cut:parametre as link%}
@@ -648,7 +661,11 @@
                             </td>
                         </tr>
                         {% for issue in issues %}
-                            <tr class="row table-main" style="height: 80px;">
+                            {%if issue.blocked %}
+                                <tr class="row table-main is-blocked" style="height: 80px;">
+                            {%else%}
+                                <tr class="row table-main" style="height: 80px;">
+                            {%endif%}
                             
                                 <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;
                                 vertical-align: middle">
@@ -697,14 +714,36 @@
                                             <span class="issue-ref">#{{issue.id}}</span>
                                             <span class="issue-subject">{{issue.subject}}</span>
                                             
+                                            {%if issue.blocked%}
+                                            <div class="blocked">
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                            </div>
+                                            {%endif%}
+                                            {% if issue.dataLimit != null%}
+                                            <div class="due-date">
+                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            </div>
+                                            {%endif%}
+                                            <div id="tag_show">
+                                            {%for tag in issue.tags.all%}
+                                            <span id ="tag_show"class="tag" style="padding-right: 5px;background-color: {{tag.color}}; ">{{tag.nom}}</span>
+                                            {%endfor%}
+                                            </div>
                                         </span>
                                         
                                     </a> 
+                                    <div>
+                                        
+                                        
+                                    </div>
                                 </td>
                                 
                                 <td  style="text-align: center;
                                 vertical-align: middle;">
-                                <form>
+                              
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_issue" value="{{issue.id}}">
                                 <select id="selectStatus" name="estat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
                                     {% for key,value in TEstats %}
                                         {% if issue.estat == key %}
@@ -714,7 +753,7 @@
                                         {%endif%}
                                     {% endfor %}
                                 </select>
-                                <button type="submit"  name="guardar_estat" style="display: none;"></button>
+                                <button id="btnSaveState" type="submit"  name="guardar_estat" style="display: none;"></button>
                                 </form>
                                 </td>
                                 
@@ -726,19 +765,19 @@
                                 
                                 <td class="assigned-field" style="text-align: center;
                                 vertical-align: middle;">   
-                                <form>
-                                    <select id="selectUsuari" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
-                                        {% for ususari in usuaris %}
-                                            {% if issue.assignacio.user.username == usuari.user.username %}
-                                                <option selected="selected" value="{{usuari.user.username}}">{{usuari.user.username}}</option>
-                                            {%else %}
-                                                <option value="{{usuari.user}}">{{usuari.user}}</option>
-                                            {%endif%}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_issue" value="{{issue.id}}">
+                                    <select id="selectAssig" name="assignat" type="submit" class="assignd-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                        {% for usuari in usuaris %}
+                                            
+                                                <option value="{{usuari.user.id}}">{{usuari.user.username}}</option>
+                                            
                                         {% endfor %}
                                     </select>
                                     <button type="submit"  name="guardar_assignat" style="display: none;"></button>
                                     </form>
-                                    <span class="issue-assignedto">{{issue.assignacio.user.username}}</span>
+                                    <span class="issue-assignedto">{{issue.assignacio.user.avatar.url}}</span>
                                 </td>
                                 
                             </tr> 
@@ -753,7 +792,24 @@
     
 <script type="text/javascript">
     
-
+    const selectStatus = document.querySelector('#selectStatus');
+    var btnSaveStat = document.getElementById('btnSaveState');
+    selectStatus.addEventListener('change', function() {
+        btnSaveStat.click();
+    });
+    
+    function filtre_buscar(){
+        
+        var x = document.getElementById('busca').value;
+       if(window.location.href.length == 29){
+        console.log(window.location.href);
+        window.location.href = window.location.href+"?search="+x;
+       }
+       else{
+        window.location.href= window.location.href+"&search="+x;
+       }
+    }
+    
     function borra() {
         var querystring = window.location.href;
         console.log(querystring);
@@ -761,6 +817,22 @@
         var aa= params.get('estat');
         console.log(params.has('estat'));
         
+    }
+    function toggle(){
+        var x = document.getElementById("tag_on");
+        var p = document.getElementById("tag_off");
+        var zz = document.getElementById("tag_show");
+        
+        
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            p.style.display = "none";
+            zz.style.display = "none";
+        } else {
+         x.style.display = "none";
+         p.style.display ="block";
+         zz.style.display ="block";
+        }
     }
     
     function myFunction() {
