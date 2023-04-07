@@ -39,6 +39,38 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
 
         return queryset
 
+    def post(self, request, *args, **kwargs):
+        id_issue = request.POST.get('id_issue')
+        issue = get_object_or_404(Issue, id=id_issue)
+        if 'guardar_estat' in request.POST:
+            estat = request.POST.get('estat')
+            if estat != issue.estat:
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=request.user),
+                    tipus=Log.ESTAT,
+                    valor_previ=issue.get_estat_display(),
+                )
+                issue.estat = estat
+                issue.save()
+                log.valor_nou = issue.get_estat_display()
+                log.save()
+        elif 'guardar_assignat' in request.POST:
+            id_assignat = request.POST.get('assignat')
+            assignat = get_object_or_404(Usuari, pk=id_assignat)
+            if assignat != issue.assignacio:
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=request.user),
+                    tipus=Log.ASSIGN,
+                    valor_previ=issue.assignacio.user.first_name,
+                    valor_nou=assignat.user.first_name
+                )
+                log.save()
+                issue.assignacio = get_object_or_404(Usuari, pk=id_assignat)
+                issue.save()
+        return redirect('tots_issues')
+
 
 class CrearIssueView(IsAuthenticatedMixin, CreateView):
     model = Issue
