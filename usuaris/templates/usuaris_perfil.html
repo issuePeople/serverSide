@@ -3,23 +3,65 @@
 
 {% block body %}
 
+
+<div class="master" style>
+   <section class="main user-profile">
+    <header>
+        <header>
+            <h1>
+                <span>Configuració d'usuari</span>
+            </h1>
+        </header>
+    </header>
+    <form method="post" enctype="multipart/form-data" class="ng-pristine ng-valid ng-valid-required ng-valid-maxlenght ng-valid email">
+        {% csrf_token %}
+        <!--Canviar avatar-->
+        <div class="project-details-image">
+            <fieldset class="image-container">
+                <img src="{{ usuari.avatar.url }}" style="width: 180px; height: 180px;">
+                <h2>{{ usuari.user }}</h2>
+            </fieldset>
+            <input type="file" value="+" name="avatar">
+            <button type="submit" name="guardar-avatar" class="btn-small button-full js-change-avatar">
+                <i aria-hidden="true"></i>
+                Canviar avatar
+            </button>
+        </div>
+        <!--Info usuari i canviar bio-->
+        <div class="project-details-form-data"> 
+            <fieldset>
+                <textarea name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;"></textarea>
+            </fieldset>
+            <fieldset class="submit">
+                <button variant="primary" type="submit" title="Save" class="btn-small" style="margin-left: 400px;">
+                    Guardar
+                </button>
+            </fieldset>
+        </div>
+    </form>
+   </section> 
+</div>
+
+
+<!--
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 
-    <!-- Això és per penjar i canviar avatar. Ho he copiat del que va fer l'Àngel a issue_edit per penjar attachments -->
+     Això és per penjar i canviar avatar. Ho he copiat del que va fer l'Àngel a issue_edit per penjar attachments 
     <input type="file" value="+" name="avatar">
 
     <button type="submit" name="guardar_avatar">
         <i class="fa fa-plus" aria-hidden="true"></i>
     </button>
 
-    <!-- Això és la foto de perfil (avatar) -->
+    Això és la foto de perfil (avatar) 
     <img src="{{ usuari.avatar.url }}">
 
-    <!-- Això és x canviar la bio -->
+    Això és x canviar la bio 
     <input type="text" name="bio" value="{{ usuari.bio }}">
     <button type="submit" name="guardar_bio">Save</button>
 
 </form>
+-->
 
 {% endblock %}
