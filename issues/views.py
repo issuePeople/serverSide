@@ -7,6 +7,7 @@ from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Issue, Tag, Attachment, Log
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
 from usuaris.models import Usuari
+from usuaris.views import get_context_navbar
 from .filters import IssueFilter
 
 
@@ -19,11 +20,10 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(Issue.get_types(self))
+        context.update(get_context_navbar(self.request))
         context.update({
             'usuaris': Usuari.objects.all(),
             'tags': Tag.objects.all(),
-            # 'usuari': Usuari.objects.get(user=self.request.user)
-
         })
         return context
 
@@ -78,6 +78,14 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
     form_class = IssueForm
     success_url = reverse_lazy('tots_issues')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(Issue.get_types(self))
+        context.update({
+            'usuaris': Usuari.objects.all(),
+        })
+        return context
+
     def form_valid(self, form):
         # Especifiquem el creador de l'issue
         form.instance.creador = Usuari.objects.get(user=self.request.user)
@@ -107,12 +115,14 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(Issue.get_types(self))
+        context.update(get_context_navbar(self.request))
         context.update({
             'possibles_observadors': Usuari.objects.exclude(observats=self.get_object()),
             'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
             'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
-            'logs': Log.objects.filter(issue=self.get_object())
+            'logs': Log.objects.filter(issue=self.get_object()),
+            # Necessari per la navbar
         })
         return context
 
@@ -155,12 +165,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                         issue=issue,
                         usuari=Usuari.objects.get(user=self.request.user),
                         tipus=Log.TIPUS,
-                        valor_previ=issue.tipus,
-                        valor_nou=tipus
+                        valor_previ=issue.get_tipus_display()
                     )
-                    log.save()
                     issue.tipus = tipus
                     issue.save()
+                    log.valor_nou = issue.get_tipus_display()
+                    log.save()
             elif 'guardar_estat' in request.POST:
                 issue = self.get_object()
                 estat = form.cleaned_data['estat']
@@ -169,12 +179,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                         issue=issue,
                         usuari=Usuari.objects.get(user=self.request.user),
                         tipus=Log.ESTAT,
-                        valor_previ=issue.estat,
-                        valor_nou=estat
+                        valor_previ=issue.get_estat_display(),
                     )
-                    log.save()
                     issue.estat = estat
                     issue.save()
+                    log.valor_nou = issue.get_estat_display()
+                    log.save()
             elif 'guardar_gravetat' in request.POST:
                 issue = self.get_object()
                 gravetat = form.cleaned_data['gravetat']
@@ -182,12 +192,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.GRAV,
-                    valor_previ=issue.gravetat,
-                    valor_nou=gravetat
+                    valor_previ=issue.get_gravetat_display(),
                 )
-                log.save()
                 issue.gravetat = gravetat
                 issue.save()
+                log.valor_nou = issue.get_gravetat_display()
+                log.save()
             elif 'guardar_prioritat' in request.POST:
                 issue = self.get_object()
                 prioritat = form.cleaned_data['prioritat']
@@ -195,12 +205,12 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.PRIO,
-                    valor_previ=issue.prioritat,
-                    valor_nou=prioritat
+                    valor_previ=issue.get_prioritat_display(),
                 )
-                log.save()
                 issue.prioritat = prioritat
                 issue.save()
+                log.valor_nou = issue.get_prioritat_display()
+                log.save()
             elif 'guardar_dataLimit' in request.POST:
                 issue = self.get_object()
                 dataLimit = form.cleaned_data['dataLimit']
@@ -265,6 +275,29 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                 )
                 log.save()
                 issue.save()
+            elif 'guardar_assignat' in request.POST:
+                issue = self.get_object()
+                id_assignat = request.POST.get('assignat')
+                assignat = get_object_or_404(Usuari, pk=id_assignat)
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.ASSIGN,
+                    valor_nou=assignat.user.first_name
+                )
+                if issue.assignacio:
+                    log.valor_previ = issue.assignacio.user.first_name
+                else:
+                    log.valor_previ = "Sense assignar"
+                log.save()
+                issue.assignacio = assignat
+                issue.save()
+            elif 'guardar_observador' in request.POST:
+                issue = self.get_object()
+                id_observador = request.POST.get('observador')
+                observador = get_object_or_404(Usuari, pk=id_observador)
+                issue.observadors.add(observador)
+                issue.save()
             elif 'autoassignar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
@@ -284,6 +317,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue.assignacio = usuari
                     log.valor_nou = usuari.user.first_name
                 log.save()
+                issue.save()
             elif 'autoobservar' in request.POST:
                 usuari = Usuari.objects.get(user=self.request.user)
                 issue = self.get_object()
@@ -291,6 +325,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
                     issue.observadors.remove(usuari)
                 else:
                     issue.observadors.add(usuari)
+                issue.save()
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
@@ -382,5 +417,36 @@ class EsborrarTagIssueView(IsAuthenticatedMixin, View):
             tipus=Log.DEL_TAG,
             valor_previ=tag.nom
         )
+
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+class EsborrarAssignacioIssue(IsAuthenticatedMixin, View):
+    def get(self, request, *args, **kwargs):
+        id_issue = self.kwargs.get('id_issue')
+        issue = get_object_or_404(Issue, id=id_issue)
+        Log.objects.create(
+            issue=issue,
+            usuari=Usuari.objects.get(user=self.request.user),
+            tipus=Log.ASSIGN,
+            valor_previ=issue.assignacio.user.first_name,
+            valor_nou="Sense assignar"
+        )
+        issue.assignacio = None
+        issue.save()
+
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+class EsborrarObservadorIssue(IsAuthenticatedMixin, View):
+    def get(self, request, *args, **kwargs):
+        id_issue = self.kwargs.get('id_issue')
+        id_usuari = self.kwargs.get('id_usuari')
+
+        issue = get_object_or_404(Issue, id=id_issue)
+        usuari = get_object_or_404(Usuari, pk=id_usuari)
+
+        issue.observadors.remove(usuari)
+        issue.save()
 
         return redirect(request.META.get('HTTP_REFERER'))

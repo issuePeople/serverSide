@@ -149,7 +149,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-DEFAULT_AVATAR_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/default.png'
+DEFAULT_AVATAR = 'default.png'
+LOGO_JPG_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/static/imatge/logo.jpeg'
+LOGO_PNG_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/static/imatge/logo_IssuePeople.png'
 
 if DEBUG:
     STATIC_URL = 'static/'

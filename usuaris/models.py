@@ -5,7 +5,7 @@ from issuePeople import settings
 
 
 def get_default_avatar_url():
-    return settings.DEFAULT_AVATAR_URL
+    return settings.DEFAULT_AVATAR
 
 
 class Usuari(models.Model):

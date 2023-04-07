@@ -263,7 +263,7 @@
                                         height="60px"
                                     >
                                     <span style="margin-left: 15px;">{{ issue.assignacio.first_name }}</span>
-                                    <a href="{% url 'esborrar_assignat' issue.id issue.assignacio.user.id %}">
+                                    <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 </div>  
@@ -272,9 +272,9 @@
                         </div>
                         <!-- selector d'assignacio -->
                         <div>
-                            <select id="selectAssig" name="" type="submit" class="status-button">
+                            <select id="selectAssig" name="assignat" type="submit" class="status-button">
                                 {% for assig in possibles_assignats %}
-                                    <option value="{{assig}}">{{assig}}</option>
+                                    <option value="{{assig.user.id}}">{{assig.user.username}}</option>
                                 {% endfor %}
                             </select>
                             <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
@@ -313,12 +313,12 @@
                             </ul>
                         </div>
                         <div>
-                            <select id="selectObs" name="guardar_observadors" type="submit" class="status-button">
+                            <select id="selectObs" name="observador" type="submit" class="status-button">
                                 {% for obs in possibles_observadors %}
-                                    <option value="{{obs}}">{{obs}}</option>
+                                    <option value="{{obs.user.id}}">{{obs.user.username}}</option>
                                 {% endfor %}
                             </select>
-                            <button id="btnSaveObs" type="submit" name="guardar_assignat" style="display: none;"></button>        
+                            <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
                         </div>
                         <div class="ticket-users-actions">
                             <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>

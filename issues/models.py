@@ -93,7 +93,7 @@ class Issue(models.Model):
 
 class Attachment(models.Model):
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data penjat'))
-    document = models.FileField(verbose_name=_('Document'))
+    document = models.FileField(upload_to='attachment/', verbose_name=_('Document'))
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=False, blank=False, related_name='attachments', verbose_name=_('Issue'))
 
 

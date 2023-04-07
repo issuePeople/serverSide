@@ -8,6 +8,7 @@ from .forms import UsuariForm, LoginForm, RegistreForm
 from issuePeople.mixins import IsAuthenticatedMixin
 from issues.models import Log
 from .models import Usuari
+from issuePeople import settings
 
 
 class VeureUsuariView(IsAuthenticatedMixin, DetailView):
@@ -17,12 +18,15 @@ class VeureUsuariView(IsAuthenticatedMixin, DetailView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        queryset = Usuari.objects.all()
+        queryset = Usuari.objects.all().prefetch_related('observats')
         return get_object_or_404(queryset, pk=pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'logs': Log.objects.filter(usuari=self.get_object())})
+        context.update({
+            'logs': Log.objects.filter(usuari=self.get_object()),
+            'logo_url': settings.LOGO_PNG_URL
+        })
         return context
 
 
@@ -32,6 +36,11 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
     form_class = UsuariForm
     context_object_name = 'usuari'
     success_url = reverse_lazy('perfil')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({'logo_url': settings.LOGO_PNG_URL})
+        return context
 
     def get_object(self, queryset=None):
         return get_object_or_404(Usuari.objects.all(), user=self.request.user)
@@ -51,6 +60,13 @@ class LoginView(FormView):
     template_name = 'usuaris_login.html'
     form_class = LoginForm
     success_url = reverse_lazy('tots_issues')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'logo_url': settings.LOGO_JPG_URL,
+        })
+        return context
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -91,6 +107,13 @@ class RegistreView(LoginView):
     template_name = 'usuaris_singUp.html'
     form_class = RegistreForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'logo_url': settings.LOGO_JPG_URL,
+        })
+        return context
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -121,3 +144,10 @@ class RegistreView(LoginView):
 def logout(request):
     djangologout(request)
     return redirect(reverse('login'))
+
+
+def get_context_navbar(request):
+    return {
+        'usuari': get_object_or_404(Usuari, user=request.user),
+        'logo_url': settings.LOGO_PNG_URL
+    }
