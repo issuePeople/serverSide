@@ -10,7 +10,6 @@
                 <header class="issue-header">
                     <h1>
                         <span>Issues</span>
-                        
                     </h1>
                     <div class="taskboard-actions">
                         <div class="issue-table-options-start" >
@@ -28,28 +27,26 @@
                             </div>
                             <!--Toggle Tags-->
                             <div style="display:flex; flex-direction:row; padding-left:10px">
-                                
-                                <button  onclick="toggle()" style="padding-right:10px">
+                                <div onclick="toggle()" style="padding-right:10px">
                                     <div  id="tag_on">
-                                        <i class="fa fa-toggle-on" aria-hidden="true"></i>
+                                        <i class="fa fa-toggle-on" aria-hidden="true" style="color:#008aa8"></i>
                                     </div>
                                     <div  id="tag_off" style="display:none">
                                         <i class="fa fa-toggle-off" aria-hidden="true"></i>
                                     </div>
-                                </button>
+                                </div>
                                 <span>Tags</span>
                             </div>
                         </div>
                         <div class="new-issue">
                             <button class="btn-small" >
                                 <span class="icon icon-add" style="font-size: large;padding-right: 5px;">+</span>
-                                <a href="/issues/create/" > New Issue</a>
-                               
+                                <a href="{% url 'crear_issue' %}" > New Issue</a>
                             </button>
                             
                             <button class="btn-icon" >
                                 
-                                    <a href="/issues/bulk/" >
+                                    <a href="{% url 'bulk_issue'%}" >
                                         <i class="fa fa-plus" aria-hidden="true"></i>  
                                     </a> 
 
@@ -223,9 +220,9 @@
                                             {% if "?creat="|add:usuari.user.username in request.get_full_path %}
                                             {%with "?creat="|add:key as parametre%}
                                             {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                            <div class="single-applied-filter ng-animate-disabled include" >
                                                     <div class="name">{{usuari.user.username}}</div>
-                                                    <a href="?creat=" class="name">X</a>
+                                                    <a href="{{link}}" class="name">X</a>
                                                     {%endwith%}
                                                {%endwith%}
                                             </div>
@@ -234,8 +231,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--Llistat Filtres-->
                                 <ul>
-                                    <li>
+                                    <li> <!--Tipus-->
                                         <button class="filters-cat-single"  id="categoria_filtre_tipus" name = "obre"onclick="filtre_tipus('filtre_tipus')" style="display: flex">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
@@ -251,7 +249,6 @@
                                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
-                                            
                                         </button>
                                         <div class="filter-list" style="display:none"  name="tanca"  id="filtre_tipus" style="display:flex ; flex-direction: column";>
                                             <div>
@@ -265,7 +262,6 @@
                                                     {%endif%} 
                                                     {% if request.get_full_path != "/issues/" and "tipus" not in request.get_full_path%}
                                                         <a href="{{request.get_full_path}}&tipus={{key}}" class="name">{{value}}</a>
-                                                    
                                                     {%else%}
                                                         <a href="?tipus={{key}}"class="name">{{value}}</a>
                                                     {%endif%}
@@ -275,7 +271,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li><!--Gravetat-->
                                         <button class="filters-cat-single" id="categoria_filtre_gravetat" name = "obre"onclick="filtre_tipus('filtre_gravetat')">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
@@ -291,7 +287,6 @@
                                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
-                                            
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_gravetat">
                                             <div>
@@ -319,7 +314,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li><!--Prioritat-->
                                         <button class="filters-cat-single" id="categoria_filtre_prioritat" name = "obre"onclick="filtre_tipus('filtre_prioritat')">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
@@ -335,7 +330,6 @@
                                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
-                                            
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_prioritat">
                                             <div>
@@ -355,11 +349,10 @@
                                                     <span class="number"></span>
                                                     </button>
                                                 {%endfor%}
-                                                
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li><!--Estat-->
                                         <button class="filters-cat-single" id="categoria_filtre_estat" name = "obre"onclick="filtre_tipus('filtre_estat')">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
@@ -375,7 +368,6 @@
                                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
-                                            
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_estat">
                                             <div>
@@ -394,8 +386,7 @@
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188);">
                                                     {%else%} 
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
-                                                    {%endif%} 
-                                                    
+                                                    {%endif%}
                                                     {% if request.get_full_path != "/issues/" %}
                                                         <a href="{{request.get_full_path}}&estat={{key}}" class="name">{{value}}</a>
                                                     {%else%}
@@ -407,7 +398,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li><!--Assignat-->
                                         <button class="filters-cat-single" id="categoria_filtre_assignat" name = "obre"onclick="filtre_tipus('filtre_assignat')">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
@@ -430,13 +421,11 @@
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
                                                     <a href="{{request.get_full_path}}&assignat={{usuari.user.username}}" class="name">{{usuari.user.username}}</a>
                                                 </button>
-                                                
                                                 {%endfor%}
                                             </div>
-                                            
                                         </div>
                                     </li>
-                                    <li>
+                                    <li><!--Tags-->
                                         <button class="filters-cat-single" id="categoria_filtre_rol" name = "obre"onclick="filtre_tipus('filtre_rol')">
                                             <span>Tags</span>
                                             <div class="ng-animate-disabled">
@@ -452,7 +441,6 @@
                                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
-                                            
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_rol">
                                             <div>
@@ -460,12 +448,11 @@
                                                 <button class="single-filter single-filter-type-general" style="border-color:'tag.color';">
                                                     <a href="{{request.get_full_path}}&creat={{tag.nom}}" class="name">{{tag.nom}}</a>
                                                 </button>
-                                                
                                                 {%endfor%}
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li><!--Creat-->
                                         <button class="filters-cat-single" id="categoria_filtre_creat" name = "obre"onclick="filtre_tipus('filtre_creat')">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
@@ -481,7 +468,6 @@
                                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                                 </svg>
                                             </div>
-                                            
                                         </button>
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
                                             <div>
@@ -489,7 +475,6 @@
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
                                                     <a href="{{request.get_full_path}}&creat={{usuari.user.username}}" class="name">{{usuari.user.username}}</a>
                                                 </button>
-                                                
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -499,6 +484,7 @@
                         </div>
                     </div>
                 </sidebar>
+                <!--Llistat Issues-->
                 <div class="issue-page"style="width: 100%;">
                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;">
                         <tr class="row title">
@@ -676,9 +662,7 @@
                                         {%elif issue.tipus == "M"%}
                                             <p class="level" style="background:  rgb(64, 228, 206)"></p>
                                         {%endif%}
-                                      
                                 </td>
-                                
                                  <td class="level-field" style="padding-right: 20px;text-align: center;
                                  vertical-align: middle;">
                                     {% if issue.gravetat == "D" %}
@@ -692,7 +676,6 @@
                                     {%elif issue.gravetat == "C"%}
                                         <p class="level" style="background:   rgb(211, 84, 80)"></p>
                                     {%endif%}
-                                    
                                  </td>
                                  
                                  <td class="level-field" style="padding-right: 20px;text-align: center;
@@ -716,7 +699,7 @@
                                             
                                             {%if issue.blocked%}
                                             <div class="blocked">
-                                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                                <i class="fa fa-lock" aria-hidden="true" style="color:red;padding-right: 5px;"></i>
                                             </div>
                                             {%endif%}
                                             {% if issue.dataLimit != null%}
@@ -724,7 +707,7 @@
                                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                             </div>
                                             {%endif%}
-                                            <div id="tag_show">
+                                            <div class="cjt_tags">
                                             {%for tag in issue.tags.all%}
                                             <span id ="tag_show"class="tag" style="padding-right: 5px;background-color: {{tag.color}}; ">{{tag.nom}}</span>
                                             {%endfor%}
@@ -821,17 +804,21 @@
     function toggle(){
         var x = document.getElementById("tag_on");
         var p = document.getElementById("tag_off");
-        var zz = document.getElementById("tag_show");
+        var z = document.querySelectorAll('[class="cjt_tags"]');
         
         
         if (x.style.display === "none") {
             x.style.display = "block";
             p.style.display = "none";
-            zz.style.display = "none";
+            for(i=0;i<z.length;i++){
+            z[i].style.display="block";
+            }
         } else {
          x.style.display = "none";
          p.style.display ="block";
-         zz.style.display ="block";
+         for(i=0;i<z.length;i++){
+            z[i].style.display="none";
+            }
         }
     }
     
