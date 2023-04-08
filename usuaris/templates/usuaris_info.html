@@ -34,21 +34,33 @@
         <div class="main">
             <div>
                 <div class="taskboard-actions">
-                    <a href="/usuaris/perfil">
-                        <h1>Timeline &nbsp</h1>
-                    </a>
-                    <p>&nbsp</p>
-                    <a href="/usuaris/perfil">
-                        <span>Watched</span>
-                    </a>
+                    <table style="width: 40%;border-collapse:separate; border-spacing: 0 5px;">
+                        <tr>
+                            <td>
+                                <th>
+                                    <a href="/usuaris/perfil">
+                                        <h1><i class="fa fa-align-justify"  aria-hidden="true" ></i> &nbsp Timeline &nbsp </h1>
+                                    </a>
+                                </th>
+                            </td>
+                            <td>
+                                <th>
+                                    <a href="/usuaris/perfil">
+                                        <h1><i class="fa fa-eye" aria-hidden="true"></i> Watched</h1>
+                                    </a>
+                                </th>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <h1 style="color:darkgrey" >________________________________________________________________</h1>
+                <p style="color:darkgrey" >__________________________________________________________________________________________</p>
                 <!--Hacer bucle recorrriendo-->
                 <div class="issue-page"style="width: 100%; ">
                     <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
                         {% for log in logs %}
                             <tr class="row table-main">
-                                <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;">{{log.usuari.user}}
+                                <!--Ojo hardcoded-->
+                                <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;"><a href="{% url 'usuari' 1 %}">{{log.usuari.user}}</a>
                                 {% if log.tipus == "CREAR" %}
                                      ha creat l'
                                 {% elif log.tipus == "ADD_ATT" %}
@@ -62,13 +74,24 @@
                                 {% else %}
                                      ha canviat l'atribut {{log.tipus}}  de {{log.valor_previ}} a {{log.valor_nou}} del
                                 {%endif%}
-                                issue #{{log.issue.id}} {{log.issue.subject}}</p>
+                                issue <a href="{% url 'editar_issue' log.issue.id %}">#{{log.issue.id}} {{log.issue.subject}}</a></p>
                                 <p style="color:darkgrey">{{log.data}}</p>
-                                <h1 style="color:darkgrey">________________________________________________________________</h1>
-                         {% endfor %}
-                        </tr> 
-                     </table>
-                 </div>
+                                <p style="color:darkgrey">__________________________________________________________________________________________</p>
+                            </tr> 
+                        {% endfor %}
+                    </table>
+                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                        {% for observat in usuari.observats.all %}
+                            <tr >
+                                <td>
+                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
+                                    <p></p>
+                                    <p style="color:darkgrey">__________________________________________________________________________________________</p>
+                                </td> 
+                            </tr> 
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
         <div>
