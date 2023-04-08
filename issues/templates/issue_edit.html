@@ -109,10 +109,13 @@
                         <!-- add attachment-->
                         <div class="options ">
                             <div class="add-attach">
-                                <input type="file" value="+" name="document">
+                                <input id="inputFile" type="file" value="+" name="document" style="display: none;">
 
-                                <!-- ToDo: Posar maco! Que només aparegui quan hi ha un file chosen -->
-                                <button type="submit" name="afegir_attachment">
+                                <button id="addAttachment" style="display: flex;">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+
+                                <button id="afegirAttachment" type="submit" name="afegir_attachment" style="display: none;">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -142,41 +145,74 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
-                        <a class="history-tab" href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
+                        {% if "?mostrar=comments" in request.get_full_path %}
+                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
+                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
+                        {%else%}    
+                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
+                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
+                        {%endif%}
                     </nav>
+                
                 </section>
                 <!-- Comments Activites content -->
-                <section class="comment" >
-                    <div style="display: flex; justify-content: space-between;">
-                        <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
-                        <button type="submit" name="afegir_comentari" style="background: none;">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                        </button>
-                    </div>
+                {% if "?mostrar=comments" in request.get_full_path %}
+                    <section class="comment" >
+                        <div style="display: flex; justify-content: space-between;">
+                            <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
+                            <button type="submit" name="afegir_comentari" style="background: none;">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
+                        </div>
 
-                    <div class="commmetns-wrapper">
-                        <ul>
-                            {%  for comentari in issue.comentaris.all %}
-                                <li>
-                                    <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                        <img src="{{ comentari.autor.avatar.url }}"
-                                            width="60px"
-                                            height="60px"
-                                        >
-                                        <div>
-                                            <div style="display: flex; justify-content: space-between;">
-                                                <span style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</span>
-                                                <span>{{ comentari.data }}</span>
+                        <div class="commmetns-wrapper">
+                            <ul>
+                                {%  for comentari in issue.comentaris.all %}
+                                    <li>
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                            <img src="{{ comentari.autor.avatar.url }}"
+                                                width="60px"
+                                                height="60px"
+                                            >
+                                            <div>
+                                                <div style="display: flex; justify-content: space-between;">
+                                                    <span style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</span>
+                                                    <span>{{ comentari.data }}</span>
+                                                </div>
+                                                <span>{{ comentari.text }}</span>
                                             </div>
-                                            <span>{{ comentari.text }}</span>
                                         </div>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </section>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </section>
+                {%else%}    
+                    <section class="activities">
+                        <div class="activities-wrapper">
+                            <ul>
+                                {%  for log in issue.log.all %}
+                                    <li>
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                            <img src="{{ log.usuari.avatar.url }}"
+                                                width="60px"
+                                                height="60px"
+                                            >
+                                            <div>
+                                                <div style="display: flex; justify-content: space-between;">
+                                                    <span style="margin-right: 5px;" class="comment-creator">{{ log.usuari.first_name }}</span>
+                                                    <span>{{ log.data }}</span>
+                                                </div>
+                                                <span>{{ log.text }}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </section>
+                {%endif%}
+                
 
             </div>
         </div>
@@ -272,7 +308,7 @@
                         </div>
                         <!-- selector d'assignacio -->
                         <div>
-                            <select id="selectAssig" name="assignat" type="submit" class="status-button">
+                            <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none;">
                                 {% for assig in possibles_assignats %}
                                     <option value="{{assig.user.id}}">{{assig.user.username}}</option>
                                 {% endfor %}
@@ -280,7 +316,9 @@
                             <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
                         </div>
                         <div class="ticket-users-actions">
-                            <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add assigned</a>
+                            <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
+                                + Add assigned
+                            </button>
                             <button type="submit" name="autoassignar" class="ticket-users-actions">Assign to me</button>
                         </div>
                     </div>
@@ -303,7 +341,7 @@
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <span style="margin-right: 15px;">{{ obs.autor.user.first_name }}</span>
+                                            <span style="margin-right: 15px;">{{ obs.first_name }}</span>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
@@ -313,7 +351,7 @@
                             </ul>
                         </div>
                         <div>
-                            <select id="selectObs" name="observador" type="submit" class="status-button">
+                            <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none;">
                                 {% for obs in possibles_observadors %}
                                     <option value="{{obs.user.id}}">{{obs.user.username}}</option>
                                 {% endfor %}
@@ -321,7 +359,9 @@
                             <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
                         </div>
                         <div class="ticket-users-actions">
-                            <a href="url/assignOther" style="margin-right: 10px;" class="ticket-users-actions">+ Add watchers</a>
+                            <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
+                                + Add watchers
+                            </button>
                             <button type="submit" name="autoobservar" class="ticket-users-actions">
                                 {% if ets_observador %}
                                     Unwatch???
@@ -391,6 +431,52 @@
 </form>
 
 <script>
+
+    var addObserver = document.getElementById('addObserver');
+    const selectObs = document.querySelector('#selectObs');
+    var btnSaveObs = document.getElementById('btnSaveObs');
+    addObserver.addEventListener('click', function() {
+        event.preventDefault();
+        if (selectObs.style.display === 'none') {
+            selectObs.style.display = 'flex';
+        }
+        else {
+            selectObs.style.display = 'none';
+        }
+    })
+    selectObs.addEventListener('change', function() {
+        btnSaveObs.click();
+    });
+
+    const selectAssig = document.querySelector('#selectAssig');
+    var btnSaveAssig = document.getElementById('btnSaveAssig');
+    var addAssigned = document.getElementById('addAssigned');
+    addAssigned.addEventListener('click', function() {
+        event.preventDefault();
+        if (selectAssig.style.display === 'none') {
+            selectAssig.style.display = 'flex';
+        }
+        else {
+            selectAssig.style.display = 'none';
+        }
+    })
+
+    selectAssig.addEventListener('change', function() {
+        btnSaveAssig.click();
+    });
+
+    var addAttachment = document.getElementById('addAttachment');
+    var afegirAttachment = document.getElementById('afegirAttachment');
+    var inputFile = document.getElementById('inputFile');
+
+    addAttachment.addEventListener('click', function() {
+        event.preventDefault();
+        inputFile.click();
+    })
+    inputFile.addEventListener('change', function() {
+        afegirAttachment.click();
+    })
+
     var addTagBtn = document.getElementById('addTagBtn');
     var myDiv = document.getElementById('addTag');
     addTagBtn.addEventListener('click', function() {
@@ -428,19 +514,6 @@
         btnSavePrior.click();
     });
 
-    const selectAssig = document.querySelector('#selectAssig');
-    var btnSaveAssig = document.getElementById('btnSaveAssig');
-    selectAssig.addEventListener('change', function() {
-        btnSaveAssig.click();
-    });
-
-    const selectObs = document.querySelector('#selectObs');
-    var btnSaveObs = document.getElementById('btnSaveObs');
-    selectObs.addEventListener('change', function() {
-        btnSaveObs.click();
-    });
-
-    
     var btnTimeLine = document.getElementById('btnTimeLine');
     var btnSaveDate = document.getElementById('btnSaveDate');
     var datePickerInput = document.querySelector('#datePickerInput');
