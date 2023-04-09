@@ -21,19 +21,26 @@
                 <img src="{{ usuari.avatar.url }}" style="width: 180px; height: 180px;">
                 <h2>{{ usuari.user }}</h2>
             </fieldset>
-            <input type="file" value="+" name="avatar">
-            <button type="submit" name="guardar-avatar" class="btn-small button-full js-change-avatar">
+            <input type="file" name="avatar">
+            <button type="submit" name="guardar_avatar" class="btn-small button-full js-change-avatar">
                 <i aria-hidden="true"></i>
                 Canviar avatar
+            </button>
+            <button type="submit" name="guardar_avatar_defecte" class="btn-small button-full js-change-avatar">
+                <i aria-hidden="true"></i>
+                AVATAR PER DEFECTE
             </button>
         </div>
         <!--Info usuari i canviar bio-->
         <div class="project-details-form-data"> 
             <fieldset>
-                <textarea name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;"></textarea>
+                <!-- ToDo: Posar maco i afegir els camps que calguin, poso username x provar :) -->
+                <input name="username" value="{{ usuari.user.username }}">
+                <br><br>
+                <textarea name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;">{{ usuari.bio }}</textarea>
             </fieldset>
             <fieldset class="submit">
-                <button variant="primary" type="submit" title="Save" class="btn-small" style="margin-left: 400px;">
+                <button name="guardar_info" variant="primary" type="submit" title="Save" class="btn-small" style="margin-left: 400px;">
                     Guardar
                 </button>
             </fieldset>
