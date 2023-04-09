@@ -68,13 +68,13 @@
                             <div class="created-by">
                                 <span>
                                     Created by
-                                    <a href="usuari/{{ issue.autor.user.first_name }}"> {{ issue.autor.user.first_name }}</a>
+                                    <a href="usuari/{{ issue.creador.user.first_name }}"> {{ issue.creador.user.first_name }}</a>
                                 </span>
                                 <div class="created-date">{{issue.dataModificacio}}</div>
                             </div>
                             <div class="user-avatar">
                                 <a href="url usser"></a>
-                                <img url="{{ issue.autor.avatar.url }}"
+                                <img url="{{ issue.creador.avatar.url }}"
                                     width="40px"
                                     height="40px"
                                 >
