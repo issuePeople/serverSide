@@ -17,12 +17,11 @@
                 </h1>
                 <div class="username">
                     <p>@{{usuari.user}}</p>
+                    
                 </div>
             </div>
             <div class="profile-stats">
                 <div class ="stat">
-                    <span class="stat-number">Y</span>
-                    <span class="stat-name">US tancats</span>
                 </div>
             </div>
             <div class="profile-quote">
@@ -84,7 +83,7 @@
                         {% for observat in usuari.observats.all %}
                             <tr >
                                 <td>
-                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
+                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
                                     <p></p>
                                     <p style="color:darkgrey">__________________________________________________________________________________________</p>
                                 </td> 
