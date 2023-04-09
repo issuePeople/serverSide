@@ -37,7 +37,7 @@
                 <!-- ToDo: Posar maco i afegir els camps que calguin, poso username x provar :) -->
                 <input name="username" value="{{ usuari.user.username }}">
                 <br><br>
-                <textarea name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;">{{ usuari.bio }}</textarea>
+                <textarea name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;">{% if usuari.bio %}{{ usuari.bio }}{% endif %}</textarea>
             </fieldset>
             <fieldset class="submit">
                 <button name="guardar_info" variant="primary" type="submit" title="Save" class="btn-small" style="margin-left: 400px;">
