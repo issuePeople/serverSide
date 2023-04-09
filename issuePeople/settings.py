@@ -150,6 +150,7 @@ STATICFILES_DIRS = [
 ]
 
 DEFAULT_AVATAR = 'default.png'
+NO_AVATAR_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/unnamed.png'
 LOGO_JPG_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/static/imatge/logo.jpeg'
 LOGO_PNG_URL = 'https://issuestorage.s3.us-west-2.amazonaws.com/static/imatge/logo_IssuePeople.png'
 
