@@ -54,7 +54,21 @@
                 </div>
                 <p style="color:darkgrey" >__________________________________________________________________________________________</p>
                 <!--Hacer bucle recorrriendo-->
-                {% if "?mostrar=timeline" in request.get_full_path %}
+                {% if "?mostrar=watched" in request.get_full_path %}
+                <section class="watched">
+                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                        {% for observat in usuari.observats.all %}
+                            <tr >
+                                <td>
+                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
+                                    <p></p>
+                                    <p style="color:darkgrey">__________________________________________________________________________________________</p>
+                                </td> 
+                            </tr> 
+                        {% endfor %}
+                    </table>
+                </section>
+                {%else%}
                 <section class ="timeline">
                     <div class="issue-page"style="width: 100%; ">
                         <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
@@ -82,21 +96,7 @@
                             {% endfor %}
                         </table>
                     </div>
-                </section>
-                {%else%}  
-                <section class="watched">
-                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
-                        {% for observat in usuari.observats.all %}
-                            <tr >
-                                <td>
-                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
-                                    <p></p>
-                                    <p style="color:darkgrey">__________________________________________________________________________________________</p>
-                                </td> 
-                            </tr> 
-                        {% endfor %}
-                    </table>
-                </section>
+                </section>  
                 {%endif%}
             </div>
         </div>
