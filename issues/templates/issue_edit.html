@@ -66,8 +66,10 @@
                         </div>
                         <div>
                             <div class="created-by">
-                                
-                                <a href="url usser">Created by {{ issue.autor.user.first_name }}</a>
+                                <span>
+                                    Created by
+                                    <a href="usuari/{{ issue.autor.user.first_name }}"> {{ issue.autor.user.first_name }}</a>
+                                </span>
                                 <div class="created-date">{{issue.dataModificacio}}</div>
                             </div>
                             <div class="user-avatar">
@@ -89,7 +91,9 @@
                     <div style="display: flex; justify-content: space-between;">
                         <textarea placeholder="Empty space is so boring... go on, be descriptive..." 
                         name="descripcio" rows="7" 
-                        class="description ng-pristine ng-untouched ng-valid ng-empty"></textarea>
+                        class="description ng-pristine ng-untouched ng-valid ng-empty">
+                        {{issue.descripcio}}
+                        </textarea>
                         <button style="max-height: 32px; background: none;" type="submit"  name="guardar_descripcio">
                             <i  class="fa fa-floppy-o" aria-hidden="true"></i>
                         </button>
@@ -147,10 +151,10 @@
                     <nav class="history-tabs">
                         {% if "?mostrar=comments" in request.get_full_path %}
                             <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
-                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
+                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
                         {%else%}    
                             <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
-                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=activities">Activites</a>
+                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
                         {%endif%}
                     </nav>
                 
@@ -169,14 +173,14 @@
                             <ul>
                                 {%  for comentari in issue.comentaris.all %}
                                     <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
                                             <img src="{{ comentari.autor.avatar.url }}"
                                                 width="60px"
                                                 height="60px"
                                             >
                                             <div>
                                                 <div style="display: flex; justify-content: space-between;">
-                                                    <span style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</span>
+                                                    <a href="usuaris/comentari.autor.user.first_name" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
                                                     <span>{{ comentari.data }}</span>
                                                 </div>
                                                 <span>{{ comentari.text }}</span>
@@ -191,19 +195,35 @@
                     <section class="activities">
                         <div class="activities-wrapper">
                             <ul>
-                                {%  for log in issue.log.all %}
+                                {%  for log in issue.logs.all %}
                                     <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
-                                            <img src="{{ log.usuari.avatar.url }}"
-                                                width="60px"
-                                                height="60px"
-                                            >
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
+                                           
+                                            <div style="display: flex; justify-content: space-between; ">
+                                                <img src="{{ log.usuari.avatar.url }}"
+                                                    width="60px"
+                                                    height="60px"
+                                                >
+
+                                                {% if log.tipus == "CREAR" %}
+                                                    <p style="margin-left: 5px;">ha creat l'</p>
+                                                {% elif log.tipus == "ADD_ATT" %}
+                                                    <p style="margin-left: 5px;">Ha afegit el fitxer {{log.valor_nou}} al</p>
+                                                {% elif log.tipus == "DEL_ATT" %}
+                                                    <p style="margin-left: 5px;">Ha esborrat el fitxer {{log.valor_antic}} al</p>
+                                                {% elif log.tipus == "ADD_TAG" %}
+                                                    <p style="margin-left: 5px;">Ha afegit el tag {{log.valor_nou}} al</p>
+                                                {% elif log.tipus == "DEL_TAG" %}
+                                                    <p style="margin-left: 5px;">Ha esborrat el tag {{log.valor_antic}} al</p>
+                                                {% else %}
+                                                    <p style="margin-left: 5px;">Ha canviat l'atribut {{log.tipus}}  de {{log.valor_previ}} a {{log.valor_nou}} del</p>
+                                                {%endif%}
+                                            </div>
                                             <div>
                                                 <div style="display: flex; justify-content: space-between;">
-                                                    <span style="margin-right: 5px;" class="comment-creator">{{ log.usuari.first_name }}</span>
+                                                    <a href="/usuaris/{{log.usuari.user.first_name}}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
                                                     <span>{{ log.data }}</span>
                                                 </div>
-                                                <span>{{ log.text }}</span>
                                             </div>
                                         </div>
                                     </li>
@@ -298,7 +318,7 @@
                                         width="60px"
                                         height="60px"
                                     >
-                                    <span style="margin-left: 15px;">{{ issue.assignacio.first_name }}</span>
+                                    <a href="usuaris/{{ issue.assignacio.user.first_name }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
                                     <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
@@ -341,7 +361,7 @@
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <span style="margin-right: 15px;">{{ obs.first_name }}</span>
+                                            <a href="usuaris/{{ obs.user.first_name }}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
