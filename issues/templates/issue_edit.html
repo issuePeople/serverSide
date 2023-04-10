@@ -10,19 +10,16 @@
             <div class="detail-header-container">
                 <!-- Per passar al segunet o anterior issue -->
                 <div class="detail-nav">
-                    <!--  anterior o seguent issue 
-                    {% if issue.id <= issues.count-1 %}
-                        <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="issue/{{issue.id+1}}/edit"></i>
-                    {%elif issue.id >= issues.count %}
-                        <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="issue/{{(issue.id-1)}}/edit"></i>
-                    {%else%}
-                        <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="issue/{{(issue.id-1)}}/edit"></i>
-                        <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="issue/{{issue.id+1}}/edit"></i>
-                    {%endif%}
-                     -->
-
-                    <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="issue/{{(issue.id-1)}}/edit"></i>
-                    <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="issue/{{issue.id+1}}/edit"></i>
+                    {% with issue_count=issues.count issue_id=issue.id %}
+                        {% if issue_count|add:-1 > issue_id %}
+                            <a title="Next" href="/issues/{{ issue_id|add:1 }}/edit"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% elif issue_id >= issue_count %}
+                            <a title="Previous" href="/issues/{{ issue_id|add:-1 }}/edit"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                        {% else %}
+                            <a title="Previous" href="/issues/{{ issue_id|add:-1 }}/edit"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                            <a title="Next" href="/issues/{{ issue_id|add:1 }}/edit"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+                    {% endwith %}
                 </div>
 
                 <div class="detail-header">
