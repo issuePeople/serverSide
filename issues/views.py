@@ -122,7 +122,6 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
             'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
             'logs': Log.objects.filter(issue=self.get_object()),
-            # Necessari per la navbar
         })
         return context
 
@@ -214,6 +213,19 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             elif 'guardar_dataLimit' in request.POST:
                 issue = self.get_object()
                 dataLimit = form.cleaned_data['dataLimit']
+                log = Log(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.LIMIT,
+                    valor_previ=str(issue.dataLimit),
+                    valor_nou=str(dataLimit)
+                )
+                log.save()
+                issue.dataLimit = dataLimit
+                issue.save()
+            elif 'esborrar_dataLimit' in request.POST:
+                issue = self.get_object()
+                dataLimit = None
                 log = Log(
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),

@@ -100,9 +100,7 @@
                     <div style="display: flex; justify-content: space-between;">
                         <textarea placeholder="Empty space is so boring... go on, be descriptive..." 
                         name="descripcio" rows="7" 
-                        class="description ng-pristine ng-untouched ng-valid ng-empty">
-                        {{issue.descripcio}}
-                        </textarea>
+                        class="description ng-pristine ng-untouched ng-valid ng-empty">{% if issue.descripcio %}{{issue.descripcio}}{% endif %}</textarea>
                         <button style="max-height: 32px; background: none;" type="submit"  name="guardar_descripcio">
                             <i  class="fa fa-floppy-o" aria-hidden="true"></i>
                         </button>
@@ -189,7 +187,7 @@
                                             >
                                             <div>
                                                 <div style="display: flex; justify-content: space-between;">
-                                                    <a href="usuaris/comentari.autor.user.first_name" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
+                                                    <a href="{% url 'usuari' comentari.autor.user.id %}" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
                                                     <span>{{ comentari.data }}</span>
                                                 </div>
                                                 <span>{{ comentari.text }}</span>
@@ -230,7 +228,7 @@
                                             </div>
                                             <div>
                                                 <div style="display: flex; justify-content: space-between;">
-                                                    <a href="/usuaris/{{log.usuari.user.first_name}}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
+                                                    <a href="{% url 'usuari' log.usuari.user.id %}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
                                                     <span>{{ log.data }}</span>
                                                 </div>
                                             </div>
@@ -327,7 +325,7 @@
                                         width="60px"
                                         height="60px"
                                     >
-                                    <a href="usuaris/{{ issue.assignacio.user.first_name }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
+                                    <a href="{% url 'usuari' issue.assignacio.user.id %}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
                                     <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
@@ -370,7 +368,7 @@
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <a href="usuaris/{{ obs.user.first_name }}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
+                                            <a href="{% url 'usuari' obs.user.id %}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
