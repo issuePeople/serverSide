@@ -10,9 +10,21 @@
             <div class="detail-header-container">
                 <!-- Per passar al segunet o anterior issue -->
                 <div class="detail-nav">
-                    <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="url/previous/issue"></i>
-                    <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="url/next/issue"></i>
+                    <!--  anterior o seguent issue 
+                    {% if issue.id <= issues.count-1 %}
+                        <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="issue/{{issue.id+1}}/edit"></i>
+                    {%elif issue.id >= issues.count %}
+                        <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="issue/{{(issue.id-1)}}/edit"></i>
+                    {%else%}
+                        <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="issue/{{(issue.id-1)}}/edit"></i>
+                        <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="issue/{{issue.id+1}}/edit"></i>
+                    {%endif%}
+                     -->
+
+                    <i title="Previous" class="fa fa-arrow-left" aria-hidden="true" href="issue/{{(issue.id-1)}}/edit"></i>
+                    <i title="Next" class="fa fa-arrow-right" aria-hidden="true" href="issue/{{issue.id+1}}/edit"></i>
                 </div>
+
                 <div class="detail-header">
                     <!-- Titol issue-->
                     <div class="detail-title-wrapper">
