@@ -60,7 +60,7 @@
                         {% for observat in usuari.observats.all %}
                             <tr >
                                 <td>
-                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
+                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.get_estat_display}}</p>
                                     <p></p>
                                     <p style="color:darkgrey">__________________________________________________________________________________________</p>
                                 </td> 
@@ -76,20 +76,20 @@
                                 <tr class="row table-main">
                                     <!--Ojo hardcoded-->
                                     <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;"><a href="{% url 'usuari' 1 %}"> {{log.usuari.user}}</a>
-                                    {% if log.tipus == "CREAR" %}
+                                    {% if log.tipus == "Creada" %}
                                         ha creat l'
-                                    {% elif log.tipus == "ADD_ATT" %}
+                                    {% elif log.tipus == 'Nou attachment' %}
                                         ha afegit el fitxer {{log.valor_nou}} al
-                                    {% elif log.tipus == "DEL_ATT" %}
+                                    {% elif log.tipus == "Attachment esborrat" %}
                                         ha esborrat el fitxer {{log.valor_antic}} al
-                                    {% elif log.tipus == "ADD_TAG" %}
+                                    {% elif log.tipus == "Tag afegida" %}
                                         ha afegit el tag {{log.valor_nou}} al
-                                    {% elif log.tipus == "DEL_TAG" %}
+                                    {% elif log.tipus == "Tag esborrada" %}
                                         ha esborrat el tag {{log.valor_antic}} al
                                     {% else %}
                                         ha canviat l'atribut {{log.tipus}}  de {{log.valor_previ}} a {{log.valor_nou}} del
                                     {%endif%}
-                                    issue <a href="{% url 'editar_issue' log.issue.id %}">#{{log.issue.id}} {{log.issue.subject}}</a></p>
+                                    issue {% if log.issue %}<a href="{% url 'editar_issue' log.issue.id %}">#{{log.issue.id}} {{log.issue.subject}}</a>{% endif %}</p>
                                     <p style="color:darkgrey">{{log.data}}</p>
                                     <p style="color:darkgrey">__________________________________________________________________________________________</p>
                                 </tr> 

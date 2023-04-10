@@ -77,13 +77,13 @@
                             <div class="created-by">
                                 <span>
                                     Created by
-                                    <a href="usuari/{{ issue.creador.user.first_name }}"> {{ issue.creador.user.first_name }}</a>
+                                    <a href="{% url 'usuari' issue.creador.user.id %}"> {{ issue.creador.user.first_name }}</a>
                                 </span>
                                 <div class="created-date">{{issue.dataModificacio}}</div>
                             </div>
                             <div class="user-avatar">
-                                <a href="url usser"></a>
-                                <img url="{{ issue.creador.avatar.url }}"
+                                <a href="{% url 'usuari' issue.creador.user.id %}"></a>
+                                <img src="{{ issue.creador.avatar.url }}"
                                     width="40px"
                                     height="40px"
                                 >
@@ -418,7 +418,7 @@
 
                     <!-- Bloqueig  -->
                     <div>
-                        {% if issue.motiuBloqueig != null %}
+                        {% if issue.motiuBloqueig %}
                             <button type="submit" name="esborrar_bloquejat" style="background: red; margin-left: 5px;">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
                             </button>
@@ -458,7 +458,6 @@
                     id="inputMotiuBloqueig" 
                     name="motiuBloqueig"
                     style="display: none;"
-                    value="{{issue.motiuBloqueig}}"
                 >
                 <button id="btnSaveBloqueigDirect" type="submit" name="guardar_bloquejat" style="display: none;">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
