@@ -24,7 +24,7 @@ class VeureUsuariView(IsAuthenticatedMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'logs': Log.objects.filter(usuari=self.get_object()),
+            'logs': Log.objects.filter(usuari=self.get_object()).order_by('-data'),
             'logo_url': settings.LOGO_PNG_URL
         })
         return context
@@ -107,7 +107,7 @@ class LoginView(FormView):
                     username = usuari.user.username
                 except Usuari.DoesNotExist:
                     form.add_error(None, _('No existeix un usuari amb aquest username o email'))
-                    return render(request, self.template_name, {'form': form})
+                    return render(request, self.template_name, {'form': form, 'logo_url': settings.LOGO_JPG_URL})
 
             # Autentiquem l'usuari (Django)
             user = authenticate(username=username, password=password)
@@ -118,7 +118,7 @@ class LoginView(FormView):
                 form.add_error(None, _('Usuari o contrasenya incorrectes'))
         else:
             form = LoginForm()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'logo_url': settings.LOGO_JPG_URL})
 
 
 class RegistreView(LoginView):
@@ -156,7 +156,7 @@ class RegistreView(LoginView):
             return redirect(self.success_url)
         else:
             form = RegistreForm()
-            return render(request, self.template_name, {'form': form})
+            return render(request, self.template_name, {'form': form, 'logo_url': settings.LOGO_JPG_URL})
 
 
 def logout(request):

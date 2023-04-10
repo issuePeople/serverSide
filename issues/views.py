@@ -1,10 +1,11 @@
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.db.models import Prefetch
 from django.views.generic.base import View
 from django_filters.views import FilterView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
 from issuePeople.mixins import IsAuthenticatedMixin
-from .models import Issue, Tag, Attachment, Log
+from .models import Issue, Tag, Attachment, Log, Comentari
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
 from usuaris.models import Usuari
 from usuaris.views import get_context_navbar
@@ -108,8 +109,10 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
 
     def get_object(self, queryset=None):
         id = self.kwargs.get('id')
-        queryset = Issue.objects.prefetch_related('attachments', 'comentaris', 'assignacio', 'observadors')\
-            .order_by('-attachments__data', '-comentaris__data')
+        queryset = Issue.objects.prefetch_related(
+            Prefetch('comentaris', queryset=Comentari.objects.order_by('-data')),
+            'attachments', 'assignacio', 'observadors'
+        )
         return get_object_or_404(queryset, id=id)
 
     def get_context_data(self, **kwargs):
@@ -239,20 +242,28 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             elif 'guardar_bloquejat' in request.POST:
                 issue = self.get_object()
                 motiuBloqueig = form.cleaned_data['motiuBloqueig']
-                log = Log(
+                issue.bloquejat = True
+                issue.motiuBloqueig = motiuBloqueig
+                issue.save()
+                Log.objects.create(
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.BLOQ,
-                    valor_previ=str(issue.bloquejat),
+                    valor_previ=str(False),
+                    valor_nou=str(True)
                 )
-                if motiuBloqueig is None:
-                    issue.bloquejat = False
-                else:
-                    issue.bloquejat = True
-                log.valor_nou = str(issue.bloquejat)
-                log.save()
-                issue.motiuBloqueig = motiuBloqueig
+            elif 'esborrar_bloquejat' in request.POST:
+                issue = self.get_object()
+                issue.bloquejat = False
+                issue.motiuBloqueig = None
                 issue.save()
+                Log.objects.create(
+                    issue=issue,
+                    usuari=Usuari.objects.get(user=self.request.user),
+                    tipus=Log.BLOQ,
+                    valor_previ=str(True),
+                    valor_nou=str(False)
+                )
             elif 'afegir_attachment' in request.POST:
                 attachment_form = AttachmentForm(request.POST, request.FILES)
                 if attachment_form.is_valid():
@@ -356,20 +367,16 @@ class CrearBulkView(IsAuthenticatedMixin, FormView):
     def form_valid(self, form):
         subject_text = form.cleaned_data['subjects']
         subjects = subject_text.splitlines()
-        issues = []
         for subject in subjects:
-            issue = Issue(
+            issue = Issue.objects.create(
                 subject=subject,
                 creador=Usuari.objects.get(user=self.request.user)
             )
-            issues.append(issue)
-            log = Log(
+            Log.objects.create(
                 issue=issue,
                 usuari=issue.creador,
                 tipus=Log.CREAR
             )
-            log.save()
-        Issue.objects.bulk_create(issues)
         return redirect(self.success_url)
 
 
@@ -405,10 +412,10 @@ class EsborrarAttachmemtView(IsAuthenticatedMixin, DeleteView):
 
     def post(self, request, *args, **kwargs):
         Log.objects.create(
-            issue=self.object.issue,
+            issue=self.get_object().issue,
             usuari=Usuari.objects.get(user=self.request.user),
             tipus=Log.DEL_ATT,
-            valor_previ=self.object.document.name
+            valor_previ=self.get_object().document.name
         )
         return super().post(request, *args, **kwargs)
 
