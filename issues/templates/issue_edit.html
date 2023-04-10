@@ -396,18 +396,31 @@
             <!-- setting Section-->
             <section class="ticket-section ticket-detail-settings">
                 <div class="ticket-detail-settings" >
+                    <!-- Data limit -->
                     <div>
-                        <!-- obrir desplegable per triar date -->
-                        <button id="btnTimeLine" style="background: none;">
-                            <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
-                        </button>
-                        
+                        {% if issue.dataLimit != null %}
+                            <button type="submit" name="esborrar_dataLimit" style="background: red;">
+                                <i  class="fa fa-clock-o" aria-hidden="true"></i>
+                            </button>
+                        {% else %}
+                            <button id="btnTimeLine" >
+                                <i  class="fa fa-clock-o" aria-hidden="true"></i>
+                            </button>
+                        {% endif %}
                     </div>
+
+                    <!-- Bloqueig  -->
                     <div>
-                        <!-- save motiuBloqueig  -->
-                        <button id="btnBloqueig" style="background: none;">
-                            <i style="margin-left: 15px;" class="fa fa-lock" aria-hidden="true"></i>
-                        </button>
+                        {% if issue.motiuBloqueig != null %}
+                            <button type="submit" name="esborrar_bloquejat" style="background: red; margin-left: 5px;">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                            </button>
+                        {% else %}
+                            <button id="btnBloqueig" style="margin-left: 5px;">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                            </button>
+                        {% endif %}
+                        
                     </div>
                     <div>
                         <a href="{% url 'esborrar_issue' issue.id %}">
@@ -423,6 +436,7 @@
                     id="datePickerInput" 
                     name="dataLimit"
                     style="display: none;"
+                    value="{{issue.dataLimit}}"
                 >
                 <button id="btnSaveDateDirect" type="submit" name="guardar_dataLimit" style="display: none;">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
@@ -437,6 +451,7 @@
                     id="inputMotiuBloqueig" 
                     name="motiuBloqueig"
                     style="display: none;"
+                    value="{{issue.motiuBloqueig}}"
                 >
                 <button id="btnSaveBloqueigDirect" type="submit" name="guardar_bloquejat" style="display: none;">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
