@@ -18,6 +18,7 @@
                 <fieldset class="image-container">
                     <img src="{{ usuari.avatar.url }}" style="width: 180px; height: 180px;">
                 </fieldset>
+                <!--
                 <div>
                     <label for="files" class="btn"><i class="fa fa-plus" aria-hidden="true"></i></label>
                     <input id="files" style="visibility:hidden;" type="file" value="+" name="avatar">
@@ -25,7 +26,20 @@
                 <button type="submit" variant="secondary" title="Guardar avatar" name="guardar_avatar" class="btn-small button-full js-change-avatar">
                     <i aria-hidden="true"></i>
                     Canviar foto
-                </button>
+                </button>-->
+                <div class="options ">
+                    <div class="add-attach">
+                        <input id="inputFile" type="file" value="+" name="document" style="display: none;">
+
+                        <button id="addAttachment" style="display: flex;">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+
+                        <button id="afegirAttachment" type="submit" name="afegir_attachment" style="display: none;">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
                 <button type="submit" name="guardar_avatar_defecte" class="botonMenu">
                     <p style="color: #1e96b1;"> &nbsp &nbsp Avatar per defecte</p>
                 </button>
@@ -38,11 +52,11 @@
                 </fieldset>
                 <fieldset>
                     <label for="email">Email</label>
-                    <input type="text" name="username" value="{{ usuari.user.email }}">
+                    <input type="text" name="email" value="{{ usuari.user.email }}">
                 </fieldset>
                 <fieldset>
                     <label for="first_name">Nom</label>
-                    <input type="text" name="username" value="{{ usuari.user.first_name }}">
+                    <input type="text" name="first_name" value="{{ usuari.user.first_name }}">
                 </fieldset>
                 <fieldset>
                     <label for="bio">Bio</label>
