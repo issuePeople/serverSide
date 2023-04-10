@@ -77,7 +77,7 @@
                             <div class="created-by">
                                 <span>
                                     Created by
-                                    <a href="usuari/{{ issue.creador.user.first_name }}"> {{ issue.creador.user.first_name }}</a>
+                                    <a href="/usuaris/{{ issue.creador.user.id }}"> {{ issue.creador.user.first_name }}</a>
                                 </span>
                                 <div class="created-date">{{issue.dataModificacio}}</div>
                             </div>
@@ -158,56 +158,25 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        {% if "?mostrar=comments" in request.get_full_path %}
-                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
-                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
-                        {%else%}    
+                        {% if "?mostrar=activities" in request.get_full_path %}
                             <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
                             <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
+                        {%else%}    
+                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
+                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
                         {%endif%}
                     </nav>
                 
                 </section>
                 <!-- Comments Activites content -->
-                {% if "?mostrar=comments" in request.get_full_path %}
-                    <section class="comment" >
-                        <div style="display: flex; justify-content: space-between;">
-                            <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
-                            <button type="submit" name="afegir_comentari" style="background: none;">
-                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                            </button>
-                        </div>
-
-                        <div class="commmetns-wrapper">
-                            <ul>
-                                {%  for comentari in issue.comentaris.all %}
-                                    <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                            <img src="{{ comentari.autor.avatar.url }}"
-                                                width="60px"
-                                                height="60px"
-                                            >
-                                            <div>
-                                                <div style="display: flex; justify-content: space-between;">
-                                                    <a href="usuaris/comentari.autor.user.first_name" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
-                                                    <span>{{ comentari.data }}</span>
-                                                </div>
-                                                <span>{{ comentari.text }}</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </section>
-                {%else%}    
+                {% if "?mostrar=activities" in request.get_full_path %}
                     <section class="activities">
                         <div class="activities-wrapper">
                             <ul>
                                 {%  for log in issue.logs.all %}
                                     <li>
                                         <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                           
+                                        
                                             <div style="display: flex; justify-content: space-between; ">
                                                 <img src="{{ log.usuari.avatar.url }}"
                                                     width="60px"
@@ -230,7 +199,7 @@
                                             </div>
                                             <div>
                                                 <div style="display: flex; justify-content: space-between;">
-                                                    <a href="/usuaris/{{log.usuari.user.first_name}}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
+                                                    <a href="/usuaris/{{log.usuari.user.id}}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
                                                     <span>{{ log.data }}</span>
                                                 </div>
                                             </div>
@@ -239,10 +208,39 @@
                                 {% endfor %}
                             </ul>
                         </div>
+                    </section>    
+                {%else%}    
+                    <section class="comment" >
+                        <div style="display: flex; justify-content: space-between;">
+                            <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
+                            <button type="submit" name="afegir_comentari" style="background: none;">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <div class="commmetns-wrapper">
+                            <ul>
+                                {%  for comentari in issue.comentaris.all %}
+                                    <li>
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
+                                            <img src="{{ comentari.autor.avatar.url }}"
+                                                width="60px"
+                                                height="60px"
+                                            >
+                                            <div>
+                                                <div style="display: flex; justify-content: space-between;">
+                                                    <a href="/usuaris/{{comentari.autor.user.id}}" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
+                                                    <span>{{ comentari.data }}</span>
+                                                </div>
+                                                <span>{{ comentari.text }}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </section>
                 {%endif%}
-                
-
             </div>
         </div>
         <sidebar class="sidebar ticket-data">
@@ -327,7 +325,7 @@
                                         width="60px"
                                         height="60px"
                                     >
-                                    <a href="usuaris/{{ issue.assignacio.user.first_name }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
+                                    <a href="/usuaris/{{ issue.assignacio.user.id }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
                                     <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
@@ -370,7 +368,7 @@
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <a href="usuaris/{{ obs.user.first_name }}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
+                                            <a href="/usuaris/{{ obs.user.id }}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
