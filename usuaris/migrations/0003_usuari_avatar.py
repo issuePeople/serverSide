@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='usuari',
             name='avatar',
-            field=models.FileField(default='<img src="https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/default.png" height="50" width="50" />', upload_to='', verbose_name='Avatar'),
+            field=models.FileField(default='default.png', upload_to='', verbose_name='Avatar'),
         ),
     ]

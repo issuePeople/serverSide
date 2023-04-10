@@ -3,69 +3,112 @@
 
 {% block body %}
 
-<body class="vsc-initialized">
-    <nav class ="navbar" style>
-        <div class="nav-left">
-            <a href="/issues/list/" title="Homepage" class="logo">
-
-            </a>
-
-        </div>
-    </nav>
-
-
     <div class="profile centered" style="margin-left: 50px;">
         <section class="profile-bar">
             <div>
-                <img src="https://static9.depositphotos.com/1010305/1139/i/600/depositphotos_11390423-stock-photo-kitten-on-a-white-background.jpg"
+                <img src="{{ usuari.avatar.url }}"
                 width="200"
                 height="200">
             </div>
 
             <div class="profile-data">
                 <h1 class="not-full-name">
-                    <p>{{usuari.user}}Aqui deberia salir el usuario</p>
+                    <p>{{usuari.user}}</p>
                 </h1>
                 <div class="username">
-                    <p>@usuario</p>
+                    <p>@{{usuari.user}}</p>
+                    
                 </div>
-                <h2>Posicion</h2>
             </div>
             <div class="profile-stats">
                 <div class ="stat">
-                    <span class="stat-number">X</span>
-                    <span class="stat-name">
-                        Projectes
-                    </span>
-                </div>
-                <div class ="stat">
-                    <span class="stat-number">Y</span>
-                    <span class="stat-name">US tancats</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">Z</span>
-                    <span class="stat-name">Contactes</span>
                 </div>
             </div>
             <div class="profile-quote">
                 <span>
-                    Aqui sale la bio
                     {{usuari.bio}}
                 </span>
             </div>
         </section>
         <div class="main">
-            <p>
-                Hola buenas, timelineContent
-            </p>
+            <div>
+                <div class="taskboard-actions">
+                    <table style="width: 40%;border-collapse:separate; border-spacing: 0 5px;">
+                        <tr>
+                            <td>
+                                <th>
+                                    <a href="/usuaris/1/?mostrar=timeline">
+                                        <h1><i class="fa fa-align-justify"  aria-hidden="true" ></i> &nbsp Timeline &nbsp </h1>
+                                    </a>
+                                </th>
+                            </td>
+                            <td>
+                                <th>
+                                    <a href="/usuaris/1/?mostrar=watched">
+                                        <h1><i class="fa fa-eye" aria-hidden="true"></i> Watched</h1>
+                                    </a>
+                                </th>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <p style="color:darkgrey" >__________________________________________________________________________________________</p>
+                <!--Hacer bucle recorrriendo-->
+                {% if "?mostrar=watched" in request.get_full_path %}
+                <section class="watched">
+                    <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                        {% for observat in usuari.observats.all %}
+                            <tr >
+                                <td>
+                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.estat}}</p>
+                                    <p></p>
+                                    <p style="color:darkgrey">__________________________________________________________________________________________</p>
+                                </td> 
+                            </tr> 
+                        {% endfor %}
+                    </table>
+                </section>
+                {%else%}
+                <section class ="timeline">
+                    <div class="issue-page"style="width: 100%; ">
+                        <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                            {% for log in logs %}
+                                <tr class="row table-main">
+                                    <!--Ojo hardcoded-->
+                                    <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;"><a href="{% url 'usuari' 1 %}"> {{log.usuari.user}}</a>
+                                    {% if log.tipus == "CREAR" %}
+                                        ha creat l'
+                                    {% elif log.tipus == "ADD_ATT" %}
+                                        ha afegit el fitxer {{log.valor_nou}} al
+                                    {% elif log.tipus == "DEL_ATT" %}
+                                        ha esborrat el fitxer {{log.valor_antic}} al
+                                    {% elif log.tipus == "ADD_TAG" %}
+                                        ha afegit el tag {{log.valor_nou}} al
+                                    {% elif log.tipus == "DEL_TAG" %}
+                                        ha esborrat el tag {{log.valor_antic}} al
+                                    {% else %}
+                                        ha canviat l'atribut {{log.tipus}}  de {{log.valor_previ}} a {{log.valor_nou}} del
+                                    {%endif%}
+                                    issue <a href="{% url 'editar_issue' log.issue.id %}">#{{log.issue.id}} {{log.issue.subject}}</a></p>
+                                    <p style="color:darkgrey">{{log.data}}</p>
+                                    <p style="color:darkgrey">__________________________________________________________________________________________</p>
+                                </tr> 
+                            {% endfor %}
+                        </table>
+                    </div>
+                </section>  
+                {%endif%}
+            </div>
         </div>
-        <button class="btn-big edit-profile" style="height:60px;">
-            <a href="/issues">
-                <span>
-                    Editar bio
-                </span>
-            </a>
-        </button>
+        <div>
+            <button class="btn-big edit-profile" style="height:50px;">
+                <a href="/usuaris/perfil">
+                    <span>
+                        Editar bio
+                    </span>
+                </a>
+            </button>
+        </div>
     </div>
 </body>
 

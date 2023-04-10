@@ -6,6 +6,10 @@ from .models import Usuari
 
 
 class UsuariForm(UserChangeForm):
+    username = forms.CharField(max_length=150, required=False)
+    email = forms.EmailField(required=False)
+    first_name = forms.CharField(max_length=150, required=False)
+
     class Meta:
         model = Usuari
         fields = ('bio', 'avatar')

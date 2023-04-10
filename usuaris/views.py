@@ -48,9 +48,27 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            usuari = form.save(commit=False)
-            usuari.user = self.request.user
-            usuari.save()
+            if 'guardar_avatar' in request.POST:
+                usuari = self.get_object()
+                avatar = form.cleaned_data['avatar']
+                usuari.avatar = avatar
+                usuari.save()
+            elif 'guardar_avatar_defecte' in request.POST:
+                usuari = self.get_object()
+                usuari.avatar = settings.DEFAULT_AVATAR
+                usuari.save()
+            elif 'guardar_info' in request.POST:
+                usuari = self.get_object()
+                username = form.cleaned_data['username']
+                usuari.user.username = username
+                email = form.cleaned_data['email']
+                usuari.user.email = email
+                first_name = form.cleaned_data['first_name']
+                usuari.user.save()
+                usuari.user.first_name = first_name
+                bio = form.cleaned_data['bio']
+                usuari.bio = bio
+                usuari.save()
             return redirect(self.success_url)
         else:
             return self.form_invalid(form)
