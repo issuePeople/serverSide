@@ -188,18 +188,36 @@
                                                         <span>{{ log.data }}</span>
                                                     </div>
                                                 
-                                                    {% if log.tipus == "CREAR" %}
-                                                        <p style="margin-left: 5px;">ha creat l'</p>
-                                                    {% elif log.tipus == "ADD_ATT" %}
-                                                        <p style="margin-left: 5px;">Ha afegit el fitxer {{log.valor_nou}} al</p>
-                                                    {% elif log.tipus == "DEL_ATT" %}
-                                                        <p style="margin-left: 5px;">Ha esborrat el fitxer {{log.valor_antic}} al</p>
-                                                    {% elif log.tipus == "ADD_TAG" %}
-                                                        <p style="margin-left: 5px;">Ha afegit el tag {{log.valor_nou}} al</p>
-                                                    {% elif log.tipus == "DEL_TAG" %}
-                                                        <p style="margin-left: 5px;">Ha esborrat el tag {{log.valor_antic}} al</p>
+                                                    {% if log.tipus == "Creada" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Creada: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{issue.creador.user.first_name}}</span>
+                                                        </div>
+                                                    {% elif log.tipus == "Nou attachment" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">New attachment: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_nou}}</span>    
+                                                        </div>
+                                                    {% elif log.tipus == "Attachment esborrat" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Deleted attachment: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_antic}}</span>    
+                                                        </div>
+                                                    {% elif log.tipus == "Tag afegida" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Tags added: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_nou}}</span>    
+                                                        </div>
+                                                    {% elif log.tipus == "Tag esborrada" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Tags removed: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_antic}}</span>    
+                                                        </div>
                                                     {% else %}
-                                                        <p style="margin-left: 5px;">Ha canviat l'atribut {{log.tipus}}  de {{log.valor_previ}} a {{log.valor_nou}} del</p>
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">{{log.tipus}}: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_previ}} > {{log.valor_nou}}</span>    
+                                                        </div>
                                                     {%endif%}
                                                 </div>
                                             </div>
