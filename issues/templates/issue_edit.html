@@ -9,6 +9,7 @@
             <!-- issue info container  -->
             <div class="detail-header-container">
                 <!-- Per passar al segunet o anterior issue -->
+                <!--
                 <div class="detail-nav">
                     {% with issue_count=issues.count issue_id=issue.id %}
                         {% if issue_count|add:-1 > issue_id %}
@@ -21,6 +22,7 @@
                         {% endif %}
                     {% endwith %}
                 </div>
+                -->
 
                 <div class="detail-header">
                     <!-- Titol issue-->
@@ -63,9 +65,9 @@
                                 </button> 
 
                                 <div id="addTag" style="display: none;">
-                                    <input name="nom" type="text" placeholder="Enter tag" >
+                                    <input id="inputAddTag" name="nom" type="text" placeholder="Enter tag" >
                                     <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
-                                    <button type="submit" name="afegir_tag" style="background: none;">
+                                    <button id="saveTag" type="submit" name="afegir_tag" style="background: none;">
                                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     </button>
                                 </div>
@@ -346,7 +348,13 @@
                             <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
                                 + Add assigned
                             </button>
-                            <button type="submit" name="autoassignar" class="ticket-users-actions">Assign to me</button>
+                            <button type="submit" name="autoassignar" class="ticket-users-actions">
+                                {% if ets_assignat  %}
+                                    Dont assign to me
+                                {% else %}
+                                    Assign to me
+                                {% endif %}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -391,7 +399,7 @@
                             </button>
                             <button type="submit" name="autoobservar" class="ticket-users-actions">
                                 {% if ets_observador %}
-                                    Unwatch???
+                                    Unwatch
                                 {% else %}
                                     Watch
                                 {% endif %}
@@ -521,6 +529,8 @@
 
     var addTagBtn = document.getElementById('addTagBtn');
     var myDiv = document.getElementById('addTag');
+    var inputAddTag = document.getElementById('inputAddTag');
+    var saveTag = document.getElementById('saveTag');
     addTagBtn.addEventListener('click', function() {
         event.preventDefault();
         if (myDiv.style.display === 'none') {
@@ -531,6 +541,11 @@
             myDiv.style.display = 'none';
         }
     });
+    inputAddTag.addEventListener('keypress', function(e){
+        if (e.key === 'Enter') {
+            saveTag.click();
+        }
+    })
 
     const selectStatus = document.querySelector('#selectStatus');
     var btnSaveStat = document.getElementById('btnSaveState');
@@ -565,10 +580,6 @@
         datePickerInput.style.display = 'block';
         btnSaveDateDirect.style.display = 'block';
     });
-    datePickerInput.addEventListener('blur', () => {
-        event.preventDefault();
-        btnSaveDate.click();
-    });
 
     var btnBloqueig = document.getElementById('btnBloqueig');
     var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
@@ -579,11 +590,12 @@
         inputMotiuBloqueig.style.display = 'block';
         btnSaveBloqueigDirect.style.display = 'block';
     })
+    /*
     inputMotiuBloqueig.addEventListener('blur', function() {
         event.preventDefault();
         btnSaveMotiuBloqueig.click();
     });
-    
+    */
 
 </script>
 
