@@ -40,9 +40,9 @@
                             <div style="display: flex; justify-content: space-between;">
                                 
                                 {% for tag in issue.tags.all %}
-                                    <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
-                                        <span  style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
-                                        <a href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
+                                    <div class="tag" style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                        <span   style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
+                                        <a class="icon-close"  href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
                                     </div>

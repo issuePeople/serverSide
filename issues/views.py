@@ -26,6 +26,7 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
             'tags': Tag.objects.all(),
         })
         return context
+        
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -450,3 +451,4 @@ class EsborrarObservadorIssue(IsAuthenticatedMixin, View):
         issue.save()
 
         return redirect(request.META.get('HTTP_REFERER'))
+
