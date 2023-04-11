@@ -8,21 +8,6 @@
         <div class="main detail">
             <!-- issue info container  -->
             <div class="detail-header-container">
-                <!-- Per passar al segunet o anterior issue -->
-                <!--
-                <div class="detail-nav">
-                    {% with issue_count=issues.count issue_id=issue.id %}
-                        {% if issue_count|add:-1 > issue_id %}
-                            <a title="Next" href="/issues/{{ issue_id|add:1 }}/edit"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% elif issue_id >= issue_count %}
-                            <a title="Previous" href="/issues/{{ issue_id|add:-1 }}/edit"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-                        {% else %}
-                            <a title="Previous" href="/issues/{{ issue_id|add:-1 }}/edit"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-                            <a title="Next" href="/issues/{{ issue_id|add:1 }}/edit"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-                    {% endwith %}
-                </div>
-                -->
 
                 <div class="detail-header">
                     <!-- Titol issue-->
@@ -40,6 +25,17 @@
                     <div class="detail-project">
                         <div class="section-name">Issue</div>
                     </div>
+                    {% if issue.motiuBloqueig %}
+                        <div class="detail-header-line block-desc-container">
+                            <span class="blocked-sign" style="color: white">
+                                <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                Blocked
+                            </span>
+                            <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                {{issue.motiuBloqueig}}
+                            </span>
+                        </div>    
+                    {%endif%}
                     <!-- Action buttons-->
                     <div class="action-buttons"></div>
                     <div class="subheader">
@@ -445,7 +441,7 @@
 
                     <!-- Bloqueig  -->
                     <div>
-                        {% if issue.motiuBloqueig %}
+                        {% if issue.bloquejat %}
                             <button type="submit" name="esborrar_bloquejat" style="background: red; margin-left: 5px;">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
                             </button>
