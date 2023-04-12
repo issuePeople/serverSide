@@ -13,10 +13,10 @@
 
             <div class="profile-data">
                 <h1 class="not-full-name">
-                    <p>{{usuari.user}}</p>
+                    <p>{{usuari.user.username}}</p>
                 </h1>
                 <div class="username">
-                    <p>@{{usuari.user}}</p>
+                    <p>@{{usuari.user.username}}</p>
                     
                 </div>
             </div>
@@ -103,7 +103,7 @@
                                     {% if log.tipus == "Creada" %}
                                         ha creat l'
                                     {% elif log.tipus == 'Nou attachment' %}
-                                        ha afegit el fitxer <a href="{{ log.valor_nou.document.url }}">{{log.valor_nou}}</a> al
+                                        ha afegit el fitxer <a>{{log.valor_nou}}</a> al
                                     {% elif log.tipus == "Attachment esborrat" %}
                                         ha esborrat el fitxer {{log.valor_antic}} al
                                     {% elif log.tipus == "Tag afegida" %}
