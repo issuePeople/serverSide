@@ -4,6 +4,8 @@ from django.views.generic.base import View
 from django_filters.views import FilterView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
+import locale
+from datetime import datetime
 from issuePeople.mixins import IsAuthenticatedMixin
 from .models import Issue, Tag, Attachment, Log, Comentari
 from .forms import IssueForm, IssueBulkForm, AttachmentForm, ComentariForm, TagForm
@@ -216,25 +218,26 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             elif 'guardar_dataLimit' in request.POST:
                 issue = self.get_object()
                 dataLimit = form.cleaned_data['dataLimit']
-                log = Log(
+                locale.setlocale(locale.LC_TIME, 'ca_ES.UTF-8')
+                Log.objects.create(
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.LIMIT,
-                    valor_previ=str(issue.dataLimit),
-                    valor_nou=str(dataLimit)
+                    valor_previ="Sense definir",
+                    valor_nou=dataLimit.strftime("%d %b. %Y")
                 )
-                log.save()
                 issue.dataLimit = dataLimit
                 issue.save()
             elif 'esborrar_dataLimit' in request.POST:
                 issue = self.get_object()
                 dataLimit = None
+                locale.setlocale(locale.LC_TIME, 'ca_ES.UTF-8')
                 log = Log(
                     issue=issue,
                     usuari=Usuari.objects.get(user=self.request.user),
                     tipus=Log.LIMIT,
-                    valor_previ=str(issue.dataLimit),
-                    valor_nou=str(dataLimit)
+                    valor_previ=issue.dataLimit.strftime("%d %b. %Y"),
+                    valor_nou="Sense definir"
                 )
                 log.save()
                 issue.dataLimit = dataLimit
