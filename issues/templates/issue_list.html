@@ -302,7 +302,7 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_gravetat">
                                             <div>
                                                 {%for key,value in TGravetat%}
-                                                {%if request.GET.gravetat == 'none' and key not in request.GET.gravetat%}
+                                                {%if key not in request.GET.gravetat%}
                                                 <p>{{request.GET.gravetat}}</p>
                                                     {%if key == 'D'%}
                                                         <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143); width:100%">
@@ -343,7 +343,7 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_prioritat">
                                             <div>
                                                 {%for key,value in TPrioritat%}
-                                                {%if key  not in request.GET.prioritat%}
+                                                {%if ke not in request.GET.prioritat%}
                                                 {%if key == 'B'%}
                                                         <button class="single-filter single-filter-type-general"style="border-color: rgb(168, 228, 64); width:100%">
                                                 {%elif key == 'M'%}
@@ -556,20 +556,20 @@
                                     <span class="first-letter">Prioritat</span>
                                 </div>
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <a href="?order_by=prioritat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                    <div class="name" onclick="ordernar('d','prioritat')">
                                         {%if "=prioritat" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-up" aria-hidden="true"></i>
                                         {%endif%}
-                                    </a>
-                                    <a href="?order_by=-prioritat" class="name">
+                                    </div>
+                                    <div  class="name" onclick="ordenar('up','prioritat')">
                                         {%if "=-prioritat" in request.get_full_path%}
                                             <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                                         {%endif%}
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                             </td>
