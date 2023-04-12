@@ -25,7 +25,8 @@ class VeureUsuariView(IsAuthenticatedMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context.update({
             'logs': Log.objects.filter(usuari=self.get_object()).order_by('-data'),
-            'logo_url': settings.LOGO_PNG_URL
+            'logo_url': settings.LOGO_PNG_URL,
+            'usuaris': Usuari.objects.all()
         })
         return context
 
@@ -39,7 +40,10 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'logo_url': settings.LOGO_PNG_URL})
+        context.update({
+            'logo_url': settings.LOGO_PNG_URL,
+            'usuaris': Usuari.objects.all()
+        })
         return context
 
     def get_object(self, queryset=None):

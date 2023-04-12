@@ -8,19 +8,6 @@
         <div class="main detail">
             <!-- issue info container  -->
             <div class="detail-header-container">
-                <!-- Per passar al segunet o anterior issue -->
-                <div class="detail-nav">
-                    {% with issue_count=issues.count issue_id=issue.id %}
-                        {% if issue_count|add:-1 > issue_id %}
-                            <a title="Next" href="/issues/{{ issue_id|add:1 }}/edit"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% elif issue_id >= issue_count %}
-                            <a title="Previous" href="/issues/{{ issue_id|add:-1 }}/edit"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-                        {% else %}
-                            <a title="Previous" href="/issues/{{ issue_id|add:-1 }}/edit"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-                            <a title="Next" href="/issues/{{ issue_id|add:1 }}/edit"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-                    {% endwith %}
-                </div>
 
                 <div class="detail-header">
                     <!-- Titol issue-->
@@ -38,6 +25,19 @@
                     <div class="detail-project">
                         <div class="section-name">Issue</div>
                     </div>
+                    {% if issue.bloquejat %}
+                        <div class="detail-header-line block-desc-container">
+                            <span class="blocked-sign" style="color: white">
+                                <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                Blocked
+                            </span>
+                            <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                {% if issue.motiuBloqueig %}
+                                    {{issue.motiuBloqueig}}
+                                {% endif %}
+                            </span>
+                        </div>    
+                    {%endif%}
                     <!-- Action buttons-->
                     <div class="action-buttons"></div>
                     <div class="subheader">
@@ -49,7 +49,7 @@
                             <div style="display: flex; justify-content: space-between;">
                                 
                                 {% for tag in issue.tags.all %}
-                                    <div style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                    <div class="tag" style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
                                         <span  style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
                                         <a href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
                                             <i class="fa fa-times" aria-hidden="true"></i>
@@ -63,9 +63,9 @@
                                 </button> 
 
                                 <div id="addTag" style="display: none;">
-                                    <input name="nom" type="text" placeholder="Enter tag" >
+                                    <input id="inputAddTag" name="nom" type="text" placeholder="Enter tag" >
                                     <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
-                                    <button type="submit" name="afegir_tag" style="background: none;">
+                                    <button id="saveTag" type="submit" name="afegir_tag" style="background: none;">
                                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     </button>
                                 </div>
@@ -77,7 +77,7 @@
                             <div class="created-by">
                                 <span>
                                     Created by
-                                    <a href="{% url 'usuari' issue.creador.user.id %}"> {{ issue.creador.user.first_name }}</a>
+                                    <a href="/usuaris/{{ issue.creador.user.id }}"> {{ issue.creador.user.first_name }}</a>
                                 </span>
                                 <div class="created-date">{{issue.dataModificacio}}</div>
                             </div>
@@ -156,80 +156,101 @@
                 <!-- Comments Activites header -->
                 <section class="history">
                     <nav class="history-tabs">
-                        {% if "?mostrar=comments" in request.get_full_path %}
-                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
-                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
-                        {%else%}    
+                        {% if "?mostrar=activities" in request.get_full_path %}
                             <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
                             <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
+                        {%else%}    
+                            <a class="history-tab active" href="/issues/{{issue.id}}/edit/?mostrar=comments">{{issue.comentaris.all.count}} Comments</a>
+                            <a class="history-tab " href="/issues/{{issue.id}}/edit/?mostrar=activities">{{issue.logs.all.count}} Activites</a>
                         {%endif%}
                     </nav>
                 
                 </section>
                 <!-- Comments Activites content -->
-                {% if "?mostrar=comments" in request.get_full_path %}
-                    <section class="comment" >
-                        <div style="display: flex; justify-content: space-between;">
-                            <input type="text" name="text" style="margin-top: 5px; margin-bottom: 5px;">
-                            <button type="submit" name="afegir_comentari" style="background: none;">
-                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                            </button>
-                        </div>
-
-                        <div class="commmetns-wrapper">
-                            <ul>
-                                {%  for comentari in issue.comentaris.all %}
-                                    <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                            <img src="{{ comentari.autor.avatar.url }}"
-                                                width="60px"
-                                                height="60px"
-                                            >
-                                            <div>
-                                                <div style="display: flex; justify-content: space-between;">
-                                                    <a href="{% url 'usuari' comentari.autor.user.id %}" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
-                                                    <span>{{ comentari.data }}</span>
-                                                </div>
-                                                <span>{{ comentari.text }}</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </section>
-                {%else%}    
+                {% if "?mostrar=activities" in request.get_full_path %}
                     <section class="activities">
                         <div class="activities-wrapper">
                             <ul>
                                 {%  for log in issue.logs.all %}
                                     <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                           
-                                            <div style="display: flex; justify-content: space-between; ">
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px; border-bottom: 0.5px solid grey;">
+                                        
+                                            <div style="display: flex; justify-content: space-between; margin-top: 10px; margin-bottom: 20px;">
                                                 <img src="{{ log.usuari.avatar.url }}"
                                                     width="60px"
                                                     height="60px"
                                                 >
-
-                                                {% if log.tipus == "CREAR" %}
-                                                    <p style="margin-left: 5px;">ha creat l'</p>
-                                                {% elif log.tipus == "ADD_ATT" %}
-                                                    <p style="margin-left: 5px;">Ha afegit el fitxer {{log.valor_nou}} al</p>
-                                                {% elif log.tipus == "DEL_ATT" %}
-                                                    <p style="margin-left: 5px;">Ha esborrat el fitxer {{log.valor_antic}} al</p>
-                                                {% elif log.tipus == "ADD_TAG" %}
-                                                    <p style="margin-left: 5px;">Ha afegit el tag {{log.valor_nou}} al</p>
-                                                {% elif log.tipus == "DEL_TAG" %}
-                                                    <p style="margin-left: 5px;">Ha esborrat el tag {{log.valor_antic}} al</p>
-                                                {% else %}
-                                                    <p style="margin-left: 5px;">Ha canviat l'atribut {{log.tipus}}  de {{log.valor_previ}} a {{log.valor_nou}} del</p>
-                                                {%endif%}
+                                                <div style="margin-left: 10px">
+                                                    <div style="display: flex; margin-left: 5px;">
+                                                        <a href="/usuaris/{{log.usuari.user.id}}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
+                                                        <span>{{ log.data }}</span>
+                                                    </div>
+                                                
+                                                    {% if log.tipus == "Creada" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Creada: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{issue.creador.user.first_name}}</span>
+                                                        </div>
+                                                    {% elif log.tipus == "Nou attachment" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">New attachment: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_nou}}</span>    
+                                                        </div>
+                                                    {% elif log.tipus == "Attachment esborrat" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Deleted attachment: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_antic}}</span>    
+                                                        </div>
+                                                    {% elif log.tipus == "Tag afegida" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Tags added: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_nou}}</span>    
+                                                        </div>
+                                                    {% elif log.tipus == "Tag esborrada" %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Tags removed: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_antic}}</span>    
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="diff-status-wrapper" style="margin-top: 20px;">
+                                                            <span style="background-color: #e2e3e9; font-weight: bold;" class="key">{{log.tipus}}: </span>
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_previ}} > {{log.valor_nou}}</span>    
+                                                        </div>
+                                                    {%endif%}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <div style="display: flex; justify-content: space-between;">
-                                                    <a href="{% url 'usuari' log.usuari.user.id %}" style="margin-right: 5px;" class="comment-creator">{{ log.usuari.user.first_name }}</a>
-                                                    <span>{{ log.data }}</span>
+                                            
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </section>    
+                {%else%}    
+                    <section class="comment" >
+                        <div style="display: flex; justify-content: space-between;">
+                            <textarea name="text" placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
+                            <button type="submit" name="afegir_comentari" style="background: none;">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <div >
+                            <ul>
+                                {%  for comentari in issue.comentaris.all %}
+                                    <li>
+                                        <div style="border-bottom: 0.5px solid grey;">
+                                            <div style="display: flex; margin-left: 5px; margin-right: 5px; margin-top: 10px; margin-bottom: 20px;">
+                                                <img src="{{ comentari.autor.avatar.url }}"
+                                                    width="60px"
+                                                    height="60px"
+                                                >
+                                                <div style="margin-left: 10px;">
+                                                    <div style="display: flex; justify-content: space-between;">
+                                                        <a href="/usuaris/{{comentari.autor.user.id}}" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.user.first_name }}</a>
+                                                        <span>{{ comentari.data }}</span>
+                                                    </div>
+                                                    <span>{{ comentari.text }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,8 +260,6 @@
                         </div>
                     </section>
                 {%endif%}
-                
-
             </div>
         </div>
         <sidebar class="sidebar ticket-data">
@@ -325,7 +344,7 @@
                                         width="60px"
                                         height="60px"
                                     >
-                                    <a href="{% url 'usuari' issue.assignacio.user.id %}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
+                                    <a href="/usuaris/{{ issue.assignacio.user.id }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
                                     <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
@@ -334,19 +353,27 @@
 
                         </div>
                         <!-- selector d'assignacio -->
-                        <div>
-                            <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none;">
-                                {% for assig in possibles_assignats %}
-                                    <option value="{{assig.user.id}}">{{assig.user.username}}</option>
-                                {% endfor %}
-                            </select>
-                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
-                        </div>
+                        
                         <div class="ticket-users-actions">
+                            <div>
+                                <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                    <option>+ Add assigned</option>
+                                    {% for assig in possibles_assignats %}
+                                        <option value="{{assig.user.id}}">{{assig.user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
+                            </div>
                             <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
                                 + Add assigned
                             </button>
-                            <button type="submit" name="autoassignar" class="ticket-users-actions">Assign to me</button>
+                            <button type="submit" name="autoassignar" class="ticket-users-actions" style="margin-left: 5px;">
+                                {% if ets_assignat  %}
+                                    Dont assign to me
+                                {% else %}
+                                    Assign to me
+                                {% endif %}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -363,12 +390,12 @@
                             <ul>
                                 {%  for obs in issue.observadors.all %}
                                     <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
                                             <img src="{{ obs.avatar.url }}"
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <a href="{% url 'usuari' obs.user.id %}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
+                                            <a href="/usuaris/{{ obs.user.id }}" style="margin-right: 120px; margin-top: 20px;">{{ obs.user.first_name }}</a>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
@@ -377,21 +404,23 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div>
-                            <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none;">
-                                {% for obs in possibles_observadors %}
-                                    <option value="{{obs.user.id}}">{{obs.user.username}}</option>
-                                {% endfor %}
-                            </select>
-                            <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
-                        </div>
+                        
                         <div class="ticket-users-actions">
+                            <div>
+                                <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                    <option>+ Add watchers</option>
+                                    {% for obs in possibles_observadors %}
+                                        <option value="{{obs.user.id}}">{{obs.user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
+                            </div>
                             <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
                                 + Add watchers
                             </button>
-                            <button type="submit" name="autoobservar" class="ticket-users-actions">
+                            <button type="submit" name="autoobservar" class="ticket-users-actions" style="margin-left: 5px;">
                                 {% if ets_observador %}
-                                    Unwatch???
+                                    Unwatch
                                 {% else %}
                                     Watch
                                 {% endif %}
@@ -418,7 +447,7 @@
 
                     <!-- Bloqueig  -->
                     <div>
-                        {% if issue.motiuBloqueig %}
+                        {% if issue.bloquejat %}
                             <button type="submit" name="esborrar_bloquejat" style="background: red; margin-left: 5px;">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
                             </button>
@@ -443,7 +472,6 @@
                     id="datePickerInput" 
                     name="dataLimit"
                     style="display: none;"
-                    value="{{issue.dataLimit}}"
                 >
                 <button id="btnSaveDateDirect" type="submit" name="guardar_dataLimit" style="display: none;">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
@@ -480,6 +508,7 @@
         event.preventDefault();
         if (selectObs.style.display === 'none') {
             selectObs.style.display = 'flex';
+            addObserver.style.display = 'none';
         }
         else {
             selectObs.style.display = 'none';
@@ -496,12 +525,12 @@
         event.preventDefault();
         if (selectAssig.style.display === 'none') {
             selectAssig.style.display = 'flex';
+            addAssigned.style.display = 'none';
         }
         else {
             selectAssig.style.display = 'none';
         }
     })
-
     selectAssig.addEventListener('change', function() {
         btnSaveAssig.click();
     });
@@ -520,6 +549,8 @@
 
     var addTagBtn = document.getElementById('addTagBtn');
     var myDiv = document.getElementById('addTag');
+    var inputAddTag = document.getElementById('inputAddTag');
+    var saveTag = document.getElementById('saveTag');
     addTagBtn.addEventListener('click', function() {
         event.preventDefault();
         if (myDiv.style.display === 'none') {
@@ -530,6 +561,12 @@
             myDiv.style.display = 'none';
         }
     });
+    inputAddTag.addEventListener('keypress', function(e){
+        if (e.key === 'Enter') {
+            event.preventDefault();
+            saveTag.click();
+        }
+    })
 
     const selectStatus = document.querySelector('#selectStatus');
     var btnSaveStat = document.getElementById('btnSaveState');
@@ -564,10 +601,12 @@
         datePickerInput.style.display = 'block';
         btnSaveDateDirect.style.display = 'block';
     });
-    datePickerInput.addEventListener('blur', () => {
-        event.preventDefault();
-        btnSaveDate.click();
-    });
+    datePickerInput.addEventListener('keypress', function(e){
+        if (e.key === 'Enter') {
+            event.preventDefault();
+            btnSaveDateDirect.click();
+        }
+    })
 
     var btnBloqueig = document.getElementById('btnBloqueig');
     var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
@@ -578,11 +617,17 @@
         inputMotiuBloqueig.style.display = 'block';
         btnSaveBloqueigDirect.style.display = 'block';
     })
-    inputMotiuBloqueig.addEventListener('blur', function() {
-        event.preventDefault();
-        btnSaveMotiuBloqueig.click();
-    });
-    
+    btnSaveBloqueigDirect.addEventListener('click', function() {
+        if (inputMotiuBloqueig.nodeValue == null) {
+            inputMotiuBloqueig = '""';
+        }
+    })
+    inputMotiuBloqueig.addEventListener('keypress', function(e){
+        if (e.key === 'Enter') {
+            event.preventDefault();
+            btnSaveMotiuBloqueig.click();
+        }
+    })
 
 </script>
 
