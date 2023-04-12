@@ -404,20 +404,21 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div>
-                            <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none;">
-                                <option>+ Add watchers</option>
-                                {% for obs in possibles_observadors %}
-                                    <option value="{{obs.user.id}}">{{obs.user.username}}</option>
-                                {% endfor %}
-                            </select>
-                            <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
-                        </div>
+                        
                         <div class="ticket-users-actions">
+                            <div>
+                                <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                    <option>+ Add watchers</option>
+                                    {% for obs in possibles_observadors %}
+                                        <option value="{{obs.user.id}}">{{obs.user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
+                            </div>
                             <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
                                 + Add watchers
                             </button>
-                            <button type="submit" name="autoobservar" class="ticket-users-actions">
+                            <button type="submit" name="autoobservar" class="ticket-users-actions" style="margin-left: 5px;">
                                 {% if ets_observador %}
                                     Unwatch
                                 {% else %}
@@ -507,6 +508,7 @@
         event.preventDefault();
         if (selectObs.style.display === 'none') {
             selectObs.style.display = 'flex';
+            addObserver.style.display = 'none';
         }
         else {
             selectObs.style.display = 'none';
