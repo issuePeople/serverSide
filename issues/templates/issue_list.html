@@ -266,6 +266,7 @@
                                         <div class="filter-list" style="display:none"  name="tanca"  id="filtre_tipus" style="display:flex ; flex-direction: column";>
                                             <div>
                                                 {%for key,value in TTipus%}
+                                                {%if  request.GET.tipus is null or key not in request.GET.tipus%}
                                                     {%if key == 'B'%}
                                                         <button class="single-filter single-filter-type-general"style="border-color: rgb(228, 64, 87); width:100%">
                                                     {%elif key == 'P'%}
@@ -278,6 +279,7 @@
                                                     
                                                     <span class="number"></span>
                                                     </button>
+                                                    {%endif%}
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -302,8 +304,8 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_gravetat">
                                             <div>
                                                 {%for key,value in TGravetat%}
-                                                {%if key not in request.GET.gravetat%}
-                                                <p>{{request.GET.gravetat}}</p>
+                                                {%if  request.GET.gravetat is null or key not in request.GET.gravetat%}
+                                                
                                                     {%if key == 'D'%}
                                                         <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143); width:100%">
                                                     {%elif key == 'M'%}
@@ -343,7 +345,7 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_prioritat">
                                             <div>
                                                 {%for key,value in TPrioritat%}
-                                                {%if ke not in request.GET.prioritat%}
+                                                {%if request.GET.prioritat is null or key not in request.GET.prioritat%}
                                                 {%if key == 'B'%}
                                                         <button class="single-filter single-filter-type-general"style="border-color: rgb(168, 228, 64); width:100%">
                                                 {%elif key == 'M'%}
@@ -378,6 +380,7 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_estat">
                                             <div>
                                                 {%for key,value in TEstats%}
+                                                {%if request.GET.estat is null or key not in request.GET.estat%}
                                                     {%if key == 'N'%}
                                                         <button class="single-filter single-filter-type-general"style="border-color: rgb(112, 114, 143);; width:100%">
                                                     {%elif key == 'D'%}
@@ -395,6 +398,7 @@
                                                     {%endif%}
                                                     <div onclick="filtre_llista('estat=','{{key}}')" class="name">{{value}}</div>
                                                     </button>
+                                                    {%endif%}
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -419,10 +423,12 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_assignat">
                                             <div>
                                                 {%for usuari in usuaris%}
+                                                {%if request.GET.assignat is null or usuari.user.username not in request.GET.assignat%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
                                                     <div onclick="filtre_llista('assignat=','{{usuari.user.username}}')" class="name">{{usuari.user.username}}</div>
                                                     
                                                 </button>
+                                                {%endif%}
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -448,10 +454,12 @@
                                             <div>
                                                 {%for issue in issues%}
                                                 {%for tag in issue.tags.all%}
+                                                {%if request.GET.tags is null or tag.nom not in request.GET.tags%}
                                                 <button class="single-filter single-filter-type-general" style="background-color: {{tag.color}};">
                                                     <div onclick="filtre_llista('tags=','{{tag.nom}}')" class="name">{{tag.nom}}</div>
                                                     
                                                 </button>
+                                                {%endif%}
                                                 {%endfor%}
                                                 {%endfor%}
                                             </div>
@@ -477,10 +485,12 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
                                             <div>
                                                 {%for usuari in usuaris%}
+                                                {%if request.GET.creat is null or usuari.user.id not in request.GET.creat%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
                                                     <div onclick="filtre_llista('creat=','{{usuari.user.id}}')" class="name">{{usuari.user.username}}</div>
                                                     
                                                 </button>
+                                                {%endif%}
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -771,9 +781,11 @@
                                     <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="assigned-button" style="margin-top: 5px; border:none; outline:none;background: none;">
                                         <option value="0">no avatar</option>
                                         {% for usuari in usuaris %}
-                                            
+                                        {% if issue.assignat.user.id == usuari.user.id %}
+                                            <option selected="selected" value="{{usuari.user.id}}">{{usuari.user.username}}</option>
+                                        {%else%}
                                                 <option value="{{usuari.user.id}}">{{usuari.user.username}}</option>
-                                            
+                                        {%endif%}
                                         {% endfor %}
                                     </select>
                                     <button id="btnSaveAssig{{issue.id}}" type="submit"  name="guardar_assignat" style="display: none;"></button>
