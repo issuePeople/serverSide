@@ -25,14 +25,16 @@
                     <div class="detail-project">
                         <div class="section-name">Issue</div>
                     </div>
-                    {% if issue.motiuBloqueig %}
+                    {% if issue.bloquejat %}
                         <div class="detail-header-line block-desc-container">
                             <span class="blocked-sign" style="color: white">
                                 <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
                                 Blocked
                             </span>
                             <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
-                                {{issue.motiuBloqueig}}
+                                {% if issue.motiuBloqueig != 'None' %}
+                                    {{issue.motiuBloqueig}}
+                                {% endif %}
                             </span>
                         </div>    
                     {%endif%}
@@ -604,6 +606,11 @@
         event.preventDefault();
         inputMotiuBloqueig.style.display = 'block';
         btnSaveBloqueigDirect.style.display = 'block';
+    })
+    btnSaveBloqueigDirect.addEventListener('click', function() {
+        if (inputMotiuBloqueig.nodeValue == null) {
+            inputMotiuBloqueig = '""';
+        }
     })
     /*
     inputMotiuBloqueig.addEventListener('blur', function() {
