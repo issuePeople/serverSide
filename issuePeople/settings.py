@@ -170,7 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Google login
 AUTHENTICATION_BACKENDS = [
-    'issuePeople.backends.CustomModelBackend',
+    'issuePeople.backends.CustomSocialAccountAdapter',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
@@ -185,3 +185,5 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+SOCIALACCOUNT_ADAPTER = 'issuePeople.backends.CustomSocialAccountAdapter'
