@@ -6,7 +6,7 @@
             <i class="fa fa-times" aria-hidden="true"></i>
         </a>
         <div> 
-            <form method="post" >
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h2 class="title">New issue</h2>
                 
@@ -89,6 +89,7 @@
                                         <button id="btnTimeLine" >
                                             <i style="width: 10px; height:10px" class="fa fa-clock-o" aria-hidden="true"></i>
                                         </button>
+                                        <input id="inputBloquejat" type="hidden" name="bloquejat" value="False"/>
                                         <button id="btnBloqueig" style="margin-left: 5px;">
                                             <i class="fa fa-lock" aria-hidden="true"></i>
                                         </button>
@@ -109,6 +110,7 @@
                                         id="inputMotiuBloqueig" 
                                         name="motiuBloqueig"
                                         style="display: none;"
+                                        placeholder="Motiu bloqueig"
                                     >
                                 </div>
                             </div>
@@ -133,14 +135,27 @@
         var datePickerInput = document.getElementById('datePickerInput');
         btnTimeLine.addEventListener('click', () => {
             event.preventDefault();
-            datePickerInput.style.display = 'block';
+            if (datePickerInput.style.display === 'none') {
+                datePickerInput.style.display = 'block';
+            } else {
+                datePickerInput.style.display = 'none';
+            }
         });
 
         var btnBloqueig = document.getElementById('btnBloqueig');
+        var inputBloquejat = document.getElementById('inputBloquejat');
         var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
         btnBloqueig.addEventListener('click', () => {
             event.preventDefault();
-            inputMotiuBloqueig.style.display = 'block';
+            if (inputBloquejat.value === 'False') {
+                inputBloquejat.value = 'True';
+                inputMotiuBloqueig.style.display = 'block';
+                btnBloqueig.style.background = 'red';
+            } else {
+                inputBloquejat.value = 'False'
+                inputMotiuBloqueig.style.display = 'none';
+                btnBloqueig.style.background = '';
+            }
         });
 
     </script>
