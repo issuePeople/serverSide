@@ -113,13 +113,17 @@
                                             
                                             
                                             {%for usuari in usuaris%}
-                                            {% if usuari.user.id in request.GET.assignat %}
+                                            {%with usuari.user.id|stringformat:"s" as id%}
+                                            {%if id in request.GET.assignat %}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                               
                                                     <div class="name">{{usuari.user.username}}</div>
                                                     <button onclick="modif_url('assignat','{{usuari.user.id}}','2')" class="name" >X</button>
                                                     
                                             </div>
+                                            
                                             {%endif%}
+                                            {%endwith%}
                                             {%endfor%}
                                             
                                             {%for issue in issues%}
@@ -135,13 +139,15 @@
                                             {%endfor%}
                                             
                                             {%for usuari in usuaris%}
-                                            {% if usuari.user.id in request.GET.creat %}
+                                            {%with usuari.user.id|stringformat:"s" as id%}
+                                            {% if id in request.GET.creat %}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{usuari.user.username}}</div>
                                                     <button onclick="modif_url('creat','{{usuari.user.id}}','2')" class="name" >X</button>
                                                     
                                             </div>
                                             {%endif%}
+                                            {%endwith%}
                                             {%endfor%}
                                             
                                         </div>
@@ -177,8 +183,8 @@
                                                     {%else%} 
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)">
                                                     {%endif%} 
-                                                    
-                                                        <div onclick="filtre_llista('tipus=','{{key}}')" class="name">{{value}}</div>
+                                                            
+                                                        <div onclick="modif_url('tipus','{{key}}','1')" class="name">{{value}}</div>
                                                     
                                                     <span class="number"></span>
                                                     </button>
@@ -221,7 +227,7 @@
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(211, 84, 80);">
                                                     {%endif%} 
                                                     
-                                                    <div onclick="filtre_llista('gravetat=','{{key}}')" class="name">{{value}}</div>
+                                                    <div onclick="modif_url('gravetat','{{key}}','1')" class="name">{{value}}</div>
                                                     </button>
                                                     {%endif%}
                                                 {%endfor%}  
@@ -256,7 +262,7 @@
                                                 {%else%} 
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64);">
                                                 {%endif%} 
-                                                    <div onclick="filtre_llista('prioritat=','{{key}}')" class="name">{{value}}</div>
+                                                    <div onclick="modif_url('prioritat','{{key}}','1')" class="name">{{value}}</div>
                                                     </button>
                                                 {%endif%}
                                                 {%endfor%}
@@ -299,7 +305,7 @@
                                                     {%else%} 
                                                         <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
                                                     {%endif%}
-                                                    <div onclick="filtre_llista('estat=','{{key}}')" class="name">{{value}}</div>
+                                                    <div onclick="modif_url('estat','{{key}}','1')" class="name">{{value}}</div>
                                                     </button>
                                                     {%endif%}
                                                 {%endfor%}
@@ -326,12 +332,14 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_assignat">
                                             <div>
                                                 {%for usuari in usuaris%}
-                                                {%if request.GET.assignat is null or usuari.user.username not in request.GET.assignat%}
+                                                {%with usuari.user.id|stringformat:"s" as id%}
+                                                {%if request.GET.assignat is null or id not in request.GET.assignat%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
-                                                    <div onclick="filtre_llista('assignat=','{{usuari.user.username}}')" class="name">{{usuari.user.username}}</div>
+                                                    <div onclick="modif_url('assignat','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
                                                     
                                                 </button>
                                                 {%endif%}
+                                                {%endwith%}
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -359,7 +367,7 @@
                                                 {%for tag in issue.tags.all%}
                                                 {%if request.GET.tags is null or tag.nom not in request.GET.tags%}
                                                 <button class="single-filter single-filter-type-general" style="background-color: {{tag.color}};">
-                                                    <div onclick="filtre_llista('tags=','{{tag.nom}}')" class="name">{{tag.nom}}</div>
+                                                    <div onclick="modif_url('tags','{{tag.nom}}','1')" class="name">{{tag.nom}}</div>
                                                     
                                                 </button>
                                                 {%endif%}
@@ -388,12 +396,14 @@
                                         <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
                                             <div>
                                                 {%for usuari in usuaris%}
-                                                {%if request.GET.creat is null or usuari.user.id not in request.GET.creat%}
+                                                {%with usuari.user.id|stringformat:"s" as id%}
+                                                {%if request.GET.creat is null or id not in request.GET.creat%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
-                                                    <div onclick="filtre_llista('creat=','{{usuari.user.id}}')" class="name">{{usuari.user.username}}</div>
+                                                    <div onclick="modif_url('creat','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
                                                     
                                                 </button>
                                                 {%endif%}
+                                                {%endwith%}
                                                 {%endfor%}
                                             </div>
                                         </div>
@@ -414,27 +424,21 @@
                                     <span class="first-letter">Tipus</span>
                                 </div>
                                 
-                                <form method="delete" action="{{request.get_full_path}}">
-                                    <div name="order_by" value="-tipus">
-                                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
-                                    </div>
-                                    <button type="submit" ></button>
-                                </form>
                                 <div class ="icon-arrow-down" style="display:flex; flex-direction: column;padding-left: 10px;">
-                                    <a href="?order_by=tipus" class="name" >
+                                    <div onclick="modif_url('order_by','tipus','3')">
                                     {%if "=tipus" in request.get_full_path%}
                                         <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                     {%else%}
                                         <i class="fa fa-angle-up" aria-hidden="true"></i>
                                     {%endif%}
-                                    </a>
-                                    <a href="?order_by=-tipus" class="name">
+                                </div>
+                                <div onclick="modif_url('order_by','-tipus','3')">
                                     {%if "=-tipus" in request.get_full_path%}
                                         <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                     {%else%}
                                         <i class="fa fa-angle-down" aria-hidden="true"></i>
                                     {%endif%}
-                                    </a>
+                                </div>
                                 </div>
                             </div>
                             </td>
@@ -445,20 +449,20 @@
                                         <span class="first-letter">Gravetat</span>
                                     </div>
                                     <div style="display:flex;flex-direction: column; padding-left: 10px; ">
-                                        <a href="?order_by=gravetat" class="name" >
+                                        <div onclick="modif_url('order_by','gravetat','3')">
                                             {%if "=gravetat" in request.get_full_path%}
                                                 <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                             {%else%}
                                                 <i class="fa fa-angle-up" aria-hidden="true"></i>
                                             {%endif%}
-                                        </a>
-                                        <a href="?order_by=-gravetat" class="name">
+                                        </div>
+                                        <div onclick="modif_url('order_by','-gravetat','3')">
                                             {%if "=-gravetat" in request.get_full_path%}
                                                 <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                             {%else%}
                                                 <i class="fa fa-angle-down" aria-hidden="true"></i>
                                             {%endif%}
-                                        </a>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -469,14 +473,14 @@
                                     <span class="first-letter">Prioritat</span>
                                 </div>
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <div class="name" onclick="ordernar('d','prioritat')">
+                                    <div class="name" onclick="modif_url('order_by','prioritat','3')">
                                         {%if "=prioritat" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-up" aria-hidden="true"></i>
                                         {%endif%}
                                     </div>
-                                    <div  class="name" onclick="ordenar('up','prioritat')">
+                                    <div  class="name" onclick="modif_url('order_by','-prioritat','3')">
                                         {%if "=-prioritat" in request.get_full_path%}
                                             <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                         {%else%}
@@ -491,14 +495,14 @@
                                 <span style="padding-top: 6px;">Issue</span>
                                 
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <div class="name" onclick="ordenar('d','id')">
+                                    <div class="name" onclick="modif_url('order_by','id','3')">
                                         {%if "=id" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-up" aria-hidden="true"></i>
                                         {%endif%}
                                     </div>
-                                    <div class="name" onclick="ordenar('up','id')">
+                                    <div class="name" onclick="modif_url('order_by','-id','3')">
                                         {%if "=-id" in request.get_full_path%}
                                             <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                         {%else%}
@@ -514,14 +518,14 @@
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
                                     {%if request.GET.order_by%}
                                     {%endif%}
-                                    <div  class="name" onclick="ordenar('d','estat')">
+                                    <div  class="name" onclick="modif_url('order_by','estat','3')">
                                         {%if "=estat" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-up" aria-hidden="true"></i>
                                         {%endif%}
                                     </div>
-                                    <div class="name" onclick="ordenar('up','estat')">
+                                    <div class="name" onclick="modif_url('order_by','-estat','3')">
                                         {%if "=-estat" in request.get_full_path%}
                                             <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                         {%else%}
@@ -535,20 +539,20 @@
                                 <div style="display:flex; flex-direction: row;">
                                 <span style="padding-top: 6px;">Modificat</span>
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <a href="?order_by=dataModificacio" class="name" >
+                                    <div class ="name" onclick="modif_url('order_by','dataModificacio','3')">
                                         {%if "=dataModificacio" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-up" aria-hidden="true"></i>
                                         {%endif%}
-                                    </a>
-                                    <a href="?order_by=-dataModificacio" class="name">
+                                    </div>
+                                    <div class ="name" onclick="modif_url('order_by','-dataModificacio','3')">
                                         {%if "=-dataModificacio" in request.get_full_path%}
                                             <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                                         {%endif%}
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                             </td>
@@ -556,20 +560,20 @@
                                 <div style="display:flex; flex-direction: row;">
                                 <span style="padding-top: 6px;">Assignat a</span>
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <a href="?order_by=assignacio" class="name" >
+                                    <div class ="name" onclick="modif_url('order_by','assignacio','3')">
                                         {%if "=assignacio" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-up" aria-hidden="true"></i>
                                         {%endif%}
-                                    </a>
-                                    <a href="?order_by=-assignacio" class="name">
+                                    </div>
+                                    <div class ="name" onclick="modif_url('order_by','-assignacio','3')">
                                         {%if "=-assignacio" in request.get_full_path%}
                                             <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                         {%else%}
                                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                                         {%endif%}
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                             </td>
@@ -714,6 +718,11 @@
     
     function modif_url(param,value,int){
         var trobat = false;
+        console.log(window.location.href)
+        if(window.location.href =="http://127.0.0.1:8000/issues/"){
+            window.location.href = window.location.href+"?"+param+"="+value
+        }
+        else{
         var url=window.location.href.split('?');
         var query=url[1].split('&');
         var out=[];
@@ -724,11 +733,12 @@
                 var parametres = filtre[1].split(',');
                 if(int == 1){
                         parametres.push(value);
-                        console.log('aaaaa')
                         var params = parametres.toString();
-                        console.log(params);
                         out.push(param+"="+params);
                         
+                }
+                else if(int ==3){
+                    out.push(param+"="+value)
                 }
                 else{
                     if(parametres.length != 1){
@@ -750,10 +760,12 @@
             }
         }
         if(trobat == false){
+            console.log('iffff')
            out.push(param+"="+value) 
         }
         var result=out.join('&')
         window.location.href=url[0]+'?'+result;
+    }
     }
     
    function ordenar(param1,value){

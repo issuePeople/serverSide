@@ -98,7 +98,7 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
         context.update(Issue.get_types(self))
         context.update({
             'usuaris': Usuari.objects.all(),
-            'no_avatar_url': settings.NO_AVATAR_URL
+            
         })
         return context
 
