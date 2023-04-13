@@ -68,8 +68,8 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
                 email = form.cleaned_data['email']
                 usuari.user.email = email
                 first_name = form.cleaned_data['first_name']
-                usuari.user.save()
                 usuari.user.first_name = first_name
+                usuari.user.save()
                 bio = form.cleaned_data['bio']
                 usuari.bio = bio
                 usuari.save()
