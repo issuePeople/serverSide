@@ -89,17 +89,26 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
         })
         return context
 
-    def form_valid(self, form):
-        # Especifiquem el creador de l'issue
-        form.instance.creador = Usuari.objects.get(user=self.request.user)
-        issue = form.save()
-        log = Log(
-            issue=issue,
-            usuari=issue.creador,
-            tipus=Log.CREAR
-        )
-        log.save()
-        return redirect(self.success_url)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            # Especifiquem el creador de l'issue
+            form.instance.creador = Usuari.objects.get(user=self.request.user)
+            issue = form.save()
+            log = Log(
+                issue=issue,
+                usuari=issue.creador,
+                tipus=Log.CREAR
+            )
+            log.save()
+            attachment_form = AttachmentForm(request.POST, request.FILES)
+            if attachment_form.is_valid():
+                attachment = attachment_form.save(commit=False)
+                attachment.issue = issue
+                attachment.save()
+            return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
 
 
 class EditarIssueView(IsAuthenticatedMixin, UpdateView):
