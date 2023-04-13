@@ -184,5 +184,3 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
-SOCIALACCOUNT_ADAPTER = 'issuePeople.backends.CustomSocialAccountAdapter'
