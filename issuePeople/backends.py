@@ -36,11 +36,13 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
             user.set_unusable_password()
             user.save()
 
-            Usuari.objects.create(
+            usuari = Usuari(
                 user=user
             )
+            usuari.save()
 
-        # Enllacem la social account al user
-        sociallogin.account.user = user
-        sociallogin.account.save()
+            # Enllacem la social account al user
+            sociallogin.account.user = user
+            sociallogin.account.save()
+
         return user
