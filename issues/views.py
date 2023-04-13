@@ -125,6 +125,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
         id = self.kwargs.get('id')
         queryset = Issue.objects.prefetch_related(
             Prefetch('comentaris', queryset=Comentari.objects.order_by('-data')),
+            Prefetch('logs', queryset=Log.objects.order_by('-data')),
             'attachments', 'assignacio', 'observadors'
         )
         return get_object_or_404(queryset, id=id)
@@ -138,7 +139,6 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
             'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
-            'logs': Log.objects.filter(issue=self.get_object()),
         })
         return context
 
