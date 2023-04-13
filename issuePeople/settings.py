@@ -170,6 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Google login
 AUTHENTICATION_BACKENDS = [
+    'issuePeople.backends.CustomModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
