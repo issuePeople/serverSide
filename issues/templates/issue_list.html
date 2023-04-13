@@ -11,6 +11,7 @@
                     <h1>
                         <span>Issues</span>
                         
+                        
                     </h1>
                     <div class="taskboard-actions">
                         <div class="issue-table-options-start" >
@@ -71,176 +72,78 @@
                                         <div class="filters-title">Filtrat per:</div>
                                         <div class="filters-wrapper">
                                             {%for key,value in TTipus%}
-                                            <!--<form method="delete" action="{{request.GET.tipus}}">
-                                                <div name="tipus" value="{{key}}" class="single-applied-filter ng-animate-disabled include">
-                                                    <div class="name">{{value}}</div>
-                                                </div>
-                                                <button type="submit" >X</button>
-                                            </form>-->
-                                            
                                             {% if key in request.GET.tipus %}
-                                            {%with "?tipus="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include" >
                                                 <div class="name">{{value}}</div>
-                                 
-                                                    <a href="{{link}}" class="name" onclick="borra()">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
-                                            </div>
-                                            {%elif "&tipus="|add:key in request.get_full_path%}
-                                            
-                                            {%with "&tipus="|add:key as patata%}
-                                            <p>{{patata}}</p>
-                                            {%with request.get_full_path|cut:patata as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include">
-                                                <div class="name">{{value}}</div>
-                                        
-                                                    <a href="{{link}}" class="name">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
+                                                    <button onclick="modif_url('tipus','{{key}}','2')" class="name" >X</button>
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for key,value in TGravetat%}
                                             {% if key in request.GET.gravetat %}
-                                            {%with "?gravetat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include">
                                                 <div class="name">{{value}}</div>
-                                                <a href="{{link}}" class="name">X</a>
-                                            {%endwith%}
-                                            {%endwith%}
+                                                <button onclick="modif_url('gravetat','{{key}}','2')" class="name" >X</button>
                                             </div>
                                             
-                                            {%elif "&gravetat="|add:key in request.get_full_path%}
-                                            {%with "&gravetat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include">
-                                                <div class="name">{{value}}</div>
-                                           
-                                                    <a href="{{link}}" class="name">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
-                                            </div>
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for key,value in TPrioritat%}
                                             {% if key in request.GET.prioritat %}
-                                            {%with "?prioritat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
-                                                    <div class="name">{{value}}</div>
-                                                    <a href="?prioritat=" class="name"onclick="filtrat('bug')">X</a>
-                                                    {%endwith%}
-                                               {%endwith%}
-                                            </div>
-                                            {%elif "&prioritat="|add:key in request.get_full_path%}
-                                            {%with "&prioritat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include">
                                                 <div class="name">{{value}}</div>
-                                           
-                                                    <a href="{{link}}" class="name">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
+                                                <button onclick="modif_url('prioritat','{{key}}','2')" class="name" >X</button>
                                             </div>
+                                            
                                             {%endif%}
                                             {%endfor%}
                                             
                                             {%for key,value in TEstats%}
                                             {% if key in request.GET.estat %}
-                                            {%with "?estat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
-                                                    <div class="name">{{value}}</div>
-                                                    <a href="?estat=" class="name">X</a>
-                                                    {%endwith%}
-                                               {%endwith%}
-                                            </div>
-                                            {%elif "&estat="|add:key in request.get_full_path%}
-                                            {%with "&estat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include">
                                                 <div class="name">{{value}}</div>
-                                           
-                                                    <a href="{{link}}" class="name">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
+                                                <button onclick="modif_url('estat','{{key}}','2')" class="name" >X</button>
+                                            </div>
+                                            
+                                            {%endif%}
+                                            {%endfor%}
+                                            
+                                            
+                                            
+                                            {%for usuari in usuaris%}
+                                            {% if usuari.user.id in request.GET.assignat %}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
+                                                    <div class="name">{{usuari.user.username}}</div>
+                                                    <button onclick="modif_url('assignat','{{usuari.user.id}}','2')" class="name" >X</button>
+                                                    
                                             </div>
                                             {%endif%}
                                             {%endfor%}
                                             
-                                            {%for usuari in usuaris%}
-                                            {% if usuari.user.username in request.GET.assignat %}
-                                            {%with "?assignat="|add:usuari.user.username as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
-                                                    <div class="name">{{usuari.user.username}}</div>
-                                                    <a href="?assignat=" class="name">X</a>
-                                                    {%endwith%}
-                                               {%endwith%}
-                                            </div>
-                                            {%elif "&assignat="|add:usuari.user.username in request.get_full_path%}
-                                            {%with "&assignat="|add:usuari.user.username as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include">
-                                                <div class="name">{{usuari.user.username}}</div>
-                                           
-                                                    <a href="{{link}}" class="name">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
-                                            </div>
-                                            {%endif%}
-                                            {%endfor%}
                                             {%for issue in issues%}
-                                      
                                             {%for tag in issue.tags.all%}
-                                           
                                             {% if tag.nom in request.GET.tags %}
-                                            {%with "?tags="|add:tag.nom as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <button class="single-applied-filter ng-animate-disabled include"style="background-color: {{tag.color}};">
-                                                    <div class="name" style="background-color: {{tag.color}};">{{tag.nom}}</div>
-                                                    <a href="{{link}}" class="name">X</a>
-                                                    {%endwith%}
-                                               {%endwith%}
-                                            </button>
-                                            {%elif "&tags="|add:tag.nom in request.get_full_path%}
-                                            {%with "&tags="|add:tag.nom as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
                                             <div class="single-applied-filter ng-animate-disabled include">
-                                                <div class="name">{{value}}</div>
-                                           
-                                                    <a href="{{link}}" class="name">X</a>
-                                               {%endwith%}
-                                               {%endwith%}
-                                                
+                                                <div class="name">{{tag.nom}}</div>
+                                                <button onclick="modif_url('tags','{{tag.nom}}','2')" class="name" >X</button>
                                             </div>
+                                            
                                             {%endif%}
                                             {%endfor%}
                                             {%endfor%}
                                             
                                             {%for usuari in usuaris%}
-                                            {% if usuari.user.username in request.GET.creat %}
-                                            {%with "?creat="|add:key as parametre%}
-                                            {%with request.get_full_path|cut:parametre as link%}
-                                            <div class="single-applied-filter ng-animate-disabled include" >
+                                            {% if usuari.user.id in request.GET.creat %}
+                                            <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{usuari.user.username}}</div>
-                                                    <a href="{{link}}" class="name">X</a>
-                                                    {%endwith%}
-                                               {%endwith%}
+                                                    <button onclick="modif_url('creat','{{usuari.user.id}}','2')" class="name" >X</button>
+                                                    
                                             </div>
                                             {%endif%}
                                             {%endfor%}
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -518,7 +421,7 @@
                                     <button type="submit" ></button>
                                 </form>
                                 <div class ="icon-arrow-down" style="display:flex; flex-direction: column;padding-left: 10px;">
-                                    <a href="?order_by=tipus" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                    <a href="?order_by=tipus" class="name" >
                                     {%if "=tipus" in request.get_full_path%}
                                         <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                     {%else%}
@@ -542,7 +445,7 @@
                                         <span class="first-letter">Gravetat</span>
                                     </div>
                                     <div style="display:flex;flex-direction: column; padding-left: 10px; ">
-                                        <a href="?order_by=gravetat" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                        <a href="?order_by=gravetat" class="name" >
                                             {%if "=gravetat" in request.get_full_path%}
                                                 <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                             {%else%}
@@ -632,7 +535,7 @@
                                 <div style="display:flex; flex-direction: row;">
                                 <span style="padding-top: 6px;">Modificat</span>
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <a href="?order_by=dataModificacio" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                    <a href="?order_by=dataModificacio" class="name" >
                                         {%if "=dataModificacio" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
@@ -653,7 +556,7 @@
                                 <div style="display:flex; flex-direction: row;">
                                 <span style="padding-top: 6px;">Assignat a</span>
                                 <div style="display:flex;flex-direction: column; padding-left: 10px;">
-                                    <a href="?order_by=assignacio" class="name" onclick=borra(order_by,tipus,request.get_full_path)>
+                                    <a href="?order_by=assignacio" class="name" >
                                         {%if "=assignacio" in request.get_full_path%}
                                             <i class="fa fa-sort-asc" aria-hidden="true"></i>
                                         {%else%}
@@ -718,6 +621,7 @@
                             
                                 <td class="subject" style="text-align: center;
                                 vertical-align: middle;">
+                                
                                     
                                     <a href="{% url 'editar_issue' issue.id %}" >
                                         <span classe="issue-text" style="display: inline-flex;">
@@ -779,9 +683,10 @@
                                     {% csrf_token %}
                                     <input type="hidden" name="id_issue" value="{{issue.id}}">
                                     <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="assigned-button" style="margin-top: 5px; border:none; outline:none;background: none;">
-                                        <option value="0">no avatar</option>
+                                        <option value="0">
+                                            no avatar</option>
                                         {% for usuari in usuaris %}
-                                        {% if issue.assignat.user.id == usuari.user.id %}
+                                        {% if issue.assignacio.user.id == usuari.user.id %}
                                             <option selected="selected" value="{{usuari.user.id}}">{{usuari.user.username}}</option>
                                         {%else%}
                                                 <option value="{{usuari.user.id}}">{{usuari.user.username}}</option>
@@ -790,7 +695,8 @@
                                     </select>
                                     <button id="btnSaveAssig{{issue.id}}" type="submit"  name="guardar_assignat" style="display: none;"></button>
                                     </form>
-                                    <img class="issue-assignedto">{{issue.assignacio.user.avatar.url}}</img>
+                                    <img class="issue-assignedto" src="{{issue.assignacio.avatar.url}}"></img>
+                                    
                                 </td>
                                 
                                 
@@ -806,6 +712,50 @@
     
 <script type="text/javascript">
     
+    function modif_url(param,value,int){
+        var trobat = false;
+        var url=window.location.href.split('?');
+        var query=url[1].split('&');
+        var out=[];
+        for(var i = 0; query.length >i ; ++i){
+            if(query[i].search(param) != -1){
+                trobat=true;
+                var filtre = query[i].split('=');
+                var parametres = filtre[1].split(',');
+                if(int == 1){
+                        parametres.push(value);
+                        console.log('aaaaa')
+                        var params = parametres.toString();
+                        console.log(params);
+                        out.push(param+"="+params);
+                        
+                }
+                else{
+                    if(parametres.length != 1){
+                        console.log(parametres)
+                        var params =[]
+                        for(var j =0; parametres.length >j;++j){
+                            if(parametres[j] != value){
+                                params.push(parametres[j])
+                            }
+                        }
+                        params = params.toString();
+                        out.push(param+"="+params)
+                        
+                    }
+                }
+            }
+            else{
+                out.push(query[i]);
+            }
+        }
+        if(trobat == false){
+           out.push(param+"="+value) 
+        }
+        var result=out.join('&')
+        window.location.href=url[0]+'?'+result;
+    }
+    
    function ordenar(param1,value){
     var url = window.location.href
     
@@ -816,9 +766,6 @@
             window.location.href = url.replace('order_by=-'+value, 'order_by='+value)
         }
    }
-    
-    
-    
     
     function filtre(val1,val2){
         
@@ -855,15 +802,7 @@
         window.location.href= window.location.href+"&"+val1+val2;
        }
     }
-    
-    function borra() {
-        var querystring = window.location.href;
-        console.log(querystring);
-        const params = new URLSearchParams(querystring)
-        var aa= params.get('estat');
-        console.log(params.has('estat'));
-        
-    }
+
     function toggle(){
         var x = document.getElementById("tag_on");
         var p = document.getElementById("tag_off");
