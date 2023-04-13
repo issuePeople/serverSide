@@ -102,17 +102,29 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
         })
         return context
 
-    def form_valid(self, form):
-        # Especifiquem el creador de l'issue
-        form.instance.creador = Usuari.objects.get(user=self.request.user)
-        issue = form.save()
-        log = Log(
-            issue=issue,
-            usuari=issue.creador,
-            tipus=Log.CREAR
-        )
-        log.save()
-        return redirect(self.success_url)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            # Especifiquem el creador de l'issue
+            form.instance.creador = Usuari.objects.get(user=self.request.user)
+            issue = form.save()
+            log = Log(
+                issue=issue,
+                usuari=issue.creador,
+                tipus=Log.CREAR
+            )
+            log.save()
+
+            # Pot ser que calgui enregistrar 1 attachment
+            attachment_form = AttachmentForm(request.POST, request.FILES)
+            if attachment_form.is_valid():
+                attachment = attachment_form.save(commit=False)
+                attachment.issue = issue
+                attachment.save()
+
+            return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
 
 
 class EditarIssueView(IsAuthenticatedMixin, UpdateView):
@@ -126,6 +138,7 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
         id = self.kwargs.get('id')
         queryset = Issue.objects.prefetch_related(
             Prefetch('comentaris', queryset=Comentari.objects.order_by('-data')),
+            Prefetch('logs', queryset=Log.objects.order_by('-data')),
             'attachments', 'assignacio', 'observadors'
         )
         return get_object_or_404(queryset, id=id)
@@ -139,7 +152,6 @@ class EditarIssueView(IsAuthenticatedMixin, UpdateView):
             'possibles_assignats': Usuari.objects.exclude(assignats=self.get_object()),
             'ets_assignat': self.get_object().assignacio == Usuari.objects.get(user=self.request.user),
             'ets_observador': self.get_object().observadors.contains(Usuari.objects.get(user=self.request.user)),
-            'logs': Log.objects.filter(issue=self.get_object()),
         })
         return context
 

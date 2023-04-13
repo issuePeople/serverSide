@@ -19,16 +19,16 @@
                     <img src="{{ usuari.avatar.url }}" style="width: 180px; height: 180px;">
                 </fieldset>
                 <div>
-                    <label for="files" class="btn"><i class="fa fa-plus" aria-hidden="true"></i></label>
-                    <input id="files" style="visibility:hidden;" type="file" value="+" name="avatar">
+                    <button id="btnSelectImg" type="text" variant="secondary" class="btn-small button-full js-change-avatar">
+                        Canviar foto
+                    </button>
+                    <input id="avatarImg" style="display: none;" type="file" name="avatar">
                 </div>
-                <button type="submit" variant="secondary" title="Guardar avatar" name="guardar_avatar" class="btn-small button-full js-change-avatar">
-                    <i aria-hidden="true"></i>
-                    Canviar foto
-                </button>
+                <button type="submit" id="btnSaveAvatar" style="display: none;" name="guardar_avatar" class="btn-small button-full js-change-avatar">    </button>
                 <button type="submit" name="guardar_avatar_defecte" class="botonMenu">
                     <p style="color: #1e96b1;"> &nbsp &nbsp Avatar per defecte</p>
                 </button>
+                
             </div>  
             <!--Info usuari i canviar bio-->
             <div class="project-details-form-data"> 
@@ -38,11 +38,11 @@
                 </fieldset>
                 <fieldset>
                     <label for="email">Email</label>
-                    <input type="text" name="username" value="{{ usuari.user.email }}">
+                    <input type="text" name="email" value="{{ usuari.user.email }}">
                 </fieldset>
                 <fieldset>
                     <label for="first_name">Nom</label>
-                    <input type="text" name="username" value="{{ usuari.user.first_name }}">
+                    <input type="text" name="first_name" value="{{ usuari.user.first_name }}">
                 </fieldset>
                 <fieldset>
                     <label for="bio">Bio</label>
@@ -53,6 +53,10 @@
                         Guardar
                     </button>
                 </fieldset>
+                <br>
+                    <a href="/usuaris/logout">
+                        <p style="color: #1e96b1; margin-left: 380px;"> &nbsp &nbsp Tancar sessió</p>
+                    </a>
             </div>
         </form>
    </section> 
@@ -71,16 +75,16 @@
 }
 </style>
 <script>
-var addAttachment = document.getElementById('addAttachment');
-    var afegirAttachment = document.getElementById('afegirAttachment');
-    var inputFile = document.getElementById('inputFile');
+    var btnSelectImg = document.getElementById('btnSelectImg');
+    var btnSaveAvatar = document.getElementById('btnSaveAvatar');
+    var avatarImg = document.getElementById('avatarImg');
 
-    addAttachment.addEventListener('click', function() {
+    btnSelectImg.addEventListener('click', function() {
         event.preventDefault();
-        inputFile.click();
+        avatarImg.click();
     })
-    inputFile.addEventListener('change', function() {
-        afegirAttachment.click();
+    avatarImg.addEventListener('change', function() {
+        btnSaveAvatar.click();
     })
 </script>
 

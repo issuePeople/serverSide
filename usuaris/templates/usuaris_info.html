@@ -13,10 +13,10 @@
 
             <div class="profile-data">
                 <h1 class="not-full-name">
-                    <p>{{usuari.user}}</p>
+                    <p>{{usuari.user.username}}</p>
                 </h1>
                 <div class="username">
-                    <p>@{{usuari.user}}</p>
+                    <p>@{{usuari.user.username}}</p>
                     
                 </div>
             </div>
@@ -35,20 +35,37 @@
                 <div class="taskboard-actions">
                     <table style="width: 40%;border-collapse:separate; border-spacing: 0 5px;">
                         <tr>
-                            <td>
-                                <th>
-                                    <a href="{% url 'usuari' usuari.user.id %}?mostrar=timeline">
-                                        <h1><i class="fa fa-align-justify"  aria-hidden="true" ></i> &nbsp Timeline &nbsp </h1>
-                                    </a>
-                                </th>
-                            </td>
-                            <td>
-                                <th>
-                                    <a href="{% url 'usuari' usuari.user.id %}?mostrar=watched">
-                                        <h1><i class="fa fa-eye" aria-hidden="true"></i> Watched</h1>
-                                    </a>
-                                </th>
-                            </td>
+                            {% if "?mostrar=watched" in request.get_full_path %}
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=timeline">
+                                            <h1><i class="fa fa-align-justify"  aria-hidden="true" ></i> &nbsp Timeline &nbsp </h1>
+                                        </a>
+                                    </th>
+                                </td>
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=watched">
+                                            <h1><i class="fa fa-eye" aria-hidden="true"></i> <u>Watched</u></h1>
+                                        </a>
+                                    </th>
+                                </td>
+                            {%else%}
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=timeline">
+                                            <h1><i class="fa fa-align-justify"  aria-hidden="true" ></i> &nbsp <u>Timeline</u> &nbsp </h1>
+                                        </a>
+                                    </th>
+                                </td>
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=watched">
+                                            <h1><i class="fa fa-eye" aria-hidden="true"></i> Watched</h1>
+                                        </a>
+                                    </th>
+                                </td>
+                            {%endif%}
                         </tr>
                     </table>
                 </div>
@@ -60,7 +77,14 @@
                         {% for observat in usuari.observats.all %}
                             <tr >
                                 <td>
-                                    <p><img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.get_estat_display}}</p>
+                                    <p>
+                                        {% if observat.assignacio %}
+                                            <img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;">
+                                        {% else %}
+                                            <img src="{{ NO_AVATAR_URL }}" style="width: 48px; height: 48px;">
+                                        {% endif %}
+                                        {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.get_estat_display}}
+                                    </p>
                                     <p></p>
                                     <p style="color:darkgrey">__________________________________________________________________________________________</p>
                                 </td> 
@@ -71,15 +95,15 @@
                 {%else%}
                 <section class ="timeline">
                     <div class="issue-page"style="width: 100%; ">
-                        <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                        <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" > 
                             {% for log in logs %}
                                 <tr class="row table-main">
                                     <!--Ojo hardcoded-->
-                                    <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;"><a href="{% url 'usuari' 1 %}"> {{log.usuari.user}}</a>
+                                    <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;"><a href="{% url 'usuari' log.usuari.user.id %}"> {{log.usuari.user}}</a>
                                     {% if log.tipus == "Creada" %}
                                         ha creat l'
                                     {% elif log.tipus == 'Nou attachment' %}
-                                        ha afegit el fitxer {{log.valor_nou}} al
+                                        ha afegit el fitxer <a>{{log.valor_nou}}</a> al
                                     {% elif log.tipus == "Attachment esborrat" %}
                                         ha esborrat el fitxer {{log.valor_antic}} al
                                     {% elif log.tipus == "Tag afegida" %}
@@ -99,15 +123,6 @@
                 </section>  
                 {%endif%}
             </div>
-        </div>
-        <div>
-            <button class="btn-big edit-profile" style="height:50px;">
-                <a href="{% url 'perfil' %}">
-                    <span>
-                        Editar bio
-                    </span>
-                </a>
-            </button>
         </div>
     </div>
 </body>

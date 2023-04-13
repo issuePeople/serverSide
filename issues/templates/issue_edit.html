@@ -32,7 +32,7 @@
                                 Blocked
                             </span>
                             <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
-                                {% if issue.motiuBloqueig != 'None' %}
+                                {% if issue.motiuBloqueig %}
                                     {{issue.motiuBloqueig}}
                                 {% endif %}
                             </span>
@@ -199,7 +199,7 @@
                                                     {% elif log.tipus == "Attachment esborrat" %}
                                                         <div class="diff-status-wrapper" style="margin-top: 20px;">
                                                             <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Deleted attachment: </span>
-                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_antic}}</span>    
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_previ}}</span>    
                                                         </div>
                                                     {% elif log.tipus == "Tag afegida" %}
                                                         <div class="diff-status-wrapper" style="margin-top: 20px;">
@@ -209,7 +209,7 @@
                                                     {% elif log.tipus == "Tag esborrada" %}
                                                         <div class="diff-status-wrapper" style="margin-top: 20px;">
                                                             <span style="background-color: #e2e3e9; font-weight: bold;" class="key">Tags removed: </span>
-                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_antic}}</span>    
+                                                            <span style="margin-left: 5px;" class="diff">{{log.valor_previ}}</span>    
                                                         </div>
                                                     {% else %}
                                                         <div class="diff-status-wrapper" style="margin-top: 20px;">
@@ -338,13 +338,13 @@
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
                         <div>
-                            {% if issue.assignacio != null %}
+                            {% if issue.assignacio %}
                                 <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
                                     <img src="{{ issue.assignacio.avatar.url }}"
                                         width="60px"
                                         height="60px"
                                     >
-                                    <a href="/usuaris/{{ issue.assignacio.user.id }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
+                                    <a href="/usuaris/{{ issue.assignacio.user.id }}" style=" margin-top: 20px;">{{ issue.assignacio.user.first_name }}</a>
                                     <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
@@ -353,19 +353,21 @@
 
                         </div>
                         <!-- selector d'assignacio -->
-                        <div>
-                            <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none;">
-                                {% for assig in possibles_assignats %}
-                                    <option value="{{assig.user.id}}">{{assig.user.username}}</option>
-                                {% endfor %}
-                            </select>
-                            <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
-                        </div>
+                        
                         <div class="ticket-users-actions">
+                            <div>
+                                <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                    <option>+ Add assigned</option>
+                                    {% for assig in possibles_assignats %}
+                                        <option value="{{assig.user.id}}">{{assig.user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
+                            </div>
                             <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
                                 + Add assigned
                             </button>
-                            <button type="submit" name="autoassignar" class="ticket-users-actions">
+                            <button type="submit" name="autoassignar" class="ticket-users-actions" style="margin-left: 5px;">
                                 {% if ets_assignat  %}
                                     Dont assign to me
                                 {% else %}
@@ -388,12 +390,12 @@
                             <ul>
                                 {%  for obs in issue.observadors.all %}
                                     <li>
-                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
+                                        <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
                                             <img src="{{ obs.avatar.url }}"
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <a href="/usuaris/{{ obs.user.id }}" style="margin-right: 15px;">{{ obs.user.first_name }}</a>
+                                            <a href="/usuaris/{{ obs.user.id }}" style=" margin-top: 20px;">{{ obs.user.first_name }}</a>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
@@ -402,19 +404,21 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div>
-                            <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none;">
-                                {% for obs in possibles_observadors %}
-                                    <option value="{{obs.user.id}}">{{obs.user.username}}</option>
-                                {% endfor %}
-                            </select>
-                            <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
-                        </div>
+                        
                         <div class="ticket-users-actions">
+                            <div>
+                                <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                    <option>+ Add watchers</option>
+                                    {% for obs in possibles_observadors %}
+                                        <option value="{{obs.user.id}}">{{obs.user.username}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
+                            </div>
                             <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
                                 + Add watchers
                             </button>
-                            <button type="submit" name="autoobservar" class="ticket-users-actions">
+                            <button type="submit" name="autoobservar" class="ticket-users-actions" style="margin-left: 5px;">
                                 {% if ets_observador %}
                                     Unwatch
                                 {% else %}
@@ -430,7 +434,7 @@
                 <div class="ticket-detail-settings" >
                     <!-- Data limit -->
                     <div>
-                        {% if issue.dataLimit != null %}
+                        {% if issue.dataLimit %}
                             <button type="submit" name="esborrar_dataLimit" style="background: red;">
                                 <i  class="fa fa-clock-o" aria-hidden="true"></i>
                             </button>
@@ -473,8 +477,6 @@
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button>
             </div>
-            
-            <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
 
             <div style="display: flex; justify-content: space-between;">
                 <input 
@@ -504,6 +506,7 @@
         event.preventDefault();
         if (selectObs.style.display === 'none') {
             selectObs.style.display = 'flex';
+            addObserver.style.display = 'none';
         }
         else {
             selectObs.style.display = 'none';
@@ -520,12 +523,12 @@
         event.preventDefault();
         if (selectAssig.style.display === 'none') {
             selectAssig.style.display = 'flex';
+            addAssigned.style.display = 'none';
         }
         else {
             selectAssig.style.display = 'none';
         }
     })
-
     selectAssig.addEventListener('change', function() {
         btnSaveAssig.click();
     });
@@ -588,35 +591,44 @@
     });
 
     var btnTimeLine = document.getElementById('btnTimeLine');
-    var btnSaveDate = document.getElementById('btnSaveDate');
     var datePickerInput = document.querySelector('#datePickerInput');
     var btnSaveDateDirect = document.getElementById('btnSaveDateDirect');
-    btnTimeLine.addEventListener('click', () => {
-        event.preventDefault();
-        datePickerInput.style.display = 'block';
-        btnSaveDateDirect.style.display = 'block';
+    if (btnTimeLine) {
+        btnTimeLine.addEventListener('click', () => {
+            event.preventDefault();
+            datePickerInput.style.display = 'block';
+            btnSaveDateDirect.style.display = 'block';
+        });
+    }
+    datePickerInput.addEventListener('keypress', function(e){
+        if (e.key === 'Enter') {
+            event.preventDefault();
+            btnSaveDateDirect.click();
+        }
     });
 
     var btnBloqueig = document.getElementById('btnBloqueig');
     var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
-    var btnSaveMotiuBloqueig = document.getElementById('btnSaveMotiuBloqueig');
     var btnSaveBloqueigDirect = document.getElementById('btnSaveBloqueigDirect');
-    btnBloqueig.addEventListener('click', () => {
-        event.preventDefault();
-        inputMotiuBloqueig.style.display = 'block';
-        btnSaveBloqueigDirect.style.display = 'block';
-    })
+    if (btnBloqueig) {
+        btnBloqueig.addEventListener('click', () => {
+            event.preventDefault();
+            console.log('patata')
+            inputMotiuBloqueig.style.display = 'block';
+            btnSaveBloqueigDirect.style.display = 'block';
+        });
+    }
     btnSaveBloqueigDirect.addEventListener('click', function() {
         if (inputMotiuBloqueig.nodeValue == null) {
             inputMotiuBloqueig = '""';
         }
     })
-    /*
-    inputMotiuBloqueig.addEventListener('blur', function() {
-        event.preventDefault();
-        btnSaveMotiuBloqueig.click();
-    });
-    */
+    inputMotiuBloqueig.addEventListener('keypress', function(e){
+        if (e.key === 'Enter') {
+            event.preventDefault();
+            btnSaveBloqueigDirect.click();
+        }
+    })
 
 </script>
 
