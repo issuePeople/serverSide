@@ -338,7 +338,7 @@
                     <div class="ticket-user-list-content">
                         <div class="ticket-user-list"></div>
                         <div>
-                            {% if issue.assignacio != null %}
+                            {% if issue.assignacio %}
                                 <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px;">
                                     <img src="{{ issue.assignacio.avatar.url }}"
                                         width="60px"
@@ -434,7 +434,7 @@
                 <div class="ticket-detail-settings" >
                     <!-- Data limit -->
                     <div>
-                        {% if issue.dataLimit != null %}
+                        {% if issue.dataLimit %}
                             <button type="submit" name="esborrar_dataLimit" style="background: red;">
                                 <i  class="fa fa-clock-o" aria-hidden="true"></i>
                             </button>
@@ -477,8 +477,6 @@
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button>
             </div>
-            
-            <button id="btnSaveDate" type="submit" name="guardar_dataLimit" style="display: none;"></button>
 
             <div style="display: flex; justify-content: space-between;">
                 <input 
@@ -593,30 +591,33 @@
     });
 
     var btnTimeLine = document.getElementById('btnTimeLine');
-    var btnSaveDate = document.getElementById('btnSaveDate');
     var datePickerInput = document.querySelector('#datePickerInput');
     var btnSaveDateDirect = document.getElementById('btnSaveDateDirect');
-    btnTimeLine.addEventListener('click', () => {
-        event.preventDefault();
-        datePickerInput.style.display = 'block';
-        btnSaveDateDirect.style.display = 'block';
-    });
+    if (btnTimeLine) {
+        btnTimeLine.addEventListener('click', () => {
+            event.preventDefault();
+            datePickerInput.style.display = 'block';
+            btnSaveDateDirect.style.display = 'block';
+        });
+    }
     datePickerInput.addEventListener('keypress', function(e){
         if (e.key === 'Enter') {
             event.preventDefault();
             btnSaveDateDirect.click();
         }
-    })
+    });
 
     var btnBloqueig = document.getElementById('btnBloqueig');
     var inputMotiuBloqueig = document.getElementById('inputMotiuBloqueig');
-    var btnSaveMotiuBloqueig = document.getElementById('btnSaveMotiuBloqueig');
     var btnSaveBloqueigDirect = document.getElementById('btnSaveBloqueigDirect');
-    btnBloqueig.addEventListener('click', () => {
-        event.preventDefault();
-        inputMotiuBloqueig.style.display = 'block';
-        btnSaveBloqueigDirect.style.display = 'block';
-    })
+    if (btnBloqueig) {
+        btnBloqueig.addEventListener('click', () => {
+            event.preventDefault();
+            console.log('patata')
+            inputMotiuBloqueig.style.display = 'block';
+            btnSaveBloqueigDirect.style.display = 'block';
+        });
+    }
     btnSaveBloqueigDirect.addEventListener('click', function() {
         if (inputMotiuBloqueig.nodeValue == null) {
             inputMotiuBloqueig = '""';
@@ -625,7 +626,7 @@
     inputMotiuBloqueig.addEventListener('keypress', function(e){
         if (e.key === 'Enter') {
             event.preventDefault();
-            btnSaveMotiuBloqueig.click();
+            btnSaveBloqueigDirect.click();
         }
     })
 
