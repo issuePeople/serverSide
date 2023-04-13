@@ -79,9 +79,9 @@
                                 <td>
                                     <p>
                                         {% if observat.assignacio %}
-                                            <img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;">
+                                            <img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px; border-radius: 50%;">
                                         {% else %}
-                                            <img src="{{ NO_AVATAR_URL }}" style="width: 48px; height: 48px;">
+                                            <img src="{{ NO_AVATAR_URL }}" style="width: 48px; height: 48px; border-radius: 50%;">
                                         {% endif %}
                                         {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.get_estat_display}}
                                     </p>
@@ -98,8 +98,7 @@
                         <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" > 
                             {% for log in logs %}
                                 <tr class="row table-main">
-                                    <!--Ojo hardcoded-->
-                                    <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px;"><a href="{% url 'usuari' log.usuari.user.id %}"> {{log.usuari.user}}</a>
+                                    <p><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px; border-radius: 50%;"><a href="{% url 'usuari' log.usuari.user.id %}"> {{log.usuari.user}}</a>
                                     {% if log.tipus == "Creada" %}
                                         ha creat l'
                                     {% elif log.tipus == 'Nou attachment' %}
@@ -122,6 +121,13 @@
                     </div>
                 </section>  
                 {%endif%}
+                
+            </div>
+            <div class="timeline-wrapper" style="margin-left: 30px; width: 150px;">
+                <h1 style="white-space: nowrap;">Your team</h1>
+                {% for usuari in usuaris %}
+                    <a href="{% url 'usuari' usuari.user.id %}"><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px; border-radius: 50%;"></a>
+                {% endfor %}
             </div>
         </div>
     </div>
