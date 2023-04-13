@@ -78,10 +78,10 @@
                             <tr >
                                 <td>
                                     <p>
-                                        {% if observat.assignacio.length == 0 %}
-                                        <img src="{{ NO_AVATAR_URL }}" style="width: 48px; height: 48px;"> 
+                                        {% if observat.assignacio %}
+                                            <img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;">
                                         {% else %}
-                                        <img src="{{ observat.assignacio.avatar.url }}" style="width: 48px; height: 48px;"> 
+                                            <img src="{{ NO_AVATAR_URL }}" style="width: 48px; height: 48px;">
                                         {% endif %}
                                         {{observat.assignacio.user}} <a href="{% url 'editar_issue' observat.id %}">#{{observat.id}} {{observat.subject}}</a> {{observat.get_estat_display}}
                                     </p>

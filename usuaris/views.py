@@ -26,7 +26,8 @@ class VeureUsuariView(IsAuthenticatedMixin, DetailView):
         context.update({
             'logs': Log.objects.filter(usuari=self.get_object()).order_by('-data'),
             'logo_url': settings.LOGO_PNG_URL,
-            'usuaris': Usuari.objects.all()
+            'usuaris': Usuari.objects.all(),
+            'NO_AVATAR_URL': settings.NO_AVATAR_URL
         })
         return context
 
