@@ -29,6 +29,7 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
             'tags': Tag.objects.all(),
         })
         return context
+        
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -60,19 +61,30 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
                 log.save()
         elif 'guardar_assignat' in request.POST:
             id_assignat = request.POST.get('assignat')
-            assignat = get_object_or_404(Usuari, pk=id_assignat)
-            if assignat != issue.assignacio:
-                log = Log(
-                    issue=issue,
-                    usuari=Usuari.objects.get(user=request.user),
-                    tipus=Log.ASSIGN,
-                    valor_previ=issue.assignacio.user.first_name,
-                    valor_nou=assignat.user.first_name
-                )
-                log.save()
-                issue.assignacio = get_object_or_404(Usuari, pk=id_assignat)
-                issue.save()
-        return redirect('tots_issues')
+            log = Log(
+                issue=issue,
+                usuari=Usuari.objects.get(user=request.user),
+                tipus=Log.ASSIGN
+            )
+
+            # Abans teníem assignat si issue.assignacio no és null
+            if issue.assignacio:
+                log.valor_previ = issue.assignacio.user.first_name
+            else:
+                log.valor_previ = "Sense assignar"
+
+            # Si id_assignat == 0, vol dir que estem desassignant
+            if id_assignat == 0:
+                log.valor_nou = "Sense assignar"
+                issue.assignacio = None
+            else:
+                assignat = get_object_or_404(Usuari, pk=id_assignat)
+                log.valor_nou = assignat.user.first_name
+                issue.assignacio = assignat
+
+            log.save()
+
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class CrearIssueView(IsAuthenticatedMixin, CreateView):
@@ -86,6 +98,7 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
         context.update(Issue.get_types(self))
         context.update({
             'usuaris': Usuari.objects.all(),
+            
         })
         return context
 
@@ -484,3 +497,4 @@ class EsborrarObservadorIssue(IsAuthenticatedMixin, View):
         issue.save()
 
         return redirect(request.META.get('HTTP_REFERER'))
+
