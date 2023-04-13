@@ -797,23 +797,6 @@
         window.location.href= window.location.href+"&"+val1+x;
        }
     }
-    function filtre_llista(val1,val2){
-     
-       if(window.location.href.length == 29){
-        console.log(window.location.href);
-        window.location.href = window.location.href+"?"+val1 +val2;
-       }
-       else if(window.location.href.includes(val1)){
-        var url =window.location.href;
-        window.location.href = url.replace(val1 , val1 + val2+",")
-        
-        var num =url.indexOf(val1);
-        console.log(num)
-       }
-       else{
-        window.location.href= window.location.href+"&"+val1+val2;
-       }
-    }
 
     function toggle(){
         var x = document.getElementById("tag_on");
