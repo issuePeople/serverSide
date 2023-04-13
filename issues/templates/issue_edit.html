@@ -344,7 +344,7 @@
                                         width="60px"
                                         height="60px"
                                     >
-                                    <a href="/usuaris/{{ issue.assignacio.user.id }}" style="margin-left: 15px;">{{ issue.assignacio.user.first_name }}</a>
+                                    <a href="/usuaris/{{ issue.assignacio.user.id }}" style=" margin-top: 20px;">{{ issue.assignacio.user.first_name }}</a>
                                     <a href="{% url 'esborrar_assignacio' issue.id %}">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
@@ -395,7 +395,7 @@
                                                 width="60px"
                                                 height="60px"
                                             >
-                                            <a href="/usuaris/{{ obs.user.id }}" style="margin-right: 120px; margin-top: 20px;">{{ obs.user.first_name }}</a>
+                                            <a href="/usuaris/{{ obs.user.id }}" style=" margin-top: 20px;">{{ obs.user.first_name }}</a>
                                             <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
