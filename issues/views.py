@@ -101,11 +101,14 @@ class CrearIssueView(IsAuthenticatedMixin, CreateView):
                 tipus=Log.CREAR
             )
             log.save()
+
+            # Pot ser que calgui enregistrar 1 attachment
             attachment_form = AttachmentForm(request.POST, request.FILES)
             if attachment_form.is_valid():
                 attachment = attachment_form.save(commit=False)
                 attachment.issue = issue
                 attachment.save()
+
             return redirect(self.success_url)
         else:
             return self.form_invalid(form)
