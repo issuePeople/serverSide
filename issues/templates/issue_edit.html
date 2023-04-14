@@ -25,6 +25,16 @@
                     <div class="detail-project">
                         <div class="section-name">Issue</div>
                     </div>
+                    {% if issue.dataLimit %}
+                            <div class="detail-header-line block-desc-container">
+                                <span class="blocked-sign" style="color: white">
+                                    <i class="fa fa-clock-o" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                </span>
+                                <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                    {{issue.dataLimit}}
+                                </span>
+                            </div>
+                        {%endif%}
                     {% if issue.bloquejat %}
                         <div class="detail-header-line block-desc-container">
                             <span class="blocked-sign" style="color: white">
