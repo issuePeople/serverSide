@@ -727,7 +727,7 @@
     function modif_url(param,value,int){
         var trobat = false;
 
-        if(window.location.href == "http://issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com/issues/"){
+        if(!window.location.href.includes("?")){
             window.location.href = window.location.href+"?"+param+"="+value
         }
         else{
