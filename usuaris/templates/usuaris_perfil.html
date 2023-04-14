@@ -58,6 +58,12 @@
                         <p style="color: #1e96b1; margin-left: 380px;"> &nbsp &nbsp Tancar sessió</p>
                     </a>
             </div>
+            <div class="timeline-wrapper" style="margin-left: 30px; width: 150px;">
+                <h1 style="white-space: nowrap;">Your team</h1>
+                {% for usuari in usuaris %}
+                    <a href="{% url 'usuari' usuari.user.id %}"><img src="{{ usuari.avatar.url }}" style="width: 32px; height: 32px; border-radius: 50%;"></a>
+                {% endfor %}
+            </div>
         </form>
    </section> 
 </div>

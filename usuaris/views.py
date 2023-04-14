@@ -170,7 +170,8 @@ def logout(request):
 
 
 def get_context_navbar(request):
+    usuari, created = Usuari.objects.get_or_create(user=request.user)
     return {
-        'usuari': get_object_or_404(Usuari, user=request.user),
+        'usuari': usuari,
         'logo_url': settings.LOGO_PNG_URL
     }
