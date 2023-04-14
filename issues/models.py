@@ -141,7 +141,7 @@ class Log(models.Model):
         (DEL_TAG, _('Tag esborrada'))
     )
 
-    issue = models.ForeignKey(Issue, related_name='logs', null=True, blank=True, on_delete=models.DO_NOTHING, verbose_name=_('Issue'))
+    issue = models.ForeignKey(Issue, related_name='logs', null=True, blank=True, on_delete=models.CASCADE, verbose_name=_('Issue'))
     usuari = models.ForeignKey(Usuari, related_name='logs', null=True, blank=True, on_delete=models.DO_NOTHING, verbose_name=_('Usuari'))
     data = models.DateTimeField(auto_now_add=True, verbose_name=_('Data creació'))
     tipus = models.CharField(max_length=20, choices=TLOG, verbose_name=_('Tipus'))
