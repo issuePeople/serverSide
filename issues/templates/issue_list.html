@@ -727,17 +727,14 @@
     function modif_url(param,value,int){
         var trobat = false;
 
-        if(window.location.href.length == 74){
+        if(window.location.href == "http://issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com/issues/"){
             window.location.href = window.location.href+"?"+param+"="+value
         }
         else{
         var url=window.location.href.split('?');
-        if('&' in url){
+
         var query=url[1].split('&');
-        }
-        else{
-            query = url[1];
-        }
+
         var out=[];
         for(var i = 0; query.length >i ; ++i){
             if(query[i].search(param) != -1){
