@@ -793,7 +793,7 @@
         
         var x = document.getElementById(val2).value;
         console.log(x)
-       if(window.location.href.length == 29){
+       if(!window.location.href.includes("?")){
         console.log(window.location.href);
         window.location.href = window.location.href+"?"+val1 +x;
        }
