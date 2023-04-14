@@ -114,11 +114,11 @@
                                             
                                             {%for usuari in usuaris%}
                                             {%with usuari.user.id|stringformat:"s" as id%}
-                                            {%if id in request.GET.assignat %}
+                                            {%if id in request.GET.assignacio %}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                
                                                     <div class="name">{{usuari.user.username}}</div>
-                                                    <button onclick="modif_url('assignat','{{usuari.user.id}}','2')" class="name" >X</button>
+                                                    <button onclick="modif_url('assignacio','{{usuari.user.id}}','2')" class="name" >X</button>
                                                     
                                             </div>
                                             
@@ -140,10 +140,10 @@
                                             
                                             {%for usuari in usuaris%}
                                             {%with usuari.user.id|stringformat:"s" as id%}
-                                            {% if id in request.GET.creat %}
+                                            {% if id in request.GET.creador %}
                                             <div class="single-applied-filter ng-animate-disabled include" id="bug_select">
                                                     <div class="name">{{usuari.user.username}}</div>
-                                                    <button onclick="modif_url('creat','{{usuari.user.id}}','2')" class="name" >X</button>
+                                                    <button onclick="modif_url('creador','{{usuari.user.id}}','2')" class="name" >X</button>
                                                     
                                             </div>
                                             {%endif%}
@@ -333,9 +333,9 @@
                                             <div>
                                                 {%for usuari in usuaris%}
                                                 {%with usuari.user.id|stringformat:"s" as id%}
-                                                {%if request.GET.assignat is null or id not in request.GET.assignat%}
+                                                {%if request.GET.assignacio is null or id not in request.GET.assignacio%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211);">
-                                                    <div onclick="modif_url('assignat','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
+                                                    <div onclick="modif_url('assignacio','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
                                                     
                                                 </button>
                                                 {%endif%}
@@ -397,9 +397,9 @@
                                             <div>
                                                 {%for usuari in usuaris%}
                                                 {%with usuari.user.id|stringformat:"s" as id%}
-                                                {%if request.GET.creat is null or id not in request.GET.creat%}
+                                                {%if request.GET.creador is null or id not in request.GET.creador%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
-                                                    <div onclick="modif_url('creat','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
+                                                    <div onclick="modif_url('creador','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
                                                     
                                                 </button>
                                                 {%endif%}
