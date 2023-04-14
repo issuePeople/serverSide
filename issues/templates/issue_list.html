@@ -689,21 +689,20 @@
                                 {%else%}
                                 <img class="issue-assignedto" src="https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/unnamed.png" style="width: 25PX; height: 25PX;border-radius: 50%"></img>
                                 {%endif%}
-                                <form method="post">
+                                <form method="post" >
                                     {% csrf_token %}
                                     <input type="hidden" name="id_issue" value="{{issue.id}}">
-                                    <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                    <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="assigned-button" style="margin-top: 5px; border:none; outline:none;background: none;">
                                         <option value="0">no assignat</option>
                                         {% for usuari in usuaris %}
-                                        {%with usuari.user.id|stringformat:"s" as id%}
-                                        {% if issue.assignacio.user.id == usuari.user.id %}
                                         
-                                            <option selected="selected" value="{{id}}">{{usuari.user.username}}</option>
+                                        {% if issue.assignacio.user.id == usuari.user.id %}
+                                            <option selected="selected" value="{{usuari.user.id}}">{{usuari.user.username}}</option>
                                         {%else%}
-                                                <option value="{{id}}">{{usuari.user.username}}</option>
+                                                <option value="{{usuari.user.id}}">{{usuari.user.username}}</option>
                                         
                                         {%endif%}
-                                        {%endwith%}
+                                        
                                         {% endfor %}
                                     </select>
                                     <button id="btnSaveAssig{{issue.id}}" type="submit"  name="guardar_assignat" style="display: none;"></button>
@@ -727,8 +726,8 @@
     
     function modif_url(param,value,int){
         var trobat = false;
-        console.log(window.location.href)
-        if(window.location.href =="http://127.0.0.1:8000/issues/"){
+        
+        if(window.location.pathname =="/issues/"){
             window.location.href = window.location.href+"?"+param+"="+value
         }
         else{
