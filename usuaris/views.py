@@ -23,9 +23,9 @@ class VeureUsuariView(IsAuthenticatedMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(get_context_navbar(self.request))
         context.update({
             'logs': Log.objects.filter(usuari=self.get_object()).order_by('-data'),
-            'logo_url': settings.LOGO_PNG_URL,
             'usuaris': Usuari.objects.all(),
             'NO_AVATAR_URL': settings.NO_AVATAR_URL
         })
@@ -41,8 +41,8 @@ class EditarPerfilView(IsAuthenticatedMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(get_context_navbar(self.request))
         context.update({
-            'logo_url': settings.LOGO_PNG_URL,
             'usuaris': Usuari.objects.all()
         })
         return context
@@ -172,6 +172,6 @@ def logout(request):
 def get_context_navbar(request):
     usuari, created = Usuari.objects.get_or_create(user=request.user)
     return {
-        'usuari': usuari,
+        'logged_usuari': usuari,
         'logo_url': settings.LOGO_PNG_URL
     }
