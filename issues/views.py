@@ -82,6 +82,7 @@ class ListIssueView(IsAuthenticatedMixin, FilterView):
                 log.valor_nou = assignat.user.first_name
                 issue.assignacio = assignat
 
+            issue.save()
             log.save()
 
         return redirect(request.META.get('HTTP_REFERER'))
