@@ -726,8 +726,8 @@
     
     function modif_url(param,value,int){
         var trobat = false;
-        
-        if( window.location.href == window.location.hostname+"/issues/"){
+        console.log()
+        if(window.location.href.length == (window.location.hostname+"/issues/").length){
             window.location.href = window.location.href+"?"+param+"="+value
         }
         else{
