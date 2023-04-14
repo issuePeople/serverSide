@@ -684,13 +684,16 @@
                                 <td class="assigned-field" style="text-align: center;
                                 vertical-align: middle;"> 
                                 <div style="display:flex; flex-direction: row;">
-                                <img class="issue-assignedto" src="{{issue.assignacio.avatar.url}}" style="width: 25PX; height: 25PX;"></img>  
+                                {%if issue.assignacio.avatar.url is not null%}
+                                <img class="issue-assignedto" src="{{issue.assignacio.avatar.url}}" style="width: 25PX; height: 25PX;border-radius: 50%"></img> 
+                                {%else%}
+                                <img class="issue-assignedto" src="https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/unnamed.png" style="width: 25PX; height: 25PX;border-radius: 50%"></img>
+                                {%endif%}
                                 <form method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id_issue" value="{{issue.id}}">
                                     <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
-                                        <option value="0">
-                                            no avatar</option>
+                                        <option value="0">no assignat</option>
                                         {% for usuari in usuaris %}
                                         {%with usuari.user.id|stringformat:"s" as id%}
                                         {% if issue.assignacio.user.id == usuari.user.id %}
