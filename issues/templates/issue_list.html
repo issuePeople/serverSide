@@ -726,14 +726,18 @@
     
     function modif_url(param,value,int){
         var trobat = false;
-        console.log(window.location.href.length)
-        console.log((window.location.hostname+"/issues/").length)
+
         if(window.location.href.length == (window.location.hostname+"/issues/").length){
             window.location.href = window.location.href+"?"+param+"="+value
         }
         else{
         var url=window.location.href.split('?');
+        if('&' in url){
         var query=url[1].split('&');
+        }
+        else{
+            query = url[1];
+        }
         var out=[];
         for(var i = 0; query.length >i ; ++i){
             if(query[i].search(param) != -1){
