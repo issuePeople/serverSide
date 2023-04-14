@@ -682,24 +682,33 @@
                                 </td>
                                 
                                 <td class="assigned-field" style="text-align: center;
-                                vertical-align: middle;">   
+                                vertical-align: middle;"> 
+                                <div style="display:flex; flex-direction: row;">
+                                {%if issue.assignacio.avatar.url is not null%}
+                                <img class="issue-assignedto" src="{{issue.assignacio.avatar.url}}" style="width: 25PX; height: 25PX;border-radius: 50%"></img> 
+                                {%else%}
+                                <img class="issue-assignedto" src="https://issuestorage.s3.us-west-2.amazonaws.com/media/avatar/unnamed.png" style="width: 25PX; height: 25PX;border-radius: 50%"></img>
+                                {%endif%}
                                 <form method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="id_issue" value="{{issue.id}}">
-                                    <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="assigned-button" style="margin-top: 5px; border:none; outline:none;background: none;">
-                                        <option value="0">
-                                            no avatar</option>
+                                    <select id="selectAssig{{issue.id}}" onchange="document.getElementById('btnSaveAssig{{issue.id}}').click() "name="assignat" type="submit" class="status-button" style="margin-top: 5px; border:none; outline:none;background: none;">
+                                        <option value="0">no assignat</option>
                                         {% for usuari in usuaris %}
+                                        {%with usuari.user.id|stringformat:"s" as id%}
                                         {% if issue.assignacio.user.id == usuari.user.id %}
-                                            <option selected="selected" value="{{usuari.user.id}}">{{usuari.user.username}}</option>
+                                        
+                                            <option selected="selected" value="{{id}}">{{usuari.user.username}}</option>
                                         {%else%}
-                                                <option value="{{usuari.user.id}}">{{usuari.user.username}}</option>
+                                                <option value="{{id}}">{{usuari.user.username}}</option>
+                                        
                                         {%endif%}
+                                        {%endwith%}
                                         {% endfor %}
                                     </select>
                                     <button id="btnSaveAssig{{issue.id}}" type="submit"  name="guardar_assignat" style="display: none;"></button>
                                     </form>
-                                    <img class="issue-assignedto" src="{{issue.assignacio.avatar.url}}"></img>
+                                </div>
                                     
                                 </td>
                                 
@@ -795,23 +804,6 @@
        }
        else{
         window.location.href= window.location.href+"&"+val1+x;
-       }
-    }
-    function filtre_llista(val1,val2){
-     
-       if(window.location.href.length == 29){
-        console.log(window.location.href);
-        window.location.href = window.location.href+"?"+val1 +val2;
-       }
-       else if(window.location.href.includes(val1)){
-        var url =window.location.href;
-        window.location.href = url.replace(val1 , val1 + val2+",")
-        
-        var num =url.indexOf(val1);
-        console.log(num)
-       }
-       else{
-        window.location.href= window.location.href+"&"+val1+val2;
        }
     }
 
