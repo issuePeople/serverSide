@@ -10,7 +10,7 @@ class IssuesView(viewsets.ModelViewSet):
     serializer_class = serializers.IssueSerializer
     permission_classes = []
 
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = {
         'id': ['exact', 'in'],
         'tipus': ['exact', 'in'],
@@ -25,4 +25,5 @@ class IssuesView(viewsets.ModelViewSet):
     ordering_fields = ['id', 'subject', 'descripcio', 'tipus', 'estat', 'gravetat',
                        'bloquejat', 'dataCreacio', 'dataLimit', 'dataModificacio',
                        'prioritat', 'assignacio', 'observadors', 'creador', 'tags']
+    search_fields = ['subject', 'descripcio']
 
