@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView, FormView
+from rest_framework.authtoken.models import Token
 from .forms import UsuariForm, LoginForm, RegistreForm
 from issuePeople.mixins import IsAuthenticatedMixin
 from issues.models import Log
@@ -117,6 +118,8 @@ class LoginView(FormView):
             # Autentiquem l'usuari (Django)
             user = authenticate(username=username, password=password)
             if user and user.is_active:
+                # Si no tenia token, li donem un
+                Token.objects.get_or_create(user=user)
                 djangologin(request, user)
                 return redirect(self.success_url)
             else:
@@ -155,6 +158,9 @@ class RegistreView(LoginView):
                 user=user
             )
             usuari.save()
+
+            # Ahhh, i li donem un token ara!
+            Token.objects.create(user=user)
 
             # Fem login
             djangologin(request, user)

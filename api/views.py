@@ -8,7 +8,6 @@ class IssuesView(viewsets.ModelViewSet):
     queryset = Issue.objects.all()
     models = Issue
     serializer_class = serializers.IssueSerializer
-    permission_classes = []
 
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = {
