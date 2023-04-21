@@ -16,6 +16,7 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register(r'issues', views.IssuesView)
+router.register(r'usuaris', views.UsuarisView)
 
 urlpatterns = [
     path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
