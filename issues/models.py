@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from django.apps import apps
 from django.utils.translation import gettext_lazy as _
 
 from usuaris.models import Usuari
