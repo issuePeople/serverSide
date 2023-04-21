@@ -34,8 +34,8 @@ class UsuarisView(viewsets.ModelViewSet):
     serializer_class = serializers.UsuariExtendedSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
-            # Quan fem get obtenim tota la informació
+        if self.action == 'retrieve':
+            # Quan fem get d'un usuari concret n'obtenim tota la informació
             return serializers.UsuariExtendedSerializer
         else:
             # En el list tenim només la info bàsica

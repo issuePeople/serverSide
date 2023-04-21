@@ -62,10 +62,11 @@ class LogSerializer(serializers.ModelSerializer):
 class UsuariExtendedSerializer(UsuariSerializer):
     observats = IssueSerializer(many=True, read_only=True)
     logs = LogSerializer(many=True, read_only=True)
+    token = serializers.CharField(source='user.auth_token', read_only=True)
 
     class Meta:
         model = Usuari
-        fields = ('id', 'username', 'nom', 'bio', 'avatar', 'observats', 'logs')
+        fields = ('id', 'username', 'nom', 'bio', 'avatar', 'observats', 'logs', 'token')
 
 
 class IssueExtendedSerializer(IssueSerializer):
