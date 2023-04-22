@@ -59,6 +59,7 @@ class UsuariExtendedSerializer(UsuariSerializer):
 
 class IssueExtendedSerializer(IssueSerializer):
     creador = UsuariSerializer(read_only=True)
+    observadors = UsuariSerializer(many=True, read_only=True)
     comentaris = ComentariSerializer(many=True, read_only=True)
     logs = LogSerializer(many=True, read_only=True)
 
