@@ -31,6 +31,14 @@ class IssueSerializer(serializers.ModelSerializer):
                   'dataLimit', 'bloquejat', 'motiuBloqueig')
 
 
+class ComentariSerializer(serializers.ModelSerializer):
+    autor = UsuariSerializer(read_only=True)
+
+    class Meta:
+        model = Comentari
+        fields = '__all__'
+
+
 class LogSerializer(serializers.ModelSerializer):
     usuari = UsuariSerializer(read_only=True)
 
@@ -51,6 +59,7 @@ class UsuariExtendedSerializer(UsuariSerializer):
 
 class IssueExtendedSerializer(IssueSerializer):
     creador = UsuariSerializer(read_only=True)
+    comentaris = ComentariSerializer(many=True, read_only=True)
 
     class Meta:
         model = Issue
