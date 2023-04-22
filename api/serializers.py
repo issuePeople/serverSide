@@ -31,6 +31,12 @@ class IssueSerializer(serializers.ModelSerializer):
                   'dataLimit', 'bloquejat', 'motiuBloqueig')
 
 
+class AttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = '__all__'
+
+
 class ComentariSerializer(serializers.ModelSerializer):
     autor = UsuariSerializer(read_only=True)
 
@@ -60,6 +66,7 @@ class UsuariExtendedSerializer(UsuariSerializer):
 class IssueExtendedSerializer(IssueSerializer):
     creador = UsuariSerializer(read_only=True)
     observadors = UsuariSerializer(many=True, read_only=True)
+    attachments = AttachmentSerializer(many=True, read_only=True)
     comentaris = ComentariSerializer(many=True, read_only=True)
     logs = LogSerializer(many=True, read_only=True)
 
