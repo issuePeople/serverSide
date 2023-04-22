@@ -8,7 +8,7 @@ from . import serializers
 class IssuesView(viewsets.ModelViewSet):
     queryset = Issue.objects.all()
     models = Issue
-    serializer_class = serializers.IssueExtendedSerializer
+    serializer_class = serializers.IssueSerializer
 
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = {
@@ -27,11 +27,20 @@ class IssuesView(viewsets.ModelViewSet):
                        'prioritat', 'assignacio', 'observadors', 'creador', 'tags']
     search_fields = ['subject', 'descripcio']
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            # Quan fem get d'un issue concret n'obtenim tota la informació
+            return serializers.IssueExtendedSerializer
+        else:
+            # En el list tenim només la info bàsica
+            # En els updates també podem modificar només la informació bàsica
+            return self.serializer_class
+
 
 class UsuarisView(viewsets.ModelViewSet):
     queryset = Usuari.objects.all()
     models = Usuari
-    serializer_class = serializers.UsuariExtendedSerializer
+    serializer_class = serializers.UsuariSerializer
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -40,4 +49,4 @@ class UsuarisView(viewsets.ModelViewSet):
         else:
             # En el list tenim només la info bàsica
             # En els updates també podem modificar només la informació bàsica
-            return serializers.UsuariSerializer
+            return self.serializer_class
