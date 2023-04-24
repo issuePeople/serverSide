@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins, status
 from rest_framework.response import Response
-from issues.models import Issue, Tag, Comentari
+from issues.models import Issue, Tag, Comentari, Attachment
 from usuaris.models import Usuari
 from . import serializers
 
@@ -144,7 +144,7 @@ class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Ge
         issue_id = self.kwargs['issue_id']
         issue = get_object_or_404(Issue, id=issue_id)
 
-        # Filtrem per obtenir només els tags d'aquell issue
+        # Filtrem per obtenir només els comentaris d'aquell issue
         queryset = super().get_queryset()
         queryset = queryset.filter(issue=issue)
         queryset = queryset.order_by('-data')
@@ -153,6 +153,29 @@ class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Ge
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
         request.POST['autor_id'] = request.user
+        request.POST['issue_id'] = kwargs['issue_id']
+        response = super().create(request)
+        request.POST._mutable = False
+        return response
+
+
+class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Attachment.objects.all()
+    serializer_class = serializers.AttachmentSerializer
+
+    def get_queryset(self):
+        # Aconseguim l'issue donat per paràmetre
+        issue_id = self.kwargs['issue_id']
+        issue = get_object_or_404(Issue, id=issue_id)
+
+        # Filtrem per obtenir només els attachments d'aquell issue
+        queryset = super().get_queryset()
+        queryset = queryset.filter(issue=issue)
+        queryset = queryset.order_by('-data')
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        request.POST._mutable = True
         request.POST['issue_id'] = kwargs['issue_id']
         response = super().create(request)
         request.POST._mutable = False

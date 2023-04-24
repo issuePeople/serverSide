@@ -38,9 +38,15 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
+    issue_id = serializers.PrimaryKeyRelatedField(
+        queryset=Issue.objects.all(),
+        write_only=True,
+        source='issue'
+    )
+
     class Meta:
         model = Attachment
-        fields = '__all__'
+        fields = ('id', 'data', 'document', 'issue_id')
 
 
 class ComentariSerializer(serializers.ModelSerializer):
