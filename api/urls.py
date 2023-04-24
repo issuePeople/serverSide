@@ -16,6 +16,7 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register(r'issues', views.IssuesView)
+router.register(r'issues/(?P<issue_id>\d+)/observadors', views.ObservadorsView)
 router.register(r'usuaris', views.UsuarisView)
 
 urlpatterns = [
