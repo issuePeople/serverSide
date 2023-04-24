@@ -50,10 +50,15 @@ class ComentariSerializer(serializers.ModelSerializer):
         write_only=True,
         source='autor'
     )
+    issue_id = serializers.PrimaryKeyRelatedField(
+        queryset=Issue.objects.all(),
+        write_only=True,
+        source='issue'
+    )
 
     class Meta:
         model = Comentari
-        fields = '__all__'
+        fields = ('id', 'text', 'autor', 'autor_id', 'data', 'issue_id')
 
 
 class LogSerializer(serializers.ModelSerializer):
