@@ -18,6 +18,7 @@ router = routers.DefaultRouter()
 router.register(r'issues', views.IssuesView)
 router.register(r'issues/(?P<issue_id>\d+)/observadors', views.ObservadorsView)
 router.register(r'issues/(?P<issue_id>\d+)/tags', views.TagsIssueView)
+router.register(r'issues/(?P<issue_id>\d+)/comentaris', views.ComentarisView)
 router.register(r'usuaris', views.UsuarisView)
 
 urlpatterns = [
