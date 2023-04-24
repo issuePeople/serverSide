@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins, status
 from rest_framework.response import Response
-from issues.models import Issue, Tag
+from issues.models import Issue, Tag, Comentari
 from usuaris.models import Usuari
 from . import serializers
 
@@ -120,7 +120,7 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
-                'error': "Has d'indicar l'identificador de l'observador a afegir"})
+                'error': "Has d'indicar el nom i el color del tag a afegir"})
 
     def destroy(self, request, *args, **kwargs):
         # Tindrem /issues/issue_id/tags/pk: Agafem els paràmetres, l'issue i del tag
@@ -129,10 +129,46 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
         id_issue = kwargs.get('issue_id')
         issue = get_object_or_404(Issue, id=id_issue)
 
-        # Esborrem la relació entre issue i observador
+        # Esborrem la relació entre issue i tag
         issue.tags.remove(tag)
         issue.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = Comentari.objects.all()
+    serializer_class = serializers.ComentariSerializer
+
+    def get_queryset(self):
+        # Aconseguim l'issue donat per paràmetre
+        issue_id = self.kwargs['issue_id']
+        issue = get_object_or_404(Issue, id=issue_id)
+
+        # Filtrem per obtenir només els tags d'aquell issue
+        queryset = super().get_queryset()
+        queryset = queryset.filter(issue=issue)
+        queryset = queryset.order_by('-data')
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        # Per paràmetre ens ha de venir el text del comentari a afegir
+        text = request.data.get('text', None)
+        if text:
+            # Busquem l'issue a què estem comentant
+            issue_id = self.kwargs['issue_id']
+            issue = get_object_or_404(Issue, id=issue_id)
+
+            # Creem el comentari
+            Comentari.objects.create(
+                text=text,
+                issue=issue,
+                autor=request.user.usuari
+            )
+
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={
+                'error': "Has d'indicar el text del comentari a afegir"})
 
 
 class UsuarisView(viewsets.ModelViewSet):
