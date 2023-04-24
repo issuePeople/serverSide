@@ -1,10 +1,22 @@
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins, status
 from rest_framework.response import Response
-from issues.models import Issue, Tag, Comentari, Attachment
+from issues.models import Issue, Tag, Comentari, Attachment, Log
 from usuaris.models import Usuari
 from . import serializers
+
+
+def registrar_log_update(issue, usuari, tipus, previ, nou):
+    if str(previ) != str(nou):
+        Log.objects.create(
+            issue=issue,
+            usuari=usuari,
+            tipus=tipus,
+            valor_previ=previ,
+            valor_nou=nou
+        )
 
 
 class IssuesView(viewsets.ModelViewSet):
@@ -43,6 +55,43 @@ class IssuesView(viewsets.ModelViewSet):
         request.POST['creador_id'] = request.user
         response = super().create(request)
         request.POST._mutable = False
+        return response
+
+    def update(self, request, *args, **kwargs):
+        issue_id = kwargs['pk']
+        issue = get_object_or_404(Issue, id=issue_id)
+        usuari = request.user.usuari
+
+        response = super().update(request, args, kwargs)
+
+        # Si s'han fet els updates, registrem els logs de canvis d'atributs
+        if response.status_code == status.HTTP_200_OK:
+            issue_nou = get_object_or_404(Issue, id=issue_id)
+
+        for key in request.data.keys():
+            if key == 'subject':
+                registrar_log_update(issue, usuari, Log.SUBJ, issue.subject, issue_nou.subject)
+            elif key == 'descripcio':
+                registrar_log_update(issue, usuari, Log.DESCR, issue.descripcio, issue_nou.descripcio)
+            elif key == 'tipus':
+                registrar_log_update(issue, usuari, Log.TIPUS, issue.tipus, issue_nou.tipus)
+            elif key == 'gravetat':
+                registrar_log_update(issue, usuari, Log.GRAV, issue.gravetat, issue_nou.gravetat)
+            elif key == 'prioritat':
+                registrar_log_update(issue, usuari, Log.PRIO, issue.prioritat, issue_nou.prioritat)
+            elif key == 'bloquejat':
+                registrar_log_update(issue, usuari, Log.BLOQ, issue.bloquejat, issue_nou.bloquejat)
+            elif key == 'dataLimit':
+                if issue.dataLimit:
+                    previ = issue.dataLimit.strftime("%d %b. %Y")
+                else:
+                    previ = 'Sense definir'
+                if issue_nou.dataLimit:
+                    nou = issue_nou.dataLimit.strftime("%d %b. %Y")
+                else:
+                    nou = 'Sense definir'
+                registrar_log_update(issue, usuari, Log.LIMIT, previ, nou)
+
         return response
 
 

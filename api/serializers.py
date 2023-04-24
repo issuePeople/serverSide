@@ -15,6 +15,7 @@ class UsuariSerializer(serializers.ModelSerializer):
 
 
 class IssueSerializer(serializers.ModelSerializer):
+    subject = serializers.CharField(required=False)
     assignacio = UsuariSerializer(read_only=True)
 
     def to_representation(self, instance):
