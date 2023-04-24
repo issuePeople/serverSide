@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins, status
@@ -55,6 +54,16 @@ class IssuesView(viewsets.ModelViewSet):
         request.POST['creador_id'] = request.user
         response = super().create(request)
         request.POST._mutable = False
+
+        # Registrem el log de la creació, si s'ha creat
+        if response.status_code == status.HTTP_201_CREATED:
+            Log.objects.create(
+                issue=get_object_or_404(Issue, id=response.data['id']),
+                usuari=request.user.usuari,
+                tipus=Log.CREAR,
+                valor_previ=None,
+                valor_nou=None
+            )
         return response
 
     def update(self, request, *args, **kwargs):
