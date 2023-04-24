@@ -45,6 +45,11 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
 class ComentariSerializer(serializers.ModelSerializer):
     autor = UsuariSerializer(read_only=True)
+    autor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Usuari.objects.all(),
+        write_only=True,
+        source='autor'
+    )
 
     class Meta:
         model = Comentari
