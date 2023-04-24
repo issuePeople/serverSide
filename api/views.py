@@ -77,18 +77,6 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
                 'error': "Has d'indicar l'identificador de l'observador a afegir"})
 
-    def destroy(self, request, *args, **kwargs):
-        # Tindrem /issues/issue_id/observadors/pk: Agafem els paràmetres, l'issue i l'usuari
-        id_observador = kwargs.get('pk')
-        usuari = get_object_or_404(Usuari, user_id=id_observador)
-        id_issue = kwargs.get('issue_id')
-        issue = get_object_or_404(Issue, id=id_issue)
-
-        # Esborrem la relació entre issue i observador
-        issue.observadors.remove(usuari)
-        issue.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class UsuarisView(viewsets.ModelViewSet):
     queryset = Usuari.objects.all()
