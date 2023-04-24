@@ -28,13 +28,20 @@ class IssuesView(viewsets.ModelViewSet):
     search_fields = ['subject', 'descripcio']
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
+        if self.action == 'retrieve' or self.action == 'create':
             # Quan fem get d'un issue concret n'obtenim tota la informació
             return serializers.IssueExtendedSerializer
         else:
             # En el list tenim només la info bàsica
             # En els updates també podem modificar només la informació bàsica
             return self.serializer_class
+
+    def create(self, request, *args, **kwargs):
+        request.POST._mutable = True
+        request.POST['creador_id'] = request.user
+        response = super().create(request)
+        request.POST._mutable = False
+        return response
 
 
 class UsuarisView(viewsets.ModelViewSet):

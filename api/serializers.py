@@ -71,6 +71,11 @@ class UsuariExtendedSerializer(UsuariSerializer):
 
 class IssueExtendedSerializer(IssueSerializer):
     creador = UsuariSerializer(read_only=True)
+    creador_id = serializers.PrimaryKeyRelatedField(
+        queryset=Usuari.objects.all(),
+        write_only=True,
+        source='creador'
+    )
     observadors = UsuariSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     attachments = AttachmentSerializer(many=True, read_only=True)
