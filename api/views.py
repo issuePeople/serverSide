@@ -61,21 +61,11 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         return queryset
 
     def create(self, request, *args, **kwargs):
-        # Per paràmetre ens ha de venir l'observador a afegir
-        id_observador = request.data.get('observador', None)
-        if id_observador:
-            # Busquem l'usuari i l'issue que hem de relacionar
-            usuari = get_object_or_404(Usuari, user_id=id_observador)
-            issue_id = self.kwargs['issue_id']
-            issue = get_object_or_404(Issue, id=issue_id)
-
-            # Guardem la relació
-            issue.observadors.add(usuari)
-            issue.save()
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={
-                'error': "Has d'indicar l'identificador de l'observador a afegir"})
+        request.POST._mutable = True
+        request.POST['autor_id'] = request.user
+        response = super().create(request)
+        request.POST._mutable = False
+        return response
 
     def destroy(self, request, *args, **kwargs):
         # Tindrem /issues/issue_id/observadors/pk: Agafem els paràmetres, l'issue i l'usuari
