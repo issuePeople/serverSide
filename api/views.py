@@ -2,9 +2,20 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins, status
 from rest_framework.response import Response
-from issues.models import Issue, Tag, Comentari, Attachment
+from issues.models import Issue, Tag, Comentari, Attachment, Log
 from usuaris.models import Usuari
 from . import serializers
+
+
+def registrar_log_update(issue, usuari, tipus, previ, nou):
+    if str(previ) != str(nou):
+        Log.objects.create(
+            issue=issue,
+            usuari=usuari,
+            tipus=tipus,
+            valor_previ=previ,
+            valor_nou=nou
+        )
 
 
 class IssuesView(viewsets.ModelViewSet):
@@ -43,6 +54,53 @@ class IssuesView(viewsets.ModelViewSet):
         request.POST['creador_id'] = request.user
         response = super().create(request)
         request.POST._mutable = False
+
+        # Registrem el log de la creació, si s'ha creat
+        if response.status_code == status.HTTP_201_CREATED:
+            Log.objects.create(
+                issue=get_object_or_404(Issue, id=response.data['id']),
+                usuari=request.user.usuari,
+                tipus=Log.CREAR,
+                valor_previ=None,
+                valor_nou=None
+            )
+        return response
+
+    def update(self, request, *args, **kwargs):
+        issue_id = kwargs['pk']
+        issue = get_object_or_404(Issue, id=issue_id)
+        usuari = request.user.usuari
+
+        response = super().update(request, args, kwargs)
+
+        # Si s'han fet els updates, registrem els logs de canvis d'atributs
+        if response.status_code == status.HTTP_200_OK:
+            issue_nou = get_object_or_404(Issue, id=issue_id)
+
+        for key in request.data.keys():
+            if key == 'subject':
+                registrar_log_update(issue, usuari, Log.SUBJ, issue.subject, issue_nou.subject)
+            elif key == 'descripcio':
+                registrar_log_update(issue, usuari, Log.DESCR, issue.descripcio, issue_nou.descripcio)
+            elif key == 'tipus':
+                registrar_log_update(issue, usuari, Log.TIPUS, issue.tipus, issue_nou.tipus)
+            elif key == 'gravetat':
+                registrar_log_update(issue, usuari, Log.GRAV, issue.gravetat, issue_nou.gravetat)
+            elif key == 'prioritat':
+                registrar_log_update(issue, usuari, Log.PRIO, issue.prioritat, issue_nou.prioritat)
+            elif key == 'bloquejat':
+                registrar_log_update(issue, usuari, Log.BLOQ, issue.bloquejat, issue_nou.bloquejat)
+            elif key == 'dataLimit':
+                if issue.dataLimit:
+                    previ = issue.dataLimit.strftime("%d %b. %Y")
+                else:
+                    previ = 'Sense definir'
+                if issue_nou.dataLimit:
+                    nou = issue_nou.dataLimit.strftime("%d %b. %Y")
+                else:
+                    nou = 'Sense definir'
+                registrar_log_update(issue, usuari, Log.LIMIT, previ, nou)
+
         return response
 
 
@@ -117,6 +175,15 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
             # Guardem la relació
             issue.tags.add(tag)
             issue.save()
+
+            # Registrem el log
+            Log.objects.create(
+                issue=issue,
+                usuari=request.user.usuari,
+                tipus=Log.ADD_TAG,
+                valor_nou=tag.nom
+            )
+
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
@@ -132,6 +199,15 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
         # Esborrem la relació entre issue i tag
         issue.tags.remove(tag)
         issue.save()
+
+        # Registrem el log
+        Log.objects.create(
+            issue=issue,
+            usuari=request.user.usuari,
+            tipus=Log.DEL_TAG,
+            valor_previ=tag.nom
+        )
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -175,10 +251,41 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         return queryset
 
     def create(self, request, *args, **kwargs):
-        request.POST._mutable = True
-        request.POST['issue_id'] = kwargs['issue_id']
-        response = super().create(request)
-        request.POST._mutable = False
+        # Quan fem multipart post, no podem fer mutable la request, així que fem override de
+        # tot el create per forçar el issue_id rebut per kwargs
+        data = request.data.copy()
+        data.update({'issue_id': kwargs['issue_id']})
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        # Si arribem aquí és que s'ha afegit l'attachment, així que escrivim el log
+        Log.objects.create(
+            issue=get_object_or_404(Issue, id=kwargs['issue_id']),
+            usuari=request.user.usuari,
+            tipus=Log.ADD_ATT,
+            valor_nou=get_object_or_404(Attachment, id=serializer.data['id']).document.name
+        )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        # Agafem el nom de l'attachment per després poder crear el log
+        valor_previ = self.get_object().document.name
+
+        # Fem el destroy
+        response = super().destroy(request, args, kwargs)
+
+        # Si s'ha destruit correactament, registrem el log
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            Log.objects.create(
+                issue=get_object_or_404(Issue, id=kwargs['issue_id']),
+                usuari=request.user.usuari,
+                tipus=Log.DEL_ATT,
+                valor_previ=valor_previ
+            )
+
         return response
 
 
