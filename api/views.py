@@ -305,7 +305,7 @@ class LogsView(mixins.ListModelMixin, viewsets.GenericViewSet):
         return queryset
 
 
-class UsuarisView(viewsets.ModelViewSet):
+class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Usuari.objects.all()
     models = Usuari
     serializer_class = serializers.UsuariSerializer
