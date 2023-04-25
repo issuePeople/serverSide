@@ -38,6 +38,13 @@ class UsuariSerializer(serializers.ModelSerializer):
 class IssueSerializer(serializers.ModelSerializer):
     subject = serializers.CharField(required=False)
     assignacio = UsuariSerializer(read_only=True)
+    assignacio_id = serializers.PrimaryKeyRelatedField(
+        allow_null=True,
+        queryset=Usuari.objects.all(),
+        write_only=True,
+        required=False,
+        source='assignacio'
+    )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -49,8 +56,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ('id', 'subject', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio', 'dataCreacio',
-                  'dataLimit', 'bloquejat', 'motiuBloqueig')
+        fields = ('id', 'subject', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio', 'assignacio_id',
+                  'dataCreacio', 'dataLimit', 'bloquejat', 'motiuBloqueig')
 
 
 class TagSerializer(serializers.ModelSerializer):
