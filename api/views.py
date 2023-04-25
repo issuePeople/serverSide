@@ -289,6 +289,22 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         return response
 
 
+class LogsView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Log.objects.all()
+    serializer_class = serializers.LogSerializer
+
+    def get_queryset(self):
+        # Aconseguim l'issue donat per paràmetre
+        issue_id = self.kwargs['issue_id']
+        issue = get_object_or_404(Issue, id=issue_id)
+
+        # Filtrem per obtenir només els logs d'aquell issue
+        queryset = super().get_queryset()
+        queryset = queryset.filter(issue=issue)
+        queryset = queryset.order_by('-data')
+        return queryset
+
+
 class UsuarisView(viewsets.ModelViewSet):
     queryset = Usuari.objects.all()
     models = Usuari

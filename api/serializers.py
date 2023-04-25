@@ -73,7 +73,7 @@ class LogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Log
-        fields = '__all__'
+        fields = ('usuari', 'data', 'tipus', 'valor_previ', 'valor_nou')
 
 
 class UsuariExtendedSerializer(UsuariSerializer):
