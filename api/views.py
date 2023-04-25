@@ -233,10 +233,41 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         return queryset
 
     def create(self, request, *args, **kwargs):
-        request.POST._mutable = True
-        request.POST['issue_id'] = kwargs['issue_id']
-        response = super().create(request)
-        request.POST._mutable = False
+        # Quan fem multipart post, no podem fer mutable la request, així que fem override de
+        # tot el create per forçar el issue_id rebut per kwargs
+        data = request.data.copy()
+        data.update({'issue_id': kwargs['issue_id']})
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        # Si arribem aquí és que s'ha afegit l'attachment, així que escrivim el log
+        Log.objects.create(
+            issue=get_object_or_404(Issue, id=kwargs['issue_id']),
+            usuari=request.user.usuari,
+            tipus=Log.ADD_ATT,
+            valor_nou=get_object_or_404(Attachment, id=serializer.data['id']).document.name
+        )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        # Agafem el nom de l'attachment per després poder crear el log
+        valor_previ = self.get_object().document.name
+
+        # Fem el destroy
+        response = super().destroy(request, args, kwargs)
+
+        # Si s'ha destruit correactament, registrem el log
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            Log.objects.create(
+                issue=get_object_or_404(Issue, id=kwargs['issue_id']),
+                usuari=request.user.usuari,
+                tipus=Log.DEL_ATT,
+                valor_previ=valor_previ
+            )
+
         return response
 
 
