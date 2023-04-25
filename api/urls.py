@@ -20,6 +20,7 @@ router.register(r'issues/(?P<issue_id>\d+)/observadors', views.ObservadorsView)
 router.register(r'issues/(?P<issue_id>\d+)/tags', views.TagsIssueView)
 router.register(r'issues/(?P<issue_id>\d+)/comentaris', views.ComentarisView)
 router.register(r'issues/(?P<issue_id>\d+)/attachments', views.AttachmentsView)
+router.register(r'issues/(?P<issue_id>\d+)/logs', views.LogsView)
 router.register(r'usuaris', views.UsuarisView)
 
 urlpatterns = [
