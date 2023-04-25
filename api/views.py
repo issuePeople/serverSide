@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, filters, mixins, status
+from rest_framework import viewsets, filters, mixins, status, permissions
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 from issues.models import Issue, Tag, Comentari, Attachment, Log
 from usuaris.models import Usuari
 from . import serializers
@@ -305,7 +306,7 @@ class LogsView(mixins.ListModelMixin, viewsets.GenericViewSet):
         return queryset
 
 
-class UsuarisView(viewsets.ModelViewSet):
+class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Usuari.objects.all()
     models = Usuari
     serializer_class = serializers.UsuariSerializer
@@ -318,3 +319,7 @@ class UsuarisView(viewsets.ModelViewSet):
             # En el list tenim només la info bàsica
             # En els updates també podem modificar només la informació bàsica
             return self.serializer_class
+
+    def check_object_permissions(self, request, obj):
+        if request.method not in permissions.SAFE_METHODS and request.user.usuari != obj:
+            raise PermissionDenied("No tens permís per executar aquesta acció.")

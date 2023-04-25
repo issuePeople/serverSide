@@ -1,13 +1,34 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import User
 from issues.models import Issue, Tag, Attachment, Comentari, Log
 from usuaris.models import Usuari
 
 
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name')
+
+
 class UsuariSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='user.id', read_only=True)
-    username = serializers.CharField(source='user.username')
-    nom = serializers.CharField(source='user.first_name')
+    username = serializers.CharField(source='user.username', required=False)
+    nom = serializers.CharField(source='user.first_name', required=False)
+
+    def update(self, instance, validated_data):
+        # La part corresponent a usuari.user, la actualitzem amb UserSerializer
+        data_user = validated_data.get('user', None)
+        if data_user:
+            user_serializer = UserSerializer(instance=instance.user, data=data_user)
+            user_serializer.is_valid(raise_exception=True)
+            user_serializer.save()
+            validated_data.pop('user')
+
+        # La resta de camps, els actualitzem amb el propi serializer (són camps d'Usuari)
+        return super().update(instance, validated_data)
 
     class Meta:
         model = Usuari
@@ -76,9 +97,17 @@ class LogSerializer(serializers.ModelSerializer):
         fields = ('usuari', 'data', 'tipus', 'valor_previ', 'valor_nou')
 
 
+class LogExtendedSerializer(LogSerializer):
+    issue = IssueSerializer(read_only=True)
+
+    class Meta:
+        model = Log
+        fields = ('issue', 'usuari', 'data', 'tipus', 'valor_previ', 'valor_nou')
+
+
 class UsuariExtendedSerializer(UsuariSerializer):
     observats = IssueSerializer(many=True, read_only=True)
-    logs = LogSerializer(many=True, read_only=True)
+    logs = LogExtendedSerializer(many=True, read_only=True)
     token = serializers.CharField(source='user.auth_token', read_only=True)
 
     class Meta:
