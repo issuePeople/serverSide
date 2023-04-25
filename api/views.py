@@ -101,6 +101,16 @@ class IssuesView(viewsets.ModelViewSet):
                 else:
                     nou = 'Sense definir'
                 registrar_log_update(issue, usuari, Log.LIMIT, previ, nou)
+            elif key == 'assignacio_id':
+                if issue.assignacio:
+                    previ = issue.assignacio.user.first_name
+                else:
+                    previ = 'Sense assignar'
+                if issue_nou.assignacio:
+                    nou = issue_nou.assignacio.user.first_name
+                else:
+                    nou = 'Sense assignar'
+                registrar_log_update(issue, usuari, Log.ASSIGN, previ, nou)
 
         return response
 
