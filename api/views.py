@@ -175,6 +175,15 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
             # Guardem la relació
             issue.tags.add(tag)
             issue.save()
+
+            # Registrem el log
+            Log.objects.create(
+                issue=issue,
+                usuari=request.user.usuari,
+                tipus=Log.ADD_TAG,
+                valor_nou=tag.nom
+            )
+
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
@@ -190,6 +199,15 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
         # Esborrem la relació entre issue i tag
         issue.tags.remove(tag)
         issue.save()
+
+        # Registrem el log
+        Log.objects.create(
+            issue=issue,
+            usuari=request.user.usuari,
+            tipus=Log.DEL_TAG,
+            valor_previ=tag.nom
+        )
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
