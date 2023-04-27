@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'django_filters',
     'drf_yasg',
     'rest_framework',
@@ -63,6 +64,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -197,3 +199,9 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# CORS
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
