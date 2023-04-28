@@ -33,7 +33,7 @@
         <div class="main">
             <div>
                 <div class="taskboard-actions">
-                    <table style="width: 40%;border-collapse:separate; border-spacing: 0 5px;">
+                    <table style="width: 50%;border-collapse:separate; border-spacing: 0 5px;">
                         <tr>
                             {% if "?mostrar=watched" in request.get_full_path %}
                                 <td>
@@ -50,6 +50,35 @@
                                         </a>
                                     </th>
                                 </td>
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
+                                            <h1><i class="fa fa-tag" aria-hidden="true"></i>Token</h1>
+                                        </a>
+                                    </th>
+                                </td>
+                            {% elif "?mostrar=token" in request.get_full_path %}
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=timeline">
+                                            <h1><i class="fa fa-align-justify"  aria-hidden="true" ></i> &nbsp Timeline &nbsp </h1>
+                                        </a>
+                                    </th>
+                                </td>
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=watched">
+                                            <h1><i class="fa fa-eye" aria-hidden="true"></i> Watched</h1>
+                                        </a>
+                                    </th>
+                                </td>
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
+                                            <h1><i class="fa fa-tag" aria-hidden="true"></i><u>Token</u></h1>
+                                        </a>
+                                    </th>
+                                </td>
                             {%else%}
                                 <td>
                                     <th>
@@ -62,6 +91,13 @@
                                     <th>
                                         <a href="{% url 'usuari' usuari.user.id %}?mostrar=watched">
                                             <h1><i class="fa fa-eye" aria-hidden="true"></i> Watched</h1>
+                                        </a>
+                                    </th>
+                                </td>
+                                <td>
+                                    <th>
+                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
+                                            <h1><i class="fa fa-tag" aria-hidden="true"></i>Token</h1>
                                         </a>
                                     </th>
                                 </td>
@@ -91,6 +127,10 @@
                             </tr> 
                         {% endfor %}
                     </table>
+                </section>
+                {% elif "?mostrar=token" in request.get_full_path %}
+                <section class="token">
+                    <p>{{usuari.user.auth_token}}</p>
                 </section>
                 {%else%}
                 <section class ="timeline">
