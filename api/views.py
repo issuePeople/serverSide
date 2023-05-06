@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, filters, mixins, status, permissions
+from rest_framework import viewsets, filters, mixins, status, permissions, parsers
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import PermissionDenied
 from issues.models import Issue, Tag, Comentari, Attachment, Log
 from usuaris.models import Usuari
@@ -312,6 +314,7 @@ class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Ge
 class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Attachment.objects.all()
     serializer_class = serializers.AttachmentSerializer
+    parser_classes = (parsers.MultiPartParser, )
 
     def get_queryset(self):
         # Aconseguim l'issue donat per paràmetre
@@ -324,6 +327,12 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         queryset = queryset.order_by('-data')
         return queryset
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('issue_id', openapi.IN_PATH, required=True, type=openapi.TYPE_INTEGER),
+            openapi.Parameter('document', openapi.IN_FORM, required=True, type=openapi.TYPE_FILE),
+        ],
+    )
     def create(self, request, *args, **kwargs):
         # Quan fem multipart post, no podem fer mutable la request, així que fem override de
         # tot el create per forçar el issue_id rebut per kwargs
