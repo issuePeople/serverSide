@@ -168,10 +168,16 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
             issue_id = self.kwargs['issue_id']
             issue = get_object_or_404(Issue, id=issue_id)
 
-            # Guardem la relació
-            issue.observadors.add(usuari)
-            issue.save()
-            return Response(status=status.HTTP_201_CREATED)
+            # Si l'usuari ja observa l'issue, llencem error
+            if issue.observadors.contains(usuari):
+                return Response(status=status.HTTP_409_CONFLICT, data={
+                    'error': "Aquest usuari ja és observador de l'issue"})
+
+            # En cas que no, guardem la relació
+            else:
+                issue.observadors.add(usuari)
+                issue.save()
+                return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
                 'error': "Has d'indicar l'identificador de l'observador a afegir"})
