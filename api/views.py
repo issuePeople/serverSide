@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, mixins, status, permissions
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from issues.models import Issue, Tag, Comentari, Attachment, Log
 from usuaris.models import Usuari
@@ -51,21 +52,50 @@ class IssuesView(viewsets.ModelViewSet):
             return self.serializer_class
 
     def create(self, request, *args, **kwargs):
-        request.POST._mutable = True
-        request.POST['creador_id'] = request.user
-        response = super().create(request)
-        request.POST._mutable = False
+        data = request.data.copy()
+
+        # Posem les dades del creador
+        data['creador_id'] = request.user
+
+        # Creem l'issue
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
 
         # Registrem el log de la creació, si s'ha creat
-        if response.status_code == status.HTTP_201_CREATED:
+        Log.objects.create(
+            issue=get_object_or_404(Issue, id=serializer.data['id']),
+            usuari=request.user.usuari,
+            tipus=Log.CREAR,
+            valor_previ=None,
+            valor_nou=None
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=False, methods=['post'])
+    def bulk(self, request):
+        # Creem els issues amb el serializer
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        issues = serializer.save()  # Guarda i aconseguim els issues creats
+
+        # Posem el creador i registrem els log de la creació, si s'han creat
+        for issue in issues:
+            issue.creador = request.user.usuari
+            issue.save()
+
             Log.objects.create(
-                issue=get_object_or_404(Issue, id=response.data['id']),
+                issue=issue,
                 usuari=request.user.usuari,
                 tipus=Log.CREAR,
                 valor_previ=None,
                 valor_nou=None
             )
-        return response
+
+        # Retornem les dades dels issues creats
+        serialized_data = serializers.IssueSerializer(issues, many=True).data
+        return Response(serialized_data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
         issue_id = kwargs['pk']
@@ -238,12 +268,18 @@ class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Ge
         return queryset
 
     def create(self, request, *args, **kwargs):
-        request.POST._mutable = True
-        request.POST['autor_id'] = request.user
-        request.POST['issue_id'] = kwargs['issue_id']
-        response = super().create(request)
-        request.POST._mutable = False
-        return response
+        data = request.data.copy()
+
+        # Posem les dades de l'autor i de l'issue
+        data['autor_id'] = request.user
+        data['issue_id'] = kwargs['issue_id']
+
+        # Creem el comentari
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):

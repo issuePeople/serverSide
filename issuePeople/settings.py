@@ -205,3 +205,16 @@ SOCIALACCOUNT_PROVIDERS = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'APIS_SORTER': 'alpha',
+    'OPERATIONS_SORTER': 'alpha'
+}
