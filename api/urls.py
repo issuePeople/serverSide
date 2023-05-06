@@ -22,6 +22,7 @@ router.register(r'issues/(?P<issue_id>\d+)/comentaris', views.ComentarisView)
 router.register(r'issues/(?P<issue_id>\d+)/attachments', views.AttachmentsView)
 router.register(r'issues/(?P<issue_id>\d+)/logs', views.LogsView)
 router.register(r'usuaris', views.UsuarisView)
+router.register(r'tags', views.TagsView)
 
 urlpatterns = [
     path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

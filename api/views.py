@@ -390,7 +390,6 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
 
             # Si estem consultant la nostra informació, rebem també el token:
             if self.kwargs.get('pk') == str(self.request.user.id):
-                print("hola")
                 return serializers.UsuariWithTokenSerializer
 
             # Si no, veurem tota la informació però sense el token
@@ -404,3 +403,9 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
     def check_object_permissions(self, request, obj):
         if request.method not in permissions.SAFE_METHODS and request.user.usuari != obj:
             raise PermissionDenied("No tens permís per executar aquesta acció.")
+
+
+class TagsView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Tag.objects.all()
+    models = Tag
+    serializer_class = serializers.TagExtendedSerializer

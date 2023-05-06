@@ -66,6 +66,17 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TagExtendedSerializer(TagSerializer):
+    num_issues = serializers.SerializerMethodField()
+
+    def get_num_issues(self, tag):
+        return len(tag.issues.all())
+
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
 class AttachmentSerializer(serializers.ModelSerializer):
     issue_id = serializers.PrimaryKeyRelatedField(
         queryset=Issue.objects.all(),
