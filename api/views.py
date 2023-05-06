@@ -257,19 +257,26 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
         id_issue = kwargs.get('issue_id')
         issue = get_object_or_404(Issue, id=id_issue)
 
-        # Esborrem la relació entre issue i tag
-        issue.tags.remove(tag)
-        issue.save()
+        # Esborrem la relació entre issue i tag si l'issue té aquell tag
+        if issue.tags.contains(tag):
+            issue.tags.remove(tag)
+            issue.save()
 
-        # Registrem el log
-        Log.objects.create(
-            issue=issue,
-            usuari=request.user.usuari,
-            tipus=Log.DEL_TAG,
-            valor_previ=tag.nom
-        )
+            # Registrem el log
+            Log.objects.create(
+                issue=issue,
+                usuari=request.user.usuari,
+                tipus=Log.DEL_TAG,
+                valor_previ=tag.nom
+            )
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT, data={
+                'tag esborrat': "S'ha eliminat el tag " + nom_tag + " de l'issue " + id_issue})
+
+        # Si l'issue no tenia el tag, llencem error
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={
+                'error': "L'issue " + id_issue + " no té el tag " + nom_tag})
 
 
 class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
