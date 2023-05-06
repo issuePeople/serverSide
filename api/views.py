@@ -168,10 +168,17 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
             issue_id = self.kwargs['issue_id']
             issue = get_object_or_404(Issue, id=issue_id)
 
-            # Guardem la relació
-            issue.observadors.add(usuari)
-            issue.save()
-            return Response(status=status.HTTP_201_CREATED)
+            # Si l'usuari ja observa l'issue, llencem error
+            if issue.observadors.contains(usuari):
+                return Response(status=status.HTTP_409_CONFLICT, data={
+                    'error': "L'usuari " + id_observador + " ja és observador de l'issue " + issue_id})
+
+            # En cas que no, guardem la relació
+            else:
+                issue.observadors.add(usuari)
+                issue.save()
+                return Response(status=status.HTTP_201_CREATED, data={
+                    'observador afegit': "S'ha afegit l'observador " + id_observador + " a l'issue " + issue_id})
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
                 'error': "Has d'indicar l'identificador de l'observador a afegir"})
@@ -183,10 +190,16 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         id_issue = kwargs.get('issue_id')
         issue = get_object_or_404(Issue, id=id_issue)
 
-        # Esborrem la relació entre issue i observador
-        issue.observadors.remove(usuari)
-        issue.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        # Esborrem la relació entre issue i observador si l'usuari és observador
+        if issue.observadors.contains(usuari):
+            issue.observadors.remove(usuari)
+            issue.save()
+            return Response(status=status.HTTP_204_NO_CONTENT, data={
+                'observador esborrat': "S'ha eliminat l'observador " + id_observador + " de l'issue " + id_issue})
+
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={
+                'error': "L'usuari " + id_observador + " no és observador de l'issue " + id_issue})
 
 
 class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
