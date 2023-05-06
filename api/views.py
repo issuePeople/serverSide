@@ -387,7 +387,15 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
     def get_serializer_class(self):
         if self.action == 'retrieve':
             # Quan fem get d'un usuari concret n'obtenim tota la informació
-            return serializers.UsuariExtendedSerializer
+
+            # Si estem consultant la nostra informació, rebem també el token:
+            if self.kwargs.get('pk') == str(self.request.user.id):
+                print("hola")
+                return serializers.UsuariWithTokenSerializer
+
+            # Si no, veurem tota la informació però sense el token
+            else:
+                return serializers.UsuariExtendedSerializer
         else:
             # En el list tenim només la info bàsica
             # En els updates també podem modificar només la informació bàsica
