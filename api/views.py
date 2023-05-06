@@ -392,6 +392,7 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
     queryset = Usuari.objects.all()
     models = Usuari
     serializer_class = serializers.UsuariSerializer
+    parser_classes = (parsers.MultiPartParser, )
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -412,6 +413,14 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
     def check_object_permissions(self, request, obj):
         if request.method not in permissions.SAFE_METHODS and request.user.usuari != obj:
             raise PermissionDenied("No tens permís per executar aquesta acció.")
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('avatar', openapi.IN_FORM, required=False, type=openapi.TYPE_FILE),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, args, kwargs)
 
 
 class TagsView(mixins.ListModelMixin, viewsets.GenericViewSet):
