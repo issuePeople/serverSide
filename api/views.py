@@ -226,19 +226,26 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
             issue_id = self.kwargs['issue_id']
             issue = get_object_or_404(Issue, id=issue_id)
 
-            # Guardem la relació
-            issue.tags.add(tag)
-            issue.save()
+            # Si l'issue ja tenia el tag, llencem error
+            if issue.tags.contains(tag):
+                return Response(status=status.HTTP_409_CONFLICT, data={
+                    'error': "L'issue " + issue_id + " ja té el tag " + nom})
 
-            # Registrem el log
-            Log.objects.create(
-                issue=issue,
-                usuari=request.user.usuari,
-                tipus=Log.ADD_TAG,
-                valor_nou=tag.nom
-            )
+            # En cas que no, guardem la relació i registrem el log
+            else:
+                issue.tags.add(tag)
+                issue.save()
 
-            return Response(status=status.HTTP_201_CREATED)
+                # Registrem el log
+                Log.objects.create(
+                    issue=issue,
+                    usuari=request.user.usuari,
+                    tipus=Log.ADD_TAG,
+                    valor_nou=tag.nom
+                )
+
+                return Response(status=status.HTTP_201_CREATED, data={
+                    'tag afegit': "S'ha afegit el tag " + nom + " a l'issue " + issue_id})
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
                 'error': "Has d'indicar el nom i el color del tag a afegir"})
