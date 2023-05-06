@@ -50,13 +50,16 @@
                                         </a>
                                     </th>
                                 </td>
-                                <td>
-                                    <th>
-                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
-                                            <h1><i class="fa fa-tag" aria-hidden="true"></i>Token</h1>
-                                        </a>
-                                    </th>
-                                </td>
+                                
+                                {% if usuari == logged_usuari %} 
+                                    <td>
+                                        <th>
+                                            <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
+                                                <h1><i class="fa fa-tag" aria-hidden="true"></i>Token</h1>
+                                            </a>
+                                        </th>
+                                    </td>
+                                {%endif%}
                             {% elif "?mostrar=token" in request.get_full_path %}
                                 <td>
                                     <th>
@@ -72,13 +75,16 @@
                                         </a>
                                     </th>
                                 </td>
-                                <td>
-                                    <th>
-                                        <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
-                                            <h1><i class="fa fa-tag" aria-hidden="true"></i><u>Token</u></h1>
-                                        </a>
-                                    </th>
-                                </td>
+                                
+                                {% if usuari == logged_usuari %} 
+                                    <td>
+                                        <th>
+                                            <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
+                                                <h1><i class="fa fa-tag" aria-hidden="true"></i><u>Token</u></h1>
+                                            </a>
+                                        </th>
+                                    </td>
+                                {%endif%}
                             {%else%}
                                 <td>
                                     <th>
@@ -94,6 +100,8 @@
                                         </a>
                                     </th>
                                 </td>
+                                
+                                {% if usuari == logged_usuari %} 
                                 <td>
                                     <th>
                                         <a href="{% url 'usuari' usuari.user.id %}?mostrar=token">
@@ -101,6 +109,7 @@
                                         </a>
                                     </th>
                                 </td>
+                                {%endif%}
                             {%endif%}
                         </tr>
                     </table>
@@ -129,9 +138,11 @@
                     </table>
                 </section>
                 {% elif "?mostrar=token" in request.get_full_path %}
-                <section class="token">
-                    <p>{{usuari.user.auth_token}}</p>
-                </section>
+                    {% if usuari == logged_usuari %} 
+                        <section class="token">
+                            <p>{{usuari.user.auth_token}}</p>
+                        </section>
+                    {%endif%}
                 {%else%}
                 <section class ="timeline">
                     <div class="issue-page"style="width: 100%; ">
