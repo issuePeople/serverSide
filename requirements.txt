@@ -23,11 +23,13 @@ django-filter==22.1
 django-storages==1.13.2
 django-tables2==2.5.3
 djangorestframework==3.14.0
+djangorestframework-jsonapi==6.0.0
 docker==4.4.4
 docker-compose==1.25.5
 dockerpty==0.4.1
 docopt==0.6.2
 drf-yasg==1.21.5
+drf-yasg-json-api==0.9.1
 idna==3.4
 inflection==0.5.1
 itypes==1.2.0
