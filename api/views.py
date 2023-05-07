@@ -53,6 +53,13 @@ class IssuesView(viewsets.ModelViewSet):
             # En els updates també podem modificar només la informació bàsica
             return self.serializer_class
 
+    @swagger_auto_schema(
+        responses={
+            201: openapi.Response("", serializers.IssueExtendedSerializer),
+            400: openapi.Response("Hi ha algun error en els valors donats per crear l'issue"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+        }
+    )
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
 
@@ -76,6 +83,13 @@ class IssuesView(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=False, methods=['post'])
+    @swagger_auto_schema(
+        responses={
+            201: openapi.Response("Es creen els issues amb els valors donats", serializers.IssueSerializer),
+            400: openapi.Response("Hi ha algun error en els valors donats per crear els issues"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+        }
+    )
     def bulk(self, request):
         # Creem els issues amb el serializer
         serializer = self.get_serializer(data=request.data, many=True)
@@ -99,6 +113,22 @@ class IssuesView(viewsets.ModelViewSet):
         serialized_data = serializers.IssueSerializer(issues, many=True).data
         return Response(serialized_data, status=status.HTTP_201_CREATED)
 
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.IssueExtendedSerializer),
+            404: openapi.Response("No hi ha cap issue amb l'identificador donat"),
+        }
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, args, kwargs)
+
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.IssueSerializer),
+            400: openapi.Response("Hi ha algun error en els valors donats per actualitzar l'issue"),
+            404: openapi.Response("No hi ha cap issue amb l'identificador donat"),
+        }
+    )
     def update(self, request, *args, **kwargs):
         issue_id = kwargs['pk']
         issue = get_object_or_404(Issue, id=issue_id)
@@ -146,6 +176,20 @@ class IssuesView(viewsets.ModelViewSet):
 
         return response
 
+    @swagger_auto_schema(auto_schema=None)
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, args, kwargs)
+
+    @swagger_auto_schema(
+        responses={
+            204: openapi.Response("S'esborra l'issue correctament"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No hi ha cap issue amb l'identificador donat"),
+        }
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, args, kwargs)
+
 
 class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Usuari.objects.all()
@@ -161,6 +205,24 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         queryset = queryset.filter(observats=issue)
         return queryset
 
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.UsuariSerializer),
+            404: openapi.Response("No existeix cap issue amb l'identificador donat")
+        }
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, args, kwargs)
+
+    @swagger_auto_schema(
+        responses={
+            201: openapi.Response("S'afegeix correctament l'observador a l'issue"),
+            400: openapi.Response("No es dona el camp 'observador' a data"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue o l'observador que es volen enllaçar"),
+            409: openapi.Response("L'usuari que es vol posar d'observador de l'issue ja ho és"),
+        }
+    )
     def create(self, request, *args, **kwargs):
         # Per paràmetre ens ha de venir l'observador a afegir
         id_observador = request.data.get('observador', None)
@@ -185,6 +247,13 @@ class ObservadorsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
                 'error': "Has d'indicar l'identificador de l'observador a afegir"})
 
+    @swagger_auto_schema(
+        responses={
+            204: openapi.Response("S'esborra correctament la relació entre l'observador i l'issue"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue o l'observador que es volen desenllaçar, o bé la relació no existia"),
+        }
+    )
     def destroy(self, request, *args, **kwargs):
         # Tindrem /issues/issue_id/observadors/pk: Agafem els paràmetres, l'issue i l'usuari
         id_observador = kwargs.get('pk')
@@ -218,6 +287,24 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
         queryset = queryset.filter(issues=issue)
         return queryset
 
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.TagSerializer),
+            404: openapi.Response("No existeix cap issue amb l'identificador donat")
+        }
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, args, kwargs)
+
+    @swagger_auto_schema(
+        responses={
+            201: openapi.Response("S'afegeix correctament el tag a l'issue", serializer_class=None),
+            400: openapi.Response("No es donen els camps nom i/o color a data"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue a què se li vol afegir el tag"),
+            409: openapi.Response("El tag que es vol afegir a l'issue ja està registrat en aquest issue"),
+        }
+    )
     def create(self, request, *args, **kwargs):
         # Per paràmetre ens ha de venir el nom i color del tag a afegir
         nom = request.data.get('nom', None)
@@ -252,6 +339,13 @@ class TagsIssueView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destr
             return Response(status=status.HTTP_400_BAD_REQUEST, data={
                 'error': "Has d'indicar el nom i el color del tag a afegir"})
 
+    @swagger_auto_schema(
+        responses={
+            204: openapi.Response("S'esborra correctament la relació entre el tag i l'issue"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue o el tag que es volen desenllaçar, o bé la relació no existia"),
+        }
+    )
     def destroy(self, request, *args, **kwargs):
         # Tindrem /issues/issue_id/tags/pk: Agafem els paràmetres, l'issue i del tag
         nom_tag = kwargs.get('pk')
@@ -296,6 +390,23 @@ class ComentarisView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Ge
         queryset = queryset.order_by('-data')
         return queryset
 
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.ComentariSerializer),
+            404: openapi.Response("No existeix cap issue amb l'identificador donat")
+        }
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, args, kwargs)
+
+    @swagger_auto_schema(
+        responses={
+            201: openapi.Response("Es crea correctament el comentari", serializers.ComentariSerializer),
+            400: openapi.Response("No es dona el camp text del comentari a data"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue a què se li vol afegir el comentari"),
+        }
+    )
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
 
@@ -328,10 +439,26 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
         return queryset
 
     @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.AttachmentSerializer),
+            404: openapi.Response("No existeix cap issue amb l'identificador donat")
+        }
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, args, kwargs)
+
+    @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter('issue_id', openapi.IN_PATH, required=True, type=openapi.TYPE_INTEGER),
             openapi.Parameter('document', openapi.IN_FORM, required=True, type=openapi.TYPE_FILE),
         ],
+        responses={
+            201: openapi.Response("S'afegeix correctament l'attachment a l'issue", serializers.AttachmentSerializer),
+            400: openapi.Response("No es dona el camp 'document' a data"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue a què se li vol afegir l'attachment"),
+            409: openapi.Response("El tag que es vol afegir a l'issue ja està registrat en aquest issue"),
+        }
     )
     def create(self, request, *args, **kwargs):
         # Quan fem multipart post, no podem fer mutable la request, així que fem override de
@@ -353,6 +480,13 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    @swagger_auto_schema(
+        responses={
+            204: openapi.Response("S'esborra correctament l'attachment"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            404: openapi.Response("No es troba l'issue o l'attachment donats"),
+        }
+    )
     def destroy(self, request, *args, **kwargs):
         # Agafem el nom de l'attachment per després poder crear el log
         valor_previ = self.get_object().document.name
@@ -387,6 +521,15 @@ class LogsView(mixins.ListModelMixin, viewsets.GenericViewSet):
         queryset = queryset.order_by('-data')
         return queryset
 
+    @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.LogSerializer),
+            404: openapi.Response("No existeix cap issue amb l'identificador donat")
+        }
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, args, kwargs)
+
 
 class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Usuari.objects.all()
@@ -415,12 +558,31 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             raise PermissionDenied("No tens permís per executar aquesta acció.")
 
     @swagger_auto_schema(
+        responses={
+            200: openapi.Response("", serializers.UsuariExtendedSerializer),
+            404: openapi.Response("No hi ha cap usuari amb l'identificador donat"),
+        }
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, args, kwargs)
+
+    @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter('avatar', openapi.IN_FORM, required=False, type=openapi.TYPE_FILE),
         ],
+        responses={
+            200: openapi.Response("Modificacions aplicades correctament", serializers.UsuariSerializer),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
+            403: openapi.Response("Error d'autenticació: s'intenta editar un usuari que no és un mateix/a"),
+            404: openapi.Response("No hi ha cap usuari amb l'identificador donat"),
+        }
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, args, kwargs)
+
+    @swagger_auto_schema(auto_schema=None)
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, args, kwargs)
 
 
 class TagsView(mixins.ListModelMixin, viewsets.GenericViewSet):

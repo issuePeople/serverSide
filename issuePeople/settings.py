@@ -208,7 +208,6 @@ CORS_ALLOWED_ORIGINS = [
 
 # Swagger amb token
 SWAGGER_SETTINGS = {
-    # Other settings...
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
         'Token': {
