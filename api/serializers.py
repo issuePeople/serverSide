@@ -56,8 +56,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ('id', 'subject', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio', 'assignacio_id',
-                  'dataCreacio', 'dataLimit', 'bloquejat', 'motiuBloqueig')
+        fields = ('id', 'subject', 'descripcio', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio', 'assignacio_id',
+                  'dataCreacio', 'dataModificacio', 'dataLimit', 'bloquejat', 'motiuBloqueig')
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -156,3 +156,79 @@ class IssueExtendedSerializer(IssueSerializer):
     class Meta:
         model = Issue
         fields = '__all__'
+
+
+# Serializers que NO fem servir en el codi, només són per la documentació
+
+class IssueListSerializer(IssueExtendedSerializer):
+    class Meta:
+        model = Issue
+        fields = ('id', 'subject', 'descripcio', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio', 'dataCreacio',
+                  'dataLimit', 'dataModificacio', 'bloquejat', 'motiuBloqueig')
+
+
+class IssueCreateSerializer(IssueExtendedSerializer):
+    assignacio_id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Issue
+        fields = ('subject', 'descripcio', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio_id',
+                  'dataLimit', 'bloquejat', 'motiuBloqueig')
+
+
+class IssueRetrieveSerializer(IssueExtendedSerializer):
+    class Meta:
+        model = Issue
+        fields = ('id', 'subject', 'tipus', 'estat', 'gravetat', 'prioritat', 'assignacio', 'dataCreacio',
+                  'dataLimit', 'dataModificacio', 'bloquejat', 'motiuBloqueig', 'creador', 'tags', 'observadors',
+                  'attachments', 'comentaris', 'logs')
+
+
+class IssueBulkSerializer(IssueExtendedSerializer):
+    issues = IssueCreateSerializer(many=True)
+
+    class Meta:
+        model = Issue
+        fields = ('issues',)
+
+
+class AttachmentsBasicSerializer(AttachmentSerializer):
+    class Meta:
+        model = Attachment
+        fields = ('document', )
+
+
+class AttachmentExtendedSerializer(AttachmentSerializer):
+    class Meta:
+        model = Attachment
+        fields = ('id', 'data', 'document')
+
+
+class ComentariCreateSerializer(ComentariSerializer):
+    class Meta:
+        model = Comentari
+        fields = ('text', )
+
+
+class ComentariRetrieveSerializer(ComentariSerializer):
+    text = serializers.CharField(required=False)
+
+    class Meta:
+        model = Comentari
+        fields = ('id', 'text', 'autor', 'data')
+
+
+class LogRetrieveSerializer(LogSerializer):
+    tipus = serializers.CharField(required=False)
+
+    class Meta:
+        model = Log
+        fields = ('usuari', 'data', 'tipus', 'valor_previ', 'valor_nou')
+
+
+class ObservadorSerializer(serializers.ModelSerializer):
+    observador = serializers.IntegerField(required=True)
+
+    class Meta:
+        model = Usuari
+        fields = ('observador',)
