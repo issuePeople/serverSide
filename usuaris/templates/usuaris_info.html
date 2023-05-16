@@ -140,7 +140,7 @@
                 {% elif "?mostrar=token" in request.get_full_path %}
                     {% if usuari == logged_usuari %} 
                         <section class="token">
-                            <p>{{usuari.user.auth_token}}</p>
+                            <p>Token {{usuari.user.auth_token}}</p>
                         </section>
                     {%endif%}
                 {%else%}

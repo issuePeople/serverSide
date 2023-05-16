@@ -17,6 +17,7 @@ Sol Torralba Calero
 
 - Taiga: https://tree.taiga.io/project/angelprat-asw
 - Desplegament a AWS: http://issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com/issues/
+- Desplegament a AWS (API): http://issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com/api/
 
 
 ## Execució i ús en local
