@@ -124,7 +124,17 @@ class IssuesView(viewsets.ModelViewSet):
         }
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, args, kwargs)
+        # Igual que super().list(request, args, kwargs), però afegint el distinct per si filtrem per [atribut]__in
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.distinct()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @swagger_auto_schema(
         responses={
