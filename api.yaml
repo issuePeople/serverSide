@@ -1,0 +1,1228 @@
+basePath: /api
+consumes:
+- application/json
+definitions:
+  Attachment:
+    properties:
+      data:
+        format: date-time
+        readOnly: true
+        title: Data penjat
+        type: string
+      document:
+        format: uri
+        readOnly: true
+        title: Document
+        type: string
+      id:
+        readOnly: true
+        title: ID
+        type: integer
+      issue_id:
+        title: Issue id
+        type: integer
+    required:
+    - issue_id
+    type: object
+  AttachmentExtended:
+    properties:
+      data:
+        format: date-time
+        readOnly: true
+        title: Data penjat
+        type: string
+      document:
+        format: uri
+        readOnly: true
+        title: Document
+        type: string
+      id:
+        readOnly: true
+        title: ID
+        type: integer
+    type: object
+  Comentari:
+    properties:
+      autor:
+        $ref: '#/definitions/Usuari'
+      autor_id:
+        title: Autor id
+        type: string
+      data:
+        format: date-time
+        readOnly: true
+        title: "Data publicaci\xF3"
+        type: string
+      id:
+        readOnly: true
+        title: ID
+        type: integer
+      issue_id:
+        title: Issue id
+        type: integer
+      text:
+        maxLength: 10000
+        minLength: 1
+        title: Text
+        type: string
+    required:
+    - text
+    - autor_id
+    - issue_id
+    type: object
+  ComentariCreate:
+    properties:
+      text:
+        maxLength: 10000
+        minLength: 1
+        title: Text
+        type: string
+    required:
+    - text
+    type: object
+  ComentariRetrieve:
+    properties:
+      autor:
+        $ref: '#/definitions/Usuari'
+      data:
+        format: date-time
+        readOnly: true
+        title: "Data publicaci\xF3"
+        type: string
+      id:
+        readOnly: true
+        title: ID
+        type: integer
+      text:
+        minLength: 1
+        title: Text
+        type: string
+    type: object
+  Issue:
+    properties:
+      assignacio:
+        $ref: '#/definitions/Usuari'
+      assignacio_id:
+        title: Assignacio id
+        type: string
+        x-nullable: true
+      bloquejat:
+        title: Bloquejat
+        type: boolean
+      dataCreacio:
+        format: date-time
+        readOnly: true
+        title: "Data creaci\xF3"
+        type: string
+      dataLimit:
+        format: date-time
+        title: "Data l\xEDmit"
+        type: string
+        x-nullable: true
+      dataModificacio:
+        format: date-time
+        readOnly: true
+        title: "\xDAltima modificaci\xF3"
+        type: string
+      descripcio:
+        maxLength: 524288
+        title: "Descripci\xF3"
+        type: string
+        x-nullable: true
+      estat:
+        enum:
+        - N
+        - D
+        - T
+        - C
+        - I
+        - R
+        - P
+        title: Estat
+        type: string
+      gravetat:
+        enum:
+        - D
+        - M
+        - N
+        - I
+        - C
+        title: Gravetat
+        type: string
+      id:
+        readOnly: true
+        title: Identificador
+        type: integer
+      motiuBloqueig:
+        maxLength: 50
+        title: Motiu bloqueig
+        type: string
+        x-nullable: true
+      prioritat:
+        enum:
+        - B
+        - M
+        - A
+        title: Prioritat
+        type: string
+      subject:
+        minLength: 1
+        title: Subject
+        type: string
+      tipus:
+        enum:
+        - B
+        - P
+        - M
+        title: Tipus
+        type: string
+    type: object
+  IssueBulk:
+    properties:
+      issues:
+        items:
+          $ref: '#/definitions/IssueCreate'
+        type: array
+    required:
+    - issues
+    type: object
+  IssueCreate:
+    properties:
+      assignacio_id:
+        title: Assignacio id
+        type: integer
+      bloquejat:
+        title: Bloquejat
+        type: boolean
+      dataLimit:
+        format: date-time
+        title: "Data l\xEDmit"
+        type: string
+        x-nullable: true
+      descripcio:
+        maxLength: 524288
+        title: "Descripci\xF3"
+        type: string
+        x-nullable: true
+      estat:
+        enum:
+        - N
+        - D
+        - T
+        - C
+        - I
+        - R
+        - P
+        title: Estat
+        type: string
+      gravetat:
+        enum:
+        - D
+        - M
+        - N
+        - I
+        - C
+        title: Gravetat
+        type: string
+      motiuBloqueig:
+        maxLength: 50
+        title: Motiu bloqueig
+        type: string
+        x-nullable: true
+      prioritat:
+        enum:
+        - B
+        - M
+        - A
+        title: Prioritat
+        type: string
+      subject:
+        minLength: 1
+        title: Subject
+        type: string
+      tipus:
+        enum:
+        - B
+        - P
+        - M
+        title: Tipus
+        type: string
+    type: object
+  IssueList:
+    properties:
+      assignacio:
+        $ref: '#/definitions/Usuari'
+      bloquejat:
+        title: Bloquejat
+        type: boolean
+      dataCreacio:
+        format: date-time
+        readOnly: true
+        title: "Data creaci\xF3"
+        type: string
+      dataLimit:
+        format: date-time
+        title: "Data l\xEDmit"
+        type: string
+        x-nullable: true
+      dataModificacio:
+        format: date-time
+        readOnly: true
+        title: "\xDAltima modificaci\xF3"
+        type: string
+      descripcio:
+        maxLength: 524288
+        title: "Descripci\xF3"
+        type: string
+        x-nullable: true
+      estat:
+        enum:
+        - N
+        - D
+        - T
+        - C
+        - I
+        - R
+        - P
+        title: Estat
+        type: string
+      gravetat:
+        enum:
+        - D
+        - M
+        - N
+        - I
+        - C
+        title: Gravetat
+        type: string
+      id:
+        readOnly: true
+        title: Identificador
+        type: integer
+      motiuBloqueig:
+        maxLength: 50
+        title: Motiu bloqueig
+        type: string
+        x-nullable: true
+      prioritat:
+        enum:
+        - B
+        - M
+        - A
+        title: Prioritat
+        type: string
+      subject:
+        minLength: 1
+        title: Subject
+        type: string
+      tipus:
+        enum:
+        - B
+        - P
+        - M
+        title: Tipus
+        type: string
+    type: object
+  IssueRetrieve:
+    properties:
+      assignacio:
+        $ref: '#/definitions/Usuari'
+      attachments:
+        items:
+          $ref: '#/definitions/Attachment'
+        readOnly: true
+        type: array
+      bloquejat:
+        title: Bloquejat
+        type: boolean
+      comentaris:
+        items:
+          $ref: '#/definitions/Comentari'
+        readOnly: true
+        type: array
+      creador:
+        $ref: '#/definitions/Usuari'
+      dataCreacio:
+        format: date-time
+        readOnly: true
+        title: "Data creaci\xF3"
+        type: string
+      dataLimit:
+        format: date-time
+        title: "Data l\xEDmit"
+        type: string
+        x-nullable: true
+      dataModificacio:
+        format: date-time
+        readOnly: true
+        title: "\xDAltima modificaci\xF3"
+        type: string
+      estat:
+        enum:
+        - N
+        - D
+        - T
+        - C
+        - I
+        - R
+        - P
+        title: Estat
+        type: string
+      gravetat:
+        enum:
+        - D
+        - M
+        - N
+        - I
+        - C
+        title: Gravetat
+        type: string
+      id:
+        readOnly: true
+        title: Identificador
+        type: integer
+      logs:
+        items:
+          $ref: '#/definitions/Log'
+        readOnly: true
+        type: array
+      motiuBloqueig:
+        maxLength: 50
+        title: Motiu bloqueig
+        type: string
+        x-nullable: true
+      observadors:
+        items:
+          $ref: '#/definitions/Usuari'
+        readOnly: true
+        type: array
+      prioritat:
+        enum:
+        - B
+        - M
+        - A
+        title: Prioritat
+        type: string
+      subject:
+        minLength: 1
+        title: Subject
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/Tag'
+        readOnly: true
+        type: array
+      tipus:
+        enum:
+        - B
+        - P
+        - M
+        title: Tipus
+        type: string
+    type: object
+  Log:
+    properties:
+      data:
+        format: date-time
+        readOnly: true
+        title: "Data creaci\xF3"
+        type: string
+      tipus:
+        enum:
+        - Assumpte
+        - "Descripci\xF3"
+        - Tipus
+        - Estat
+        - Gravetat
+        - Prioritat
+        - Assignada a
+        - "Data l\xEDmit"
+        - Bloquejat
+        - Creada
+        - Nou attachment
+        - Attachment esborrat
+        - Tag afegida
+        - Tag esborrada
+        title: Tipus
+        type: string
+      usuari:
+        $ref: '#/definitions/Usuari'
+      valor_nou:
+        maxLength: 524288
+        title: Valor nou
+        type: string
+        x-nullable: true
+      valor_previ:
+        maxLength: 524288
+        title: Valor previ
+        type: string
+        x-nullable: true
+    required:
+    - tipus
+    type: object
+  LogExtended:
+    properties:
+      data:
+        format: date-time
+        readOnly: true
+        title: "Data creaci\xF3"
+        type: string
+      issue:
+        $ref: '#/definitions/Issue'
+      tipus:
+        enum:
+        - Assumpte
+        - "Descripci\xF3"
+        - Tipus
+        - Estat
+        - Gravetat
+        - Prioritat
+        - Assignada a
+        - "Data l\xEDmit"
+        - Bloquejat
+        - Creada
+        - Nou attachment
+        - Attachment esborrat
+        - Tag afegida
+        - Tag esborrada
+        title: Tipus
+        type: string
+      usuari:
+        $ref: '#/definitions/Usuari'
+      valor_nou:
+        maxLength: 524288
+        title: Valor nou
+        type: string
+        x-nullable: true
+      valor_previ:
+        maxLength: 524288
+        title: Valor previ
+        type: string
+        x-nullable: true
+    required:
+    - tipus
+    type: object
+  LogRetrieve:
+    properties:
+      data:
+        format: date-time
+        readOnly: true
+        title: "Data creaci\xF3"
+        type: string
+      tipus:
+        minLength: 1
+        title: Tipus
+        type: string
+      usuari:
+        $ref: '#/definitions/Usuari'
+      valor_nou:
+        maxLength: 524288
+        title: Valor nou
+        type: string
+        x-nullable: true
+      valor_previ:
+        maxLength: 524288
+        title: Valor previ
+        type: string
+        x-nullable: true
+    type: object
+  Observador:
+    properties:
+      observador:
+        title: Observador
+        type: integer
+    required:
+    - observador
+    type: object
+  Tag:
+    properties:
+      color:
+        maxLength: 7
+        minLength: 1
+        pattern: ^#([A-Fa-f0-9]{6})$
+        title: Color
+        type: string
+      nom:
+        maxLength: 20
+        minLength: 1
+        title: Nom
+        type: string
+    required:
+    - nom
+    - color
+    type: object
+  TagExtended:
+    properties:
+      color:
+        maxLength: 7
+        minLength: 1
+        pattern: ^#([A-Fa-f0-9]{6})$
+        title: Color
+        type: string
+      nom:
+        maxLength: 20
+        minLength: 1
+        title: Nom
+        type: string
+      num_issues:
+        readOnly: true
+        title: Num issues
+        type: string
+    required:
+    - nom
+    - color
+    type: object
+  Usuari:
+    properties:
+      avatar:
+        format: uri
+        readOnly: true
+        title: Avatar
+        type: string
+      bio:
+        maxLength: 210
+        title: Bio
+        type: string
+        x-nullable: true
+      id:
+        minLength: 1
+        readOnly: true
+        title: Id
+        type: string
+      nom:
+        minLength: 1
+        title: Nom
+        type: string
+      username:
+        minLength: 1
+        title: Username
+        type: string
+    type: object
+  UsuariExtended:
+    properties:
+      avatar:
+        format: uri
+        readOnly: true
+        title: Avatar
+        type: string
+      bio:
+        maxLength: 210
+        title: Bio
+        type: string
+        x-nullable: true
+      id:
+        minLength: 1
+        readOnly: true
+        title: Id
+        type: string
+      logs:
+        items:
+          $ref: '#/definitions/LogExtended'
+        readOnly: true
+        type: array
+      nom:
+        minLength: 1
+        title: Nom
+        type: string
+      observats:
+        items:
+          $ref: '#/definitions/Issue'
+        readOnly: true
+        type: array
+      username:
+        minLength: 1
+        title: Username
+        type: string
+    type: object
+host: issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com
+info:
+  description: API desenvolupada pel segon lliurament del projecte d'ASW
+  title: Issue People
+  version: v1
+paths:
+  /issues/:
+    get:
+      description: ''
+      operationId: issues_list
+      parameters:
+      - description: ''
+        in: query
+        name: id
+        required: false
+        type: number
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: id__in
+        required: false
+        type: number
+      - description: ''
+        in: query
+        name: tipus
+        required: false
+        type: string
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: tipus__in
+        required: false
+        type: string
+      - description: ''
+        in: query
+        name: estat
+        required: false
+        type: string
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: estat__in
+        required: false
+        type: string
+      - description: ''
+        in: query
+        name: gravetat
+        required: false
+        type: string
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: gravetat__in
+        required: false
+        type: string
+      - description: ''
+        in: query
+        name: prioritat
+        required: false
+        type: string
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: prioritat__in
+        required: false
+        type: string
+      - description: ''
+        in: query
+        name: assignacio__user__id
+        required: false
+        type: number
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: assignacio__user__id__in
+        required: false
+        type: number
+      - description: ''
+        in: query
+        name: observadors__user__id
+        required: false
+        type: number
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: observadors__user__id__in
+        required: false
+        type: number
+      - description: ''
+        in: query
+        name: creador__user__id
+        required: false
+        type: number
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: creador__user__id__in
+        required: false
+        type: number
+      - description: ''
+        in: query
+        name: tags__nom
+        required: false
+        type: string
+      - description: Multiple values may be separated by commas.
+        in: query
+        name: tags__nom__in
+        required: false
+        type: string
+      - description: Which field to use when ordering the results.
+        in: query
+        name: ordering
+        required: false
+        type: string
+      - description: A search term.
+        in: query
+        name: search
+        required: false
+        type: string
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/IssueList'
+      tags:
+      - issues
+    parameters: []
+    post:
+      description: ''
+      operationId: issues_create
+      parameters:
+      - in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/IssueCreate'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/IssueRetrieve'
+        '400':
+          description: Hi ha algun error en els valors donats per crear l'issue
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+      tags:
+      - issues
+  /issues/bulk/:
+    parameters: []
+    post:
+      description: ''
+      operationId: issues_bulk
+      parameters:
+      - in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/IssueBulk'
+      responses:
+        '201':
+          description: Es creen els issues amb els valors donats
+          schema:
+            $ref: '#/definitions/IssueList'
+        '400':
+          description: Hi ha algun error en els valors donats per crear els issues
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+      tags:
+      - issues
+  /issues/{id}/:
+    delete:
+      description: ''
+      operationId: issues_delete
+      parameters: []
+      responses:
+        '204':
+          description: S'esborra l'issue correctament
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: No hi ha cap issue amb l'identificador donat
+      tags:
+      - issues
+    get:
+      description: ''
+      operationId: issues_read
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/IssueRetrieve'
+        '404':
+          description: No hi ha cap issue amb l'identificador donat
+      tags:
+      - issues
+    parameters:
+    - description: A unique integer value identifying this issue.
+      in: path
+      name: id
+      required: true
+      type: integer
+    put:
+      description: ''
+      operationId: issues_update
+      parameters:
+      - in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/IssueCreate'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/IssueCreate'
+        '400':
+          description: Hi ha algun error en els valors donats per actualitzar l'issue
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: No hi ha cap issue amb l'identificador donat
+      tags:
+      - issues
+  /issues/{issue_id}/attachments/:
+    get:
+      consumes:
+      - multipart/form-data
+      description: ''
+      operationId: issues_attachments_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AttachmentExtended'
+        '404':
+          description: No existeix cap issue amb l'identificador donat
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+    post:
+      consumes:
+      - multipart/form-data
+      description: ''
+      operationId: issues_attachments_create
+      parameters:
+      - in: formData
+        name: document
+        required: true
+        type: file
+      - in: path
+        name: issue_id
+        required: true
+        type: integer
+      responses:
+        '201':
+          description: S'afegeix correctament l'attachment a l'issue
+          schema:
+            $ref: '#/definitions/AttachmentExtended'
+        '400':
+          description: No es dona el camp 'document' a data
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: "No es troba l'issue a qu\xE8 se li vol afegir l'attachment"
+      tags:
+      - issues
+  /issues/{issue_id}/attachments/{id}/:
+    delete:
+      consumes:
+      - multipart/form-data
+      description: ''
+      operationId: issues_attachments_delete
+      parameters: []
+      responses:
+        '204':
+          description: S'esborra correctament l'attachment
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: No es troba l'issue o l'attachment donats
+      tags:
+      - issues
+    parameters:
+    - description: A unique integer value identifying this attachment.
+      in: path
+      name: id
+      required: true
+      type: integer
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+  /issues/{issue_id}/comentaris/:
+    get:
+      description: ''
+      operationId: issues_comentaris_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ComentariRetrieve'
+        '404':
+          description: No existeix cap issue amb l'identificador donat
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+    post:
+      description: ''
+      operationId: issues_comentaris_create
+      parameters:
+      - in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ComentariCreate'
+      responses:
+        '201':
+          description: Es crea correctament el comentari
+          schema:
+            $ref: '#/definitions/ComentariRetrieve'
+        '400':
+          description: No es dona el camp text del comentari a data
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: "No es troba l'issue a qu\xE8 se li vol afegir el comentari"
+      tags:
+      - issues
+  /issues/{issue_id}/logs/:
+    get:
+      description: ''
+      operationId: issues_logs_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LogRetrieve'
+        '404':
+          description: No existeix cap issue amb l'identificador donat
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+  /issues/{issue_id}/observadors/:
+    get:
+      description: ''
+      operationId: issues_observadors_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Usuari'
+        '404':
+          description: No existeix cap issue amb l'identificador donat
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+    post:
+      description: ''
+      operationId: issues_observadors_create
+      parameters:
+      - in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/Observador'
+      responses:
+        '201':
+          description: S'afegeix correctament l'observador a l'issue
+        '400':
+          description: No es dona el camp 'observador' a data
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: "No es troba l'issue o l'observador que es volen enlla\xE7\
+            ar"
+        '409':
+          description: "L'usuari que es vol posar d'observador de l'issue ja ho \xE9\
+            s"
+      tags:
+      - issues
+  /issues/{issue_id}/observadors/{user}/:
+    delete:
+      description: ''
+      operationId: issues_observadors_delete
+      parameters: []
+      responses:
+        '204':
+          description: "S'esborra correctament la relaci\xF3 entre l'observador i\
+            \ l'issue"
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: "No es troba l'issue o l'observador que es volen desenlla\xE7\
+            ar, o b\xE9 la relaci\xF3 no existia"
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+    - description: A unique value identifying this usuari.
+      in: path
+      name: user
+      required: true
+      type: string
+  /issues/{issue_id}/tags/:
+    get:
+      description: ''
+      operationId: issues_tags_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Tag'
+        '404':
+          description: No existeix cap issue amb l'identificador donat
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+    post:
+      description: ''
+      operationId: issues_tags_create
+      parameters:
+      - in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/Tag'
+      responses:
+        '201':
+          description: S'afegeix correctament el tag a l'issue
+        '400':
+          description: No es donen els camps nom i/o color a data
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: "No es troba l'issue a qu\xE8 se li vol afegir el tag"
+        '409':
+          description: "El tag que es vol afegir a l'issue ja est\xE0 registrat en\
+            \ aquest issue"
+      tags:
+      - issues
+  /issues/{issue_id}/tags/{nom}/:
+    delete:
+      description: ''
+      operationId: issues_tags_delete
+      parameters: []
+      responses:
+        '204':
+          description: "S'esborra correctament la relaci\xF3 entre el tag i l'issue"
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '404':
+          description: "No es troba l'issue o el tag que es volen desenlla\xE7ar,\
+            \ o b\xE9 la relaci\xF3 no existia"
+      tags:
+      - issues
+    parameters:
+    - in: path
+      name: issue_id
+      required: true
+      type: string
+    - description: A unique value identifying this tag.
+      in: path
+      name: nom
+      required: true
+      type: string
+  /tags/:
+    get:
+      description: ''
+      operationId: tags_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            items:
+              $ref: '#/definitions/TagExtended'
+            type: array
+      tags:
+      - tags
+    parameters: []
+  /usuaris/:
+    get:
+      consumes:
+      - multipart/form-data
+      description: ''
+      operationId: usuaris_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            items:
+              $ref: '#/definitions/Usuari'
+            type: array
+      tags:
+      - usuaris
+    parameters: []
+  /usuaris/{user}/:
+    get:
+      consumes:
+      - multipart/form-data
+      description: ''
+      operationId: usuaris_read
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UsuariExtended'
+        '404':
+          description: No hi ha cap usuari amb l'identificador donat
+      tags:
+      - usuaris
+    parameters:
+    - description: A unique value identifying this usuari.
+      in: path
+      name: user
+      required: true
+      type: string
+    put:
+      consumes:
+      - multipart/form-data
+      description: ''
+      operationId: usuaris_update
+      parameters:
+      - in: formData
+        minLength: 1
+        name: username
+        required: false
+        type: string
+      - in: formData
+        minLength: 1
+        name: nom
+        required: false
+        type: string
+      - in: formData
+        maxLength: 210
+        name: bio
+        required: false
+        type: string
+        x-nullable: true
+      - in: formData
+        name: avatar
+        required: false
+        type: file
+      responses:
+        '200':
+          description: Modificacions aplicades correctament
+          schema:
+            $ref: '#/definitions/Usuari'
+        '401':
+          description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
+        '403':
+          description: "Error d'autenticaci\xF3: s'intenta editar un usuari que no\
+            \ \xE9s un mateix/a"
+        '404':
+          description: No hi ha cap usuari amb l'identificador donat
+      tags:
+      - usuaris
+produces:
+- application/json
+schemes:
+- http
+security:
+- Token: []
+securityDefinitions:
+  Token:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: '2.0'
