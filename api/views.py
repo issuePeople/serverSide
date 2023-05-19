@@ -150,6 +150,7 @@ class IssuesView(viewsets.ModelViewSet):
         responses={
             200: openapi.Response("", serializers.IssueCreateSerializer),
             400: openapi.Response("Hi ha algun error en els valors donats per actualitzar l'issue"),
+            401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
             404: openapi.Response("No hi ha cap issue amb l'identificador donat"),
         }
     )
@@ -171,6 +172,8 @@ class IssuesView(viewsets.ModelViewSet):
                 registrar_log_update(issue, usuari, Log.DESCR, issue.descripcio, issue_nou.descripcio)
             elif key == 'tipus':
                 registrar_log_update(issue, usuari, Log.TIPUS, issue.tipus, issue_nou.tipus)
+            elif key == 'estat':
+                registrar_log_update(issue, usuari, Log.ESTAT, issue.estat, issue_nou.estat)
             elif key == 'gravetat':
                 registrar_log_update(issue, usuari, Log.GRAV, issue.gravetat, issue_nou.gravetat)
             elif key == 'prioritat':
@@ -483,7 +486,6 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
             400: openapi.Response("No es dona el camp 'document' a data"),
             401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
             404: openapi.Response("No es troba l'issue a què se li vol afegir l'attachment"),
-            409: openapi.Response("El tag que es vol afegir a l'issue ja està registrat en aquest issue"),
         }
     )
     def create(self, request, *args, **kwargs):
