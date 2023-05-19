@@ -204,6 +204,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://editor.swagger.io",
 ]
 
 # Swagger amb token
