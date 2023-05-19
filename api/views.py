@@ -486,6 +486,7 @@ class AttachmentsView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Des
             400: openapi.Response("No es dona el camp 'document' a data"),
             401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
             404: openapi.Response("No es troba l'issue a què se li vol afegir l'attachment"),
+            413: openapi.Response("L'attachment que es vol afegir pesa massa"),
         }
     )
     def create(self, request, *args, **kwargs):
@@ -603,6 +604,7 @@ class UsuarisView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             401: openapi.Response("Error d'autenticació: no es dona el token o és incorrecte"),
             403: openapi.Response("Error d'autenticació: s'intenta editar un usuari que no és un mateix/a"),
             404: openapi.Response("No hi ha cap usuari amb l'identificador donat"),
+            413: openapi.Response("L'avatar que es vol posar a l'usuari pesa massa"),
         }
     )
     def update(self, request, *args, **kwargs):
