@@ -896,6 +896,8 @@ paths:
           description: "Error d'autenticaci\xF3: no es dona el token o \xE9s incorrecte"
         '404':
           description: "No es troba l'issue a qu\xE8 se li vol afegir l'attachment"
+        '413':
+          description: L'attachment que es vol afegir pesa massa
       tags:
       - issues
   /issues/{issue_id}/attachments/{id}/:
@@ -1212,6 +1214,8 @@ paths:
             \ \xE9s un mateix/a"
         '404':
           description: No hi ha cap usuari amb l'identificador donat
+        '413':
+          description: L'avatar que es vol posar a l'usuari pesa massa
       tags:
       - usuaris
 produces:
