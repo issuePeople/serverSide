@@ -17,6 +17,7 @@ class UsuariSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='user.id', read_only=True)
     username = serializers.CharField(source='user.username', required=False)
     nom = serializers.CharField(source='user.first_name', required=False)
+    email = serializers.CharField(source='user.email', required=False)
 
     def update(self, instance, validated_data):
         # La part corresponent a usuari.user, la actualitzem amb UserSerializer
@@ -32,7 +33,7 @@ class UsuariSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Usuari
-        fields = ('id', 'username', 'nom', 'bio', 'avatar')
+        fields = ('id', 'username', 'nom', 'email', 'bio', 'avatar')
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -129,7 +130,7 @@ class UsuariExtendedSerializer(UsuariSerializer):
 
     class Meta:
         model = Usuari
-        fields = ('id', 'username', 'nom', 'bio', 'avatar', 'observats', 'logs')
+        fields = ('id', 'username', 'nom', 'email', 'bio', 'avatar', 'observats', 'logs')
 
 
 class UsuariWithTokenSerializer(UsuariExtendedSerializer):
@@ -137,7 +138,7 @@ class UsuariWithTokenSerializer(UsuariExtendedSerializer):
 
     class Meta:
         model = Usuari
-        fields = ('id', 'username', 'nom', 'bio', 'avatar', 'observats', 'logs', 'token')
+        fields = ('id', 'username', 'nom', 'email', 'bio', 'avatar', 'observats', 'logs', 'token')
 
 
 class IssueExtendedSerializer(IssueSerializer):
